@@ -56,7 +56,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     if controller.ping():
         _LOGGER.info(
             "Successfully connected to the Eco-Device gateway: %s.",
-            config.get(CONF_HOST),
+            config.get(CONF_HOST, CONF_PORT),
         )
         if config.get(CONF_T1_NAME):
             _LOGGER.info("Add the t1 device with name: %s.", config.get(CONF_T1_NAME))
