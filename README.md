@@ -4,7 +4,7 @@ The `ecodevices` integration allows you to get information from [GCE Eco-Devices
 
 ## Sensors
 
-For the teleinfo inputs, you will get aj instant consumption sensor.
+For the teleinfo inputs, you will get an instant consumption sensor.
 For the counter inputs, you will get a daily sensor and a total sensor.
 
 ## Configuration
