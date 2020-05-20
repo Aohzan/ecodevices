@@ -1,4 +1,5 @@
 # Eco-Devices component for Home Assistant
+
 This a *custom component* for [Home Assistant](https://www.home-assistant.io/). 
 The `ecodevices` integration allows you to get information from [GCE Eco-Devices](http://gce-electronics.com/fr/carte-relais-ethernet-module-rail-din/409-teleinformation-ethernet-ecodevices.html).
 
@@ -8,8 +9,12 @@ For the teleinfo inputs, you will get an instant consumption sensor.
 For the counter inputs, you will get a daily sensor and a total sensor.
 
 ## Configuration
+### Installation
+
+Copy the `custom_components/ecodevices` folder.
 
 ### Example
+
 ```yaml
 # Example configuration.yaml entry
 sensor:
@@ -24,6 +29,7 @@ sensor:
 ```
 
 ### List of configuration parameters
+
 ```yaml
 {% configuration %}
 host:
