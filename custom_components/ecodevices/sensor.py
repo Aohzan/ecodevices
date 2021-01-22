@@ -54,7 +54,12 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the GCE Eco-Devices platform."""
-    controller = ecodevice(config.get(CONF_HOST), config.get(CONF_PORT), config.get(CONF_USERNAME), config.get(CONF_PASSWORD))
+    controller = ecodevice(
+        config.get(CONF_HOST),
+        config.get(CONF_PORT),
+        config.get(CONF_USERNAME),
+        config.get(CONF_PASSWORD)
+    )
     entities = []
 
     if controller.ping():
@@ -70,7 +75,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             )
 
         if config.get(CONF_T1_NAME):
-            _LOGGER.info("Add the t1 device with name: %s.", config.get(CONF_T1_NAME))
+            _LOGGER.info(
+                "Add the t1 device with name: %s.",
+                config.get(CONF_T1_NAME)
+            )
             entities.append(
                 EdDevice(
                     controller,
@@ -82,7 +90,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
                 )
             )
         if config.get(CONF_T2_NAME):
-            _LOGGER.info("Add the t2 device with name: %s.", config.get(CONF_T2_NAME))
+            _LOGGER.info(
+                "Add the t2 device with name: %s.",
+                config.get(CONF_T2_NAME)
+            )
             entities.append(
                 EdDevice(
                     controller,
@@ -94,7 +105,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
                 )
             )
         if config.get(CONF_C1_NAME):
-            _LOGGER.info("Add the c1 device with name: %s.", config.get(CONF_C1_NAME))
+            _LOGGER.info(
+                "Add the c1 device with name: %s.",
+                config.get(CONF_C1_NAME)
+            )
             entities.append(
                 EdDevice(
                     controller,
@@ -116,7 +130,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
                 )
             )
         if config.get(CONF_C2_NAME):
-            _LOGGER.info("Add the c2 device with name: %s.", config.get(CONF_C2_NAME))
+            _LOGGER.info(
+                "Add the c2 device with name: %s.",
+                config.get(CONF_C2_NAME)
+            )
             entities.append(
                 EdDevice(
                     controller,
@@ -139,8 +156,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             )
     else:
         _LOGGER.error(
-            "Can't connect to the platform %s:%s, please check host, port and authentication parameters if enabled.",
-            config.get(CONF_HOST), config.get(CONF_PORT),
+            "Can't connect to the platform %s:%s, please check host, " +
+            "port and authentication parameters if enabled.",
+            config.get(CONF_HOST),
+            config.get(CONF_PORT)
         )
     if entities:
         add_entities(entities, True)
