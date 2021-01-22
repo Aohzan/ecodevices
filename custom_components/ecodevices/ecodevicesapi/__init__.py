@@ -4,11 +4,11 @@ import requests
 class ECODEVICE:
     """Class representing the ECODEVICE and its API"""
 
-    def __init__(self, host, port=80, user=None, secret=None):
+    def __init__(self, host, port=80, username=None, password=None):
         self._host = host
         self._port = port
-        self._user = user
-        self._secret = secret
+        self._username= username
+        self._password = password
         self._timeout = 2
         self._api_url = f"http://{host}:{port}/api/xdevices.json"
 
@@ -18,8 +18,8 @@ class ECODEVICE:
 
     def _request(self, params):
 
-        if self._user != None and self._secret != None:
-            r = requests.get(self._api_url, params=params, auth=(self._user, self._secret), timeout=self._timeout)
+        if self._username is not None and self._password is not None:
+            r = requests.get(self._api_url, params=params, auth=(self._username, self._password), timeout=self._timeout)
         else:
             r = requests.get(self._api_url, params=params, timeout=self._timeout)
         r.raise_for_status()

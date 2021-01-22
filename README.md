@@ -45,7 +45,7 @@ user:
   description: HTTP user for authentication
   required: false
   type: string
-secret:
+password:
   description: HTTP user password for authentication
   required: false
   type: password

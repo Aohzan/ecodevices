@@ -11,12 +11,12 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.const import (
     CONF_HOST,
     CONF_PORT,
+    CONF_USERNAME,
+    CONF_PASSWORD
 )
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_USER = "user"
-CONF_SECRET = "secret"
 CONF_T1_NAME = "t1_name"
 CONF_T1_UNIT_OF_MEASUREMENT = "t1_unit_of_measurement"
 CONF_T2_NAME = "t2_name"
@@ -33,8 +33,8 @@ CONF_C2_DEVICE_CLASS = "c2_device_class"
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_HOST): cv.string,
-        vol.Optional(CONF_USER): cv.string,
-        vol.Optional(CONF_SECRET): cv.string,
+        vol.Optional(CONF_USERNAME): cv.string,
+        vol.Optional(CONF_PASSWORD): cv.string,
         vol.Optional(CONF_PORT, default=80): cv.port,
         vol.Optional(CONF_T1_NAME): cv.string,
         vol.Optional(CONF_T1_UNIT_OF_MEASUREMENT, default="VA"): cv.string,
@@ -54,7 +54,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the GCE Eco-Devices platform."""
-    controller = ecodevice(config.get(CONF_HOST), config.get(CONF_PORT), config.get(CONF_USER), config.get(CONF_SECRET))
+    controller = ecodevice(config.get(CONF_HOST), config.get(CONF_PORT), config.get(CONF_USERNAME), config.get(CONF_PASSWORD))
     entities = []
 
     if controller.ping():
@@ -63,10 +63,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             config.get(CONF_HOST, CONF_PORT),
         )
 
-        if config.get(CONF_USER) and config.get(CONF_SECRET):
+        if config.get(CONF_USERNAME) and config.get(CONF_PASSWORD):
             _LOGGER.info(
                 "Authenticated as %s.",
-                config.get(CONF_USER),
+                config.get(CONF_USERNAME),
             )
 
         if config.get(CONF_T1_NAME):
@@ -139,7 +139,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             )
     else:
         _LOGGER.error(
-            "Can't connect to the platform %s:%s, please check host, port and authentication parameters.",
+            "Can't connect to the platform %s:%s, please check host, port and authentication parameters if enabled.",
             config.get(CONF_HOST), config.get(CONF_PORT),
         )
     if entities:
