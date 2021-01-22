@@ -41,6 +41,14 @@ port:
   required: false
   default: 80
   type: port
+user:
+  description: HTTP user for authentication
+  required: false
+  type: string
+secret:
+  description: HTTP user password for authentication
+  required: false
+  type: password
 t1_name:
   description: Name of the teleinfo 1 input
   required: false
