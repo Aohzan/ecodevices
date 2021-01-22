@@ -139,7 +139,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             )
     else:
         _LOGGER.error(
-            "Can't connect to the plateform %s:%s, please check host, port and authentication parameters.",
+            "Can't connect to the platform %s:%s, please check host, port and authentication parameters.",
             config.get(CONF_HOST), config.get(CONF_PORT),
         )
     if entities:
