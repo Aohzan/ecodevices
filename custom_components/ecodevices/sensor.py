@@ -15,6 +15,8 @@ from homeassistant.const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+CONF_USER = "user"
+CONF_SECRET = "secret"
 CONF_T1_NAME = "t1_name"
 CONF_T1_UNIT_OF_MEASUREMENT = "t1_unit_of_measurement"
 CONF_T2_NAME = "t2_name"
@@ -31,6 +33,8 @@ CONF_C2_DEVICE_CLASS = "c2_device_class"
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_HOST): cv.string,
+        vol.Optional(CONF_USER): cv.string,
+        vol.Optional(CONF_SECRET): cv.string,
         vol.Optional(CONF_PORT, default=80): cv.port,
         vol.Optional(CONF_T1_NAME): cv.string,
         vol.Optional(CONF_T1_UNIT_OF_MEASUREMENT, default="VA"): cv.string,
@@ -50,7 +54,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the GCE Eco-Devices platform."""
-    controller = ecodevice(config.get(CONF_HOST), config.get(CONF_PORT))
+    controller = ecodevice(config.get(CONF_HOST), config.get(CONF_PORT), config.get(CONF_USER), config.get(CONF_SECRET))
     entities = []
 
     if controller.ping():
@@ -58,6 +62,13 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             "Successfully connected to the Eco-Device gateway: %s.",
             config.get(CONF_HOST, CONF_PORT),
         )
+
+        if config.get(CONF_USER) and config.get(CONF_SECRET):
+            _LOGGER.info(
+                "Authenticated as %s.",
+                config.get(CONF_USER),
+            )
+
         if config.get(CONF_T1_NAME):
             _LOGGER.info("Add the t1 device with name: %s.", config.get(CONF_T1_NAME))
             entities.append(
@@ -128,8 +139,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             )
     else:
         _LOGGER.error(
-            "Can't connect to the plateform %s, please check host and port.",
-            config.get(CONF_HOST),
+            "Can't connect to the plateform %s:%s, please check host, port and authentication parameters.",
+            config.get(CONF_HOST), config.get(CONF_PORT),
         )
     if entities:
         add_entities(entities, True)
