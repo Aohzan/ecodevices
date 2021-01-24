@@ -9,6 +9,7 @@ from homeassistant.const import (
     CONF_PORT,
     CONF_USERNAME,
 )
+from pyecodevices import EcoDevices
 
 from .const import (
     CONF_C1_ENABLED,
@@ -40,7 +41,8 @@ DATA_SCHEMA = vol.Schema(
     }
 )
 
-# @config_entries.HANDLERS.register(DOMAIN)
+
+@config_entries.HANDLERS.register(DOMAIN)
 class EcodevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a eco-devices config flow."""
 
@@ -53,6 +55,7 @@ class EcodevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""
+        errors = {}
         if user_input is not None:
             entry = await self.async_set_unique_id(
                 f"{DOMAIN}, {user_input.get(CONF_HOST)}"
@@ -62,8 +65,21 @@ class EcodevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self.hass.config_entries.async_update_entry(entry, data=user_input)
                 self._abort_if_unique_id_configured()
 
-            return self.async_create_entry(
-                title=user_input.get(CONF_HOST), data=user_input
+            # Check if ecodevices answer
+            controller = EcoDevices(
+                user_input.get(CONF_HOST),
+                user_input.get(CONF_PORT),
+                user_input.get(CONF_USERNAME),
+                user_input.get(CONF_PASSWORD),
             )
 
-        return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA)
+            if controller.ping():
+                return self.async_create_entry(
+                    title=user_input.get(CONF_HOST), data=user_input
+                )
+
+            errors["base"] = "cannot_connect"
+
+        return self.async_show_form(
+            step_id="user", data_schema=DATA_SCHEMA, errors=errors
+        )
