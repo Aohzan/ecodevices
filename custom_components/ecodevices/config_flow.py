@@ -65,7 +65,6 @@ class EcodevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self.hass.config_entries.async_update_entry(entry, data=user_input)
                 self._abort_if_unique_id_configured()
 
-            # Check if ecodevices answer
             controller = EcoDevices(
                 user_input.get(CONF_HOST),
                 user_input.get(CONF_PORT),
@@ -73,7 +72,7 @@ class EcodevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 user_input.get(CONF_PASSWORD),
             )
 
-            if controller.ping():
+            if await self.hass.async_add_executor_job(controller.ping):
                 return self.async_create_entry(
                     title=user_input.get(CONF_HOST), data=user_input
                 )

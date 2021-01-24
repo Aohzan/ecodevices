@@ -40,7 +40,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         config.get(CONF_PASSWORD),
     )
 
-    if not controller.ping():
+    if not await hass.async_add_executor_job(controller.ping):
         _LOGGER.error("GCE Eco-Devices didn't answer to the request, unable to set up")
         raise ConfigEntryNotReady
 
@@ -50,7 +50,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     )
 
     if config.get(CONF_USERNAME) and config.get(CONF_PASSWORD):
-        _LOGGER.info(
+        _LOGGER.debug(
             "Authenticated as %s.",
             config.get(CONF_USERNAME),
         )
