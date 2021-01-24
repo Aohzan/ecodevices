@@ -1,41 +1,40 @@
 """Support for the GCE Eco-Devices."""
-import voluptuous as vol
 import logging
 
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.config_entries import SOURCE_IMPORT
+from homeassistant.const import (
+    CONF_HOST,
+    CONF_NAME,
+    CONF_PASSWORD,
+    CONF_PORT,
+    CONF_USERNAME,
+)
+from homeassistant.helpers.entity import Entity
+
 from .const import (
-    DOMAIN,
-    CONTROLLER,
-    CONFIG,
+    CONF_C1_DEVICE_CLASS,
+    CONF_C1_ENABLED,
+    CONF_C1_ICON,
+    CONF_C1_NAME,
+    CONF_C1_UNIT_OF_MEASUREMENT,
+    CONF_C2_DEVICE_CLASS,
+    CONF_C2_ENABLED,
+    CONF_C2_ICON,
+    CONF_C2_NAME,
+    CONF_C2_UNIT_OF_MEASUREMENT,
     CONF_T1_ENABLED,
     CONF_T1_NAME,
     CONF_T1_UNIT_OF_MEASUREMENT,
     CONF_T2_ENABLED,
     CONF_T2_NAME,
     CONF_T2_UNIT_OF_MEASUREMENT,
-    CONF_C1_ENABLED,
-    CONF_C1_NAME,
-    CONF_C1_ICON,
-    CONF_C1_UNIT_OF_MEASUREMENT,
-    CONF_C1_DEVICE_CLASS,
-    CONF_C2_ENABLED,
-    CONF_C2_NAME,
-    CONF_C2_ICON,
-    CONF_C2_UNIT_OF_MEASUREMENT,
-    CONF_C2_DEVICE_CLASS,
+    CONFIG,
+    CONTROLLER,
+    DOMAIN,
 )
-
-from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.config_entries import SOURCE_IMPORT
-from homeassistant.const import (
-    CONF_NAME,
-    CONF_HOST,
-    CONF_PORT,
-    CONF_USERNAME,
-    CONF_PASSWORD,
-)
-from homeassistant.helpers.entity import Entity
-import homeassistant.helpers.config_validation as cv
-
 
 _LOGGER = logging.getLogger(__name__)
 

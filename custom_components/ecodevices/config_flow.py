@@ -1,29 +1,29 @@
 """Config flow to configure the eco-devices integration."""
-from homeassistant import config_entries
-import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
-
-from .const import (
-    DOMAIN,
-    CONTROLLER,
-    CONFIG,
-    CONF_T1_ENABLED,
-    CONF_T2_ENABLED,
-    CONF_C1_ENABLED,
-    CONF_C2_ENABLED,
-    CONF_T1_NAME,
-    CONF_T1_UNIT_OF_MEASUREMENT,
-    CONF_T2_NAME,
-    CONF_T2_UNIT_OF_MEASUREMENT,
-    CONF_C1_NAME,
-    CONF_C2_NAME,
-)
+import voluptuous as vol
+from homeassistant import config_entries
 from homeassistant.const import (
-    CONF_NAME,
     CONF_HOST,
+    CONF_NAME,
+    CONF_PASSWORD,
     CONF_PORT,
     CONF_USERNAME,
-    CONF_PASSWORD,
+)
+
+from .const import (
+    CONF_C1_ENABLED,
+    CONF_C1_NAME,
+    CONF_C2_ENABLED,
+    CONF_C2_NAME,
+    CONF_T1_ENABLED,
+    CONF_T1_NAME,
+    CONF_T1_UNIT_OF_MEASUREMENT,
+    CONF_T2_ENABLED,
+    CONF_T2_NAME,
+    CONF_T2_UNIT_OF_MEASUREMENT,
+    CONFIG,
+    CONTROLLER,
+    DOMAIN,
 )
 
 DATA_SCHEMA = vol.Schema(

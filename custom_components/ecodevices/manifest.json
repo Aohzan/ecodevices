@@ -1,9 +1,9 @@
 {
-  "name": "GCE Eco-Devices",
-  "domain": "ecodevices",
-  "documentation": "https://github.com/Aohzan/ecodevices",
-  "codeowners": ["@Aohzan"],
-  "config_flow": true,
-  "requirements": ["pyecodevices=1.0.0"],
-  "dependencies": ["request"]
+    "name": "GCE Eco-Devices",
+    "domain": "ecodevices",
+    "documentation": "https://github.com/Aohzan/ecodevices",
+    "codeowners": ["@Aohzan"],
+    "config_flow": true,
+    "requirements": ["pyecodevices=1.0.0"],
+    "dependencies": ["request"],
 }

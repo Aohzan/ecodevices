@@ -2,23 +2,23 @@
 import asyncio
 import logging
 
-from .ecodevicesapi import EcoDevices
-from .const import DOMAIN, CONTROLLER, CONFIG, UNDO_UPDATE_LISTENER, PLATFORMS
-
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    CONF_NAME,
-    CONF_HOST,
-    CONF_PORT,
-    CONF_USERNAME,
-    CONF_PASSWORD,
-)
-from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry as dr
-from homeassistant.exceptions import ConfigEntryNotReady
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
+from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import (
+    CONF_HOST,
+    CONF_NAME,
+    CONF_PASSWORD,
+    CONF_PORT,
+    CONF_USERNAME,
+)
+from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers import device_registry as dr
+
+from .const import CONFIG, CONTROLLER, DOMAIN, PLATFORMS, UNDO_UPDATE_LISTENER
+from .ecodevicesapi import EcoDevices
 
 _LOGGER = logging.getLogger(__name__)
 
