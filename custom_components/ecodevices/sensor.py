@@ -85,7 +85,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     entities = []
 
     if config.get(CONF_T1_ENABLED):
-        _LOGGER.info("Add the t1 entity.")
+        _LOGGER.debug("Add the t1 entity.")
         entities.append(
             EdDevice(
                 controller,
@@ -98,7 +98,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             )
         )
     if config.get(CONF_T2_ENABLED):
-        _LOGGER.info("Add the t2 entity.")
+        _LOGGER.debug("Add the t2 entity.")
         entities.append(
             EdDevice(
                 controller,
@@ -111,7 +111,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             )
         )
     if config.get(CONF_C1_ENABLED):
-        _LOGGER.info("Add the c1 entities.")
+        _LOGGER.debug("Add the c1 entities.")
         entities.append(
             EdDevice(
                 controller,
@@ -135,7 +135,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             )
         )
     if config.get(CONF_C2_ENABLED):
-        _LOGGER.info("Add the c2 entities.")
+        _LOGGER.debug("Add the c2 entities.")
         entities.append(
             EdDevice(
                 controller,
