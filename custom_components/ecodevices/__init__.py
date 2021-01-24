@@ -16,9 +16,9 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import device_registry as dr
+from pyecodevices import EcoDevices
 
 from .const import CONFIG, CONTROLLER, DOMAIN, PLATFORMS, UNDO_UPDATE_LISTENER
-from .ecodevicesapi import EcoDevices
 
 _LOGGER = logging.getLogger(__name__)
 
