@@ -1,8 +1,9 @@
 {
+  "name": "GCE Eco-Devices",
   "domain": "ecodevices",
-  "name": "Eco-Devices",
-  "documentation": "https://www.home-assistant.io/integrations/ecodevices",
-  "requirements": [],
-  "dependencies": [],
-  "codeowners": ["@Mati24"]
+  "documentation": "https://github.com/Aohzan/ecodevices",
+  "codeowners": ["@Aohzan"],
+  "config_flow": true,
+  "requirements": ["pyecodevices==1.0.0"],
+  "dependencies": []
 }

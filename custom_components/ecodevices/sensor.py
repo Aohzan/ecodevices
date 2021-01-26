@@ -1,146 +1,177 @@
 """Support for the GCE Eco-Devices."""
-import voluptuous as vol
 import logging
 
-from .ecodevicesapi import ECODEVICE as ecodevice
-
-from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
-
+import voluptuous as vol
+from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.config_entries import SOURCE_IMPORT
 from homeassistant.const import (
     CONF_HOST,
+    CONF_NAME,
+    CONF_PASSWORD,
     CONF_PORT,
+    CONF_USERNAME,
+)
+from homeassistant.helpers.entity import Entity
+
+from .const import (
+    CONF_C1_DEVICE_CLASS,
+    CONF_C1_ENABLED,
+    CONF_C1_ICON,
+    CONF_C1_NAME,
+    CONF_C1_UNIT_OF_MEASUREMENT,
+    CONF_C2_DEVICE_CLASS,
+    CONF_C2_ENABLED,
+    CONF_C2_ICON,
+    CONF_C2_NAME,
+    CONF_C2_UNIT_OF_MEASUREMENT,
+    CONF_T1_ENABLED,
+    CONF_T1_NAME,
+    CONF_T1_UNIT_OF_MEASUREMENT,
+    CONF_T2_ENABLED,
+    CONF_T2_NAME,
+    CONF_T2_UNIT_OF_MEASUREMENT,
+    CONFIG,
+    CONTROLLER,
+    DOMAIN,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_T1_NAME = "t1_name"
-CONF_T1_UNIT_OF_MEASUREMENT = "t1_unit_of_measurement"
-CONF_T2_NAME = "t2_name"
-CONF_T2_UNIT_OF_MEASUREMENT = "t2_unit_of_measurement"
-CONF_C1_NAME = "c1_name"
-CONF_C1_ICON = "c1_icon"
-CONF_C1_UNIT_OF_MEASUREMENT = "c1_unit_of_measurement"
-CONF_C1_DEVICE_CLASS = "c1_device_class"
-CONF_C2_NAME = "c2_name"
-CONF_C2_ICON = "c2_icon"
-CONF_C2_UNIT_OF_MEASUREMENT = "c2_unit_of_measurement"
-CONF_C2_DEVICE_CLASS = "c2_device_class"
-
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
-        vol.Required(CONF_HOST): cv.string,
-        vol.Optional(CONF_PORT, default=80): cv.port,
-        vol.Optional(CONF_T1_NAME): cv.string,
-        vol.Optional(CONF_T1_UNIT_OF_MEASUREMENT, default="VA"): cv.string,
-        vol.Optional(CONF_T2_NAME): cv.string,
-        vol.Optional(CONF_T2_UNIT_OF_MEASUREMENT, default="VA"): cv.string,
-        vol.Optional(CONF_C1_NAME): cv.string,
-        vol.Optional(CONF_C1_ICON): cv.string,
-        vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): cv.string,
-        vol.Optional(CONF_C1_DEVICE_CLASS): cv.string,
-        vol.Optional(CONF_C2_NAME): cv.string,
-        vol.Optional(CONF_C2_ICON): cv.string,
-        vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): cv.string,
-        vol.Optional(CONF_C2_DEVICE_CLASS): cv.string,
+        vol.Optional(CONF_NAME, default="Eco-Devices"): str,
+        vol.Required(CONF_HOST): str,
+        vol.Optional(CONF_PORT, default=80): int,
+        vol.Optional(CONF_USERNAME): str,
+        vol.Optional(CONF_PASSWORD): str,
+        vol.Required(CONF_T1_ENABLED, default=False): bool,
+        vol.Optional(CONF_T1_NAME): str,
+        vol.Optional(CONF_T1_UNIT_OF_MEASUREMENT): str,
+        vol.Required(CONF_T2_ENABLED, default=False): bool,
+        vol.Optional(CONF_T2_NAME): str,
+        vol.Optional(CONF_T2_UNIT_OF_MEASUREMENT): str,
+        vol.Required(CONF_C1_ENABLED, default=False): bool,
+        vol.Optional(CONF_C1_NAME): str,
+        vol.Optional(CONF_C1_ICON): str,
+        vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): str,
+        vol.Optional(CONF_C1_DEVICE_CLASS): str,
+        vol.Required(CONF_C2_ENABLED, default=False): bool,
+        vol.Optional(CONF_C2_NAME): str,
+        vol.Optional(CONF_C2_ICON): str,
+        vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): str,
+        vol.Optional(CONF_C2_DEVICE_CLASS): str,
     }
 )
 
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    """Import the platform into a config entry."""
+
+    hass.async_create_task(
+        hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": SOURCE_IMPORT}, data=config
+        )
+    )
+
+
+async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up the GCE Eco-Devices platform."""
-    controller = ecodevice(config.get(CONF_HOST), config.get(CONF_PORT))
+    data = hass.data[DOMAIN][config_entry.entry_id]
+    controller = data[CONTROLLER]
+    controller_name = data[CONF_NAME]
+    config = data[CONFIG]
+
     entities = []
 
-    if controller.ping():
-        _LOGGER.info(
-            "Successfully connected to the Eco-Device gateway: %s.",
-            config.get(CONF_HOST, CONF_PORT),
+    if config.get(CONF_T1_ENABLED):
+        _LOGGER.debug("Add the t1 entity.")
+        entities.append(
+            EdDevice(
+                controller,
+                controller_name,
+                "current_t1",
+                config.get(CONF_T1_NAME, "Teleinfo 1"),
+                config.get(CONF_T1_UNIT_OF_MEASUREMENT, "VA"),
+                "mdi:flash",
+                "power",
+            )
         )
-        if config.get(CONF_T1_NAME):
-            _LOGGER.info("Add the t1 device with name: %s.", config.get(CONF_T1_NAME))
-            entities.append(
-                EdDevice(
-                    controller,
-                    "current_t1",
-                    config.get(CONF_T1_NAME),
-                    config.get(CONF_T1_UNIT_OF_MEASUREMENT),
-                    "mdi:flash",
-                    "power",
-                )
+    if config.get(CONF_T2_ENABLED):
+        _LOGGER.debug("Add the t2 entity.")
+        entities.append(
+            EdDevice(
+                controller,
+                controller_name,
+                "current_t2",
+                config.get(CONF_T2_NAME, "Teleinfo 2"),
+                config.get(CONF_T2_UNIT_OF_MEASUREMENT, "VA"),
+                "mdi:flash",
+                "power",
             )
-        if config.get(CONF_T2_NAME):
-            _LOGGER.info("Add the t2 device with name: %s.", config.get(CONF_T2_NAME))
-            entities.append(
-                EdDevice(
-                    controller,
-                    "current_t2",
-                    config.get(CONF_T2_NAME),
-                    config.get(CONF_T2_UNIT_OF_MEASUREMENT),
-                    "mdi:flash",
-                    "power",
-                )
-            )
-        if config.get(CONF_C1_NAME):
-            _LOGGER.info("Add the c1 device with name: %s.", config.get(CONF_C1_NAME))
-            entities.append(
-                EdDevice(
-                    controller,
-                    "daily_c1",
-                    f"{config.get(CONF_C1_NAME)} Daily",
-                    config.get(CONF_C1_UNIT_OF_MEASUREMENT),
-                    config.get(CONF_C1_ICON),
-                    config.get(CONF_C1_DEVICE_CLASS),
-                )
-            )
-            entities.append(
-                EdDevice(
-                    controller,
-                    "total_c1",
-                    f"{config.get(CONF_C1_NAME)} Total",
-                    config.get(CONF_C1_UNIT_OF_MEASUREMENT),
-                    config.get(CONF_C1_ICON),
-                    config.get(CONF_C1_DEVICE_CLASS),
-                )
-            )
-        if config.get(CONF_C2_NAME):
-            _LOGGER.info("Add the c2 device with name: %s.", config.get(CONF_C2_NAME))
-            entities.append(
-                EdDevice(
-                    controller,
-                    "daily_c2",
-                    f"{config.get(CONF_C1_NAME)} Daily",
-                    config.get(CONF_C2_UNIT_OF_MEASUREMENT),
-                    config.get(CONF_C2_ICON),
-                    config.get(CONF_C2_DEVICE_CLASS),
-                )
-            )
-            entities.append(
-                EdDevice(
-                    controller,
-                    "total_c2",
-                    f"{config.get(CONF_C1_NAME)} Total",
-                    config.get(CONF_C2_UNIT_OF_MEASUREMENT),
-                    config.get(CONF_C2_ICON),
-                    config.get(CONF_C2_DEVICE_CLASS),
-                )
-            )
-    else:
-        _LOGGER.error(
-            "Can't connect to the plateform %s, please check host and port.",
-            config.get(CONF_HOST),
         )
+    if config.get(CONF_C1_ENABLED):
+        _LOGGER.debug("Add the c1 entities.")
+        entities.append(
+            EdDevice(
+                controller,
+                controller_name,
+                "daily_c1",
+                f"{config.get(CONF_C1_NAME, 'Meter 1')} Daily",
+                config.get(CONF_C1_UNIT_OF_MEASUREMENT),
+                config.get(CONF_C1_ICON),
+                config.get(CONF_C1_DEVICE_CLASS),
+            )
+        )
+        entities.append(
+            EdDevice(
+                controller,
+                controller_name,
+                "total_c1",
+                f"{config.get(CONF_C1_NAME, 'Meter 1')} Total",
+                config.get(CONF_C1_UNIT_OF_MEASUREMENT),
+                config.get(CONF_C1_ICON),
+                config.get(CONF_C1_DEVICE_CLASS),
+            )
+        )
+    if config.get(CONF_C2_ENABLED):
+        _LOGGER.debug("Add the c2 entities.")
+        entities.append(
+            EdDevice(
+                controller,
+                controller_name,
+                "daily_c2",
+                f"{config.get(CONF_C2_NAME, 'Meter 2')} Daily",
+                config.get(CONF_C2_UNIT_OF_MEASUREMENT),
+                config.get(CONF_C2_ICON),
+                config.get(CONF_C2_DEVICE_CLASS),
+            )
+        )
+        entities.append(
+            EdDevice(
+                controller,
+                controller_name,
+                "total_c2",
+                f"{config.get(CONF_C2_NAME, 'Meter 2')} Total",
+                config.get(CONF_C2_UNIT_OF_MEASUREMENT),
+                config.get(CONF_C2_ICON),
+                config.get(CONF_C2_DEVICE_CLASS),
+            )
+        )
+
     if entities:
-        add_entities(entities, True)
+        async_add_entities(entities, True)
 
 
 class EdDevice(Entity):
     """Representation of a Sensor."""
 
-    def __init__(self, controller, request, name, unit, icon, device_class):
+    def __init__(
+        self, controller, controller_name, request, name, unit, icon, device_class
+    ):
         """Initialize the sensor."""
         self._controller = controller
+        self._controller_name = controller_name
         self._request = request
         self._name = name
         self._unit = unit
@@ -148,21 +179,20 @@ class EdDevice(Entity):
         self._device_class = device_class
 
         self._state = None
-        self._uid = f"{self._controller.host}_{str(self._request)}"
 
     @property
     def device_info(self):
         return {
-            "identifiers": {("ecodevices", self._uid)},
-            "name": self._name,
+            "identifiers": {(DOMAIN, self._controller.host)},
+            "name": self._controller_name,
             "manufacturer": "GCE",
-            "model": "ECO-DEVICES",
-            "via_device": ("ecodevices", self._controller.host),
+            "model": "Eco-Devices",
+            "via_device": (DOMAIN, self._controller.host),
         }
 
     @property
     def unique_id(self):
-        return self._uid
+        return f"ecodevices_{self._controller.host}_{str(self._request)}"
 
     @property
     def device_class(self):

@@ -1,0 +1,28 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Déjà configuré"
+    },
+    "error": {
+      "cannot_connect": "Problème de connexion",
+      "invalid_auth": "Problème d'authentification",
+      "unknown": "Erreur non reconnue"
+    },
+    "step": {
+      "user": {
+        "data": {
+          "name": "Nom",
+          "host": "Adresse IP ou DNS",
+          "port": "Port",
+          "password": "Mot de passe",
+          "username": "Nom d'utilisateur",
+          "t1_enabled": "Teleinfo 1",
+          "t2_enabled": "Teleinfo 2",
+          "c1_enabled": "Compteur 1",
+          "c2_enabled": "Compteur 2"
+        }
+      }
+    }
+  },
+  "title": "GCE Eco-Devices"
+}
