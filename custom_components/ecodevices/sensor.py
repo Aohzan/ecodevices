@@ -1,28 +1,15 @@
 """Support for the GCE Eco-Devices."""
 import logging
 
-import homeassistant.helpers.config_validation as cv
-import voluptuous as vol
-from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.config_entries import SOURCE_IMPORT
-from homeassistant.const import (
-    CONF_HOST,
-    CONF_NAME,
-    CONF_PASSWORD,
-    CONF_PORT,
-    CONF_USERNAME,
-)
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     CONF_C1_DEVICE_CLASS,
     CONF_C1_ENABLED,
-    CONF_C1_ICON,
     CONF_C1_NAME,
     CONF_C1_UNIT_OF_MEASUREMENT,
     CONF_C2_DEVICE_CLASS,
     CONF_C2_ENABLED,
-    CONF_C2_ICON,
     CONF_C2_NAME,
     CONF_C2_UNIT_OF_MEASUREMENT,
     CONF_T1_ENABLED,
@@ -33,53 +20,18 @@ from .const import (
     CONF_T2_UNIT_OF_MEASUREMENT,
     CONFIG,
     CONTROLLER,
+    COORDINATOR,
     DOMAIN,
 )
 
 _LOGGER = logging.getLogger(__name__)
-
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
-    {
-        vol.Optional(CONF_NAME, default="Eco-Devices"): str,
-        vol.Required(CONF_HOST): str,
-        vol.Optional(CONF_PORT, default=80): int,
-        vol.Optional(CONF_USERNAME): str,
-        vol.Optional(CONF_PASSWORD): str,
-        vol.Required(CONF_T1_ENABLED, default=False): bool,
-        vol.Optional(CONF_T1_NAME): str,
-        vol.Optional(CONF_T1_UNIT_OF_MEASUREMENT): str,
-        vol.Required(CONF_T2_ENABLED, default=False): bool,
-        vol.Optional(CONF_T2_NAME): str,
-        vol.Optional(CONF_T2_UNIT_OF_MEASUREMENT): str,
-        vol.Required(CONF_C1_ENABLED, default=False): bool,
-        vol.Optional(CONF_C1_NAME): str,
-        vol.Optional(CONF_C1_ICON): str,
-        vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): str,
-        vol.Optional(CONF_C1_DEVICE_CLASS): str,
-        vol.Required(CONF_C2_ENABLED, default=False): bool,
-        vol.Optional(CONF_C2_NAME): str,
-        vol.Optional(CONF_C2_ICON): str,
-        vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): str,
-        vol.Optional(CONF_C2_DEVICE_CLASS): str,
-    }
-)
-
-
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    """Import the platform into a config entry."""
-
-    hass.async_create_task(
-        hass.config_entries.flow.async_init(
-            DOMAIN, context={"source": SOURCE_IMPORT}, data=config
-        )
-    )
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up the GCE Eco-Devices platform."""
     data = hass.data[DOMAIN][config_entry.entry_id]
     controller = data[CONTROLLER]
-    controller_name = data[CONF_NAME]
+    coordinator = data[COORDINATOR]
     config = data[CONFIG]
 
     entities = []
@@ -87,74 +39,50 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if config.get(CONF_T1_ENABLED):
         _LOGGER.debug("Add the t1 entity.")
         entities.append(
-            EdDevice(
+            T1EdDevice(
                 controller,
-                controller_name,
-                "current_t1",
-                config.get(CONF_T1_NAME, "Teleinfo 1"),
-                config.get(CONF_T1_UNIT_OF_MEASUREMENT, "VA"),
-                "mdi:flash",
+                coordinator,
+                "t1",
+                config.get(CONF_T1_NAME),
+                config.get(CONF_T1_UNIT_OF_MEASUREMENT),
                 "power",
+                "mdi:flash",
             )
         )
     if config.get(CONF_T2_ENABLED):
         _LOGGER.debug("Add the t2 entity.")
         entities.append(
-            EdDevice(
+            T2EdDevice(
                 controller,
-                controller_name,
-                "current_t2",
-                config.get(CONF_T2_NAME, "Teleinfo 2"),
-                config.get(CONF_T2_UNIT_OF_MEASUREMENT, "VA"),
-                "mdi:flash",
+                coordinator,
+                "t2",
+                config.get(CONF_T2_NAME),
+                config.get(CONF_T2_UNIT_OF_MEASUREMENT),
                 "power",
+                "mdi:flash",
             )
         )
     if config.get(CONF_C1_ENABLED):
-        _LOGGER.debug("Add the c1 entities.")
+        _LOGGER.debug("Add the c1 entity.")
         entities.append(
-            EdDevice(
+            C1EdDevice(
                 controller,
-                controller_name,
-                "daily_c1",
-                f"{config.get(CONF_C1_NAME, 'Meter 1')} Daily",
+                coordinator,
+                "c1",
+                config.get(CONF_C1_NAME),
                 config.get(CONF_C1_UNIT_OF_MEASUREMENT),
-                config.get(CONF_C1_ICON),
-                config.get(CONF_C1_DEVICE_CLASS),
-            )
-        )
-        entities.append(
-            EdDevice(
-                controller,
-                controller_name,
-                "total_c1",
-                f"{config.get(CONF_C1_NAME, 'Meter 1')} Total",
-                config.get(CONF_C1_UNIT_OF_MEASUREMENT),
-                config.get(CONF_C1_ICON),
                 config.get(CONF_C1_DEVICE_CLASS),
             )
         )
     if config.get(CONF_C2_ENABLED):
-        _LOGGER.debug("Add the c2 entities.")
+        _LOGGER.debug("Add the c2 entity.")
         entities.append(
-            EdDevice(
+            C2EdDevice(
                 controller,
-                controller_name,
-                "daily_c2",
-                f"{config.get(CONF_C2_NAME, 'Meter 2')} Daily",
+                coordinator,
+                "c2",
+                config.get(CONF_C2_NAME),
                 config.get(CONF_C2_UNIT_OF_MEASUREMENT),
-                config.get(CONF_C2_ICON),
-                config.get(CONF_C2_DEVICE_CLASS),
-            )
-        )
-        entities.append(
-            EdDevice(
-                controller,
-                controller_name,
-                "total_c2",
-                f"{config.get(CONF_C2_NAME, 'Meter 2')} Total",
-                config.get(CONF_C2_UNIT_OF_MEASUREMENT),
-                config.get(CONF_C2_ICON),
                 config.get(CONF_C2_DEVICE_CLASS),
             )
         )
@@ -163,56 +91,145 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities, True)
 
 
-class EdDevice(Entity):
-    """Representation of a Sensor."""
+class EdDevice(CoordinatorEntity):
+    """Representation of a generic Eco-Devices sensor."""
 
     def __init__(
-        self, controller, controller_name, request, name, unit, icon, device_class
+        self,
+        controller,
+        coordinator,
+        input_name,
+        name,
+        unit,
+        device_class,
+        icon=None,
     ):
         """Initialize the sensor."""
-        self._controller = controller
-        self._controller_name = controller_name
-        self._request = request
+        super().__init__(coordinator)
+        self.controller = controller
+        self._input_name = input_name
         self._name = name
         self._unit = unit
-        self._icon = icon
         self._device_class = device_class
-
+        self._icon = icon
         self._state = None
 
     @property
     def device_info(self):
+        """Return device information identifier."""
         return {
-            "identifiers": {(DOMAIN, self._controller.host)},
-            "name": self._controller_name,
-            "manufacturer": "GCE",
-            "model": "Eco-Devices",
-            "via_device": (DOMAIN, self._controller.host),
+            "identifiers": {(DOMAIN, self.controller.host)},
+            "via_device": (DOMAIN, self.controller.host),
         }
 
     @property
     def unique_id(self):
-        return f"ecodevices_{self._controller.host}_{str(self._request)}"
+        """Return an unique id."""
+        return "_".join(
+            [
+                DOMAIN,
+                self.controller.host,
+                "sensor",
+                self._input_name,
+            ]
+        )
 
     @property
     def device_class(self):
+        """Return the device_class."""
         return self._device_class
 
     @property
     def name(self):
+        """Return the name."""
         return self._name
 
     @property
-    def state(self):
-        return self._state
-
-    @property
     def unit_of_measurement(self):
+        """Return the unit_of_measurement if specified."""
         return self._unit
 
     @property
     def icon(self):
+        """Return the icon if specified."""
         return self._icon
 
-    def update(self):
-        self._state = self._controller.get(self._request)
+
+class T1EdDevice(EdDevice):
+    """Initialize the T1 sensor."""
+
+    @property
+    def state(self):
+        """Return the state."""
+        return self.coordinator.data["T1_PAPP"]
+
+    @property
+    def state_attributes(self):
+        """Return the state attributes."""
+        if self.coordinator.data:
+            return {
+                "ptec": self.coordinator.data["T1_PTEC"],
+                "souscription": self.coordinator.data["T1_ISOUSC"],
+                "intensite_max": self.coordinator.data["T1_IMAX"],
+                "intensite_max_ph1": self.coordinator.data["T1_IMAX1"],
+                "intensite_max_ph2": self.coordinator.data["T1_IMAX2"],
+                "intensite_max_ph3": self.coordinator.data["T1_IMAX3"],
+            }
+
+
+class T2EdDevice(EdDevice):
+    """Initialize the T2 sensor."""
+
+    @property
+    def state(self):
+        """Return the state."""
+        return self.coordinator.data["T2_PAPP"]
+
+    @property
+    def state_attributes(self):
+        """Return the state attributes."""
+        if self.coordinator.data:
+            return {
+                "ptec": self.coordinator.data["T2_PTEC"],
+                "souscription": self.coordinator.data["T2_ISOUSC"],
+                "intensite_max": self.coordinator.data["T2_IMAX"],
+                "intensite_max_ph1": self.coordinator.data["T2_IMAX1"],
+                "intensite_max_ph2": self.coordinator.data["T2_IMAX2"],
+                "intensite_max_ph3": self.coordinator.data["T2_IMAX3"],
+            }
+
+
+class C1EdDevice(EdDevice):
+    """Initialize the C1 sensor."""
+
+    @property
+    def state(self):
+        """Return the state."""
+        return self.coordinator.data["c0day"]
+
+    @property
+    def state_attributes(self):
+        """Return the state attributes."""
+        if self.coordinator.data:
+            return {
+                "total": self.coordinator.data["count0"],
+                "fuel": self.coordinator.data["c0_fuel"],
+            }
+
+
+class C2EdDevice(EdDevice):
+    """Initialize the C2 sensor."""
+
+    @property
+    def state(self):
+        """Return the state."""
+        return self.coordinator.data["c1day"]
+
+    @property
+    def state_attributes(self):
+        """Return the state attributes."""
+        if self.coordinator.data:
+            return {
+                "total": self.coordinator.data["count1"],
+                "fuel": self.coordinator.data["c1_fuel"],
+            }

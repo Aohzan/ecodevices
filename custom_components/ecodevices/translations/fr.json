@@ -1,28 +1,44 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Déjà configuré"
+      "already_configured": "D\u00e9j\u00e0 configur\u00e9"
     },
     "error": {
-      "cannot_connect": "Problème de connexion",
-      "invalid_auth": "Problème d'authentification",
+      "cannot_connect": "Probl\u00e8me de connexion",
+      "invalid_auth": "Probl\u00e8me d'authentification",
       "unknown": "Erreur non reconnue"
     },
     "step": {
       "user": {
+        "title": "Param\u00e8tres de l'Eco-Device",
+        "description": "D\u00e9finissez les param\u00e8tres de connexion ainsi que les entr\u00e9es utilis\u00e9es.",
         "data": {
           "name": "Nom",
           "host": "Adresse IP ou DNS",
           "port": "Port",
+          "scan_interval": "Interval de mise à jour en secondes",
           "password": "Mot de passe",
           "username": "Nom d'utilisateur",
-          "t1_enabled": "Teleinfo 1",
-          "t2_enabled": "Teleinfo 2",
+          "t1_enabled": "T\u00e9l\u00e9info 1",
+          "t2_enabled": "T\u00e9l\u00e9info 2",
           "c1_enabled": "Compteur 1",
           "c2_enabled": "Compteur 2"
         }
+      },
+      "params": {
+        "data": {
+          "t1_name": "Nom du T\u00e9l\u00e9info 1",
+          "t1_unit_of_measurement": "Unit\u00e9 du T\u00e9l\u00e9info 1",
+          "t2_name": "Nom du T\u00e9l\u00e9info 2",
+          "t2_unit_of_measurement": "Unit\u00e9 du T\u00e9l\u00e9info 2",
+          "c1_name": "Nom du compteur 1",
+          "c1_device_class": "Type du compteur 1",
+          "c1_unit_of_measurement": "Unit\u00e9 du compteur 1",
+          "c2_name": "Nom du compteur 2",
+          "c2_device_class": "Type du compteur 2",
+          "c2_unit_of_measurement": "Unit\u00e9 du compteur 2"
+        }
       }
     }
-  },
-  "title": "GCE Eco-Devices"
+  }
 }
