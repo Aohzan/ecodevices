@@ -37,7 +37,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     entities = []
 
     if config.get(CONF_T1_ENABLED):
-        _LOGGER.debug("Add the t1 entity.")
+        _LOGGER.debug("Add the teleinfo 1 entity")
         entities.append(
             T1EdDevice(
                 controller,
@@ -50,7 +50,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             )
         )
     if config.get(CONF_T2_ENABLED):
-        _LOGGER.debug("Add the t2 entity.")
+        _LOGGER.debug("Add the teleinfo 2 entity")
         entities.append(
             T2EdDevice(
                 controller,
@@ -63,7 +63,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             )
         )
     if config.get(CONF_C1_ENABLED):
-        _LOGGER.debug("Add the c1 entity.")
+        _LOGGER.debug("Add the meter 1 entity")
         entities.append(
             C1EdDevice(
                 controller,
@@ -75,7 +75,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             )
         )
     if config.get(CONF_C2_ENABLED):
-        _LOGGER.debug("Add the c2 entity.")
+        _LOGGER.debug("Add the meter 2 entity")
         entities.append(
             C2EdDevice(
                 controller,
@@ -168,12 +168,26 @@ class T1EdDevice(EdDevice):
         """Return the state attributes."""
         if self.coordinator.data:
             return {
-                "ptec": self.coordinator.data["T1_PTEC"],
-                "souscription": self.coordinator.data["T1_ISOUSC"],
-                "intensite_max": self.coordinator.data["T1_IMAX"],
-                "intensite_max_ph1": self.coordinator.data["T1_IMAX1"],
-                "intensite_max_ph2": self.coordinator.data["T1_IMAX2"],
-                "intensite_max_ph3": self.coordinator.data["T1_IMAX3"],
+                "type_heures": self.coordinator.data.get("T1_PTEC"),
+                "souscription": self.coordinator.data.get("T1_ISOUSC"),
+                "intensite_max": self.coordinator.data.get("T1_IMAX"),
+                "intensite_max_ph1": self.coordinator.data.get("T1_IMAX1"),
+                "intensite_max_ph2": self.coordinator.data.get("T1_IMAX2"),
+                "intensite_max_ph3": self.coordinator.data.get("T1_IMAX3"),
+                "intensite_now": self.coordinator.data.get("T1_IINST"),
+                "intensite_now_ph1": self.coordinator.data.get("T1_IINST1"),
+                "intensite_now_ph2": self.coordinator.data.get("T1_IINST2"),
+                "intensite_now_ph3": self.coordinator.data.get("T1_IINST3"),
+                "numero_compteur": self.coordinator.data.get("T1_ADCO"),
+                "option_tarifaire": self.coordinator.data.get("T1_OPTARIF"),
+                "index_base": self.coordinator.data.get("T1_BASE"),
+                "index_heures_creuses": self.coordinator.data.get("T1_HCHC"),
+                "index_heures_pleines": self.coordinator.data.get("T1_HCHP"),
+                "index_heures_normales": self.coordinator.data.get("T1_EJPHN"),
+                "index_heures_pointes": self.coordinator.data.get("T1_EJPHPM"),
+                "preavis_heures_pointes": self.coordinator.data.get("T1_PEJP"),
+                "groupe_horaire": self.coordinator.data.get("T1_HHPHC"),
+                "etat": self.coordinator.data.get("T1_MOTDETAT"),
             }
 
 
@@ -190,12 +204,26 @@ class T2EdDevice(EdDevice):
         """Return the state attributes."""
         if self.coordinator.data:
             return {
-                "ptec": self.coordinator.data["T2_PTEC"],
-                "souscription": self.coordinator.data["T2_ISOUSC"],
-                "intensite_max": self.coordinator.data["T2_IMAX"],
-                "intensite_max_ph1": self.coordinator.data["T2_IMAX1"],
-                "intensite_max_ph2": self.coordinator.data["T2_IMAX2"],
-                "intensite_max_ph3": self.coordinator.data["T2_IMAX3"],
+                "type_heures": self.coordinator.data.get("T2_PTEC"),
+                "souscription": self.coordinator.data.get("T2_ISOUSC"),
+                "intensite_max": self.coordinator.data.get("T2_IMAX"),
+                "intensite_max_ph1": self.coordinator.data.get("T2_IMAX1"),
+                "intensite_max_ph2": self.coordinator.data.get("T2_IMAX2"),
+                "intensite_max_ph3": self.coordinator.data.get("T2_IMAX3"),
+                "intensite_now": self.coordinator.data.get("T2_IINST"),
+                "intensite_now_ph1": self.coordinator.data.get("T2_IINST1"),
+                "intensite_now_ph2": self.coordinator.data.get("T2_IINST2"),
+                "intensite_now_ph3": self.coordinator.data.get("T2_IINST3"),
+                "numero_compteur": self.coordinator.data.get("T2_ADCO"),
+                "option_tarifaire": self.coordinator.data.get("T2_OPTARIF"),
+                "index_base": self.coordinator.data.get("T2_BASE"),
+                "index_heures_creuses": self.coordinator.data.get("T2_HCHC"),
+                "index_heures_pleines": self.coordinator.data.get("T2_HCHP"),
+                "index_heures_normales": self.coordinator.data.get("T2_EJPHN"),
+                "index_heures_pointes": self.coordinator.data.get("T2_EJPHPM"),
+                "preavis_heures_pointes": self.coordinator.data.get("T2_PEJP"),
+                "groupe_horaire": self.coordinator.data.get("T2_HHPHC"),
+                "etat": self.coordinator.data.get("T2_MOTDETAT"),
             }
 
 
