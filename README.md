@@ -1,7 +1,7 @@
 # Eco-Devices integration for Home Assistant
 
 This a *custom component* for [Home Assistant](https://www.home-assistant.io/). 
-The `ecodevices` integration allows you to get information from [GCE Eco-Devices](http://gce-electronics.com/fr/carte-relais-ethernet-module-rail-din/409-teleinformation-ethernet-ecodevices.html).
+The `ecodevices` integration allows you to get information from [GCE Eco-Devices](http://gce-electronics.com/fr/carte-relais-ethernet-module-rail-din/409-teleinformation-ethernet-ecodevices.html) (/!\ not the RT2).
 
 You will get a sensor by input enabled with all attributes availables.
 
