@@ -1,0 +1,7 @@
+{
+  "name": "GCE Eco-Devices",
+  "country": "FR",
+  "domains": ["sensor"],
+  "render_readme": true,
+  "iot_class": ["Local Polling"]
+}
