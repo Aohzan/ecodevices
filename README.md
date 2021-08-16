@@ -7,6 +7,12 @@ You will get a sensor by input enabled with all attributes availables.
 
 ## Installation
 
+### HACS
+
+HACS > Integrations > Explore & Add Repositories > GCE Eco-Devices > Install this repository
+
+### Manually
+
 Copy the `custom_components/ecodevices` folder into the config folder.
 
 ## Configuration
