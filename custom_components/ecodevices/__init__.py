@@ -69,7 +69,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         except EcoDevicesCannotConnectError as err:
             raise UpdateFailed(f"Failed to communicating with API: {err}") from err
 
-    scan_interval = config.get(CONF_SCAN_INTERVAL)
+    scan_interval = config[CONF_SCAN_INTERVAL]
 
     coordinator = DataUpdateCoordinator(
         hass,
@@ -121,10 +121,10 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload a config entry."""
     unload_ok = all(
         await asyncio.gather(
-            *[
+            *(
                 hass.config_entries.async_forward_entry_unload(entry, component)
                 for component in PLATFORMS
-            ]
+            )
         )
     )
 
