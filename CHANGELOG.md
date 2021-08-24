@@ -1,7 +1,12 @@
 # Changelog
 
+## 2.3.1
+
+- Fix total for c1
+  
 ## 2.3.0
 
+- /!\ Need Home-Assistant version 202109 at least
 - Add entities for total
 - Add state class property and adjust default classes for Energy dashboard compatibility
 

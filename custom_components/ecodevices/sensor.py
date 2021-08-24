@@ -108,7 +108,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             )
         )
         entities.append(
-            C2TotalEdDevice(
+            C1TotalEdDevice(
                 controller,
                 coordinator,
                 input_name="c1_total",
