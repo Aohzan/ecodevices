@@ -27,14 +27,10 @@
       },
       "params": {
         "data": {
-          "t1_name": "Nom du T\u00e9l\u00e9info 1",
           "t1_unit_of_measurement": "Unit\u00e9 du T\u00e9l\u00e9info 1",
-          "t2_name": "Nom du T\u00e9l\u00e9info 2",
           "t2_unit_of_measurement": "Unit\u00e9 du T\u00e9l\u00e9info 2",
-          "c1_name": "Nom du compteur 1",
           "c1_device_class": "Type du compteur 1",
           "c1_unit_of_measurement": "Unit\u00e9 du compteur 1",
-          "c2_name": "Nom du compteur 2",
           "c2_device_class": "Type du compteur 2",
           "c2_unit_of_measurement": "Unit\u00e9 du compteur 2"
         }

@@ -1,9 +1,14 @@
 # Changelog
 
+## 2.4.0
+
+- Remove name parameters
+- Use new sensor properties
+
 ## 2.3.1
 
 - Fix total for c1
-  
+
 ## 2.3.0
 
 - /!\ Need Home-Assistant version 202109 at least
