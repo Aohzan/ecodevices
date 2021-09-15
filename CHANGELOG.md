@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0
+
+- Allow to set a different unit of measurement for counters total sensors (https://github.com/Aohzan/ecodevices/issues/12)
+- Don't report 0 for total sensors (https://github.com/Aohzan/ecodevices/issues/13)
+
 ## 2.4.0
 
 - Remove name parameters

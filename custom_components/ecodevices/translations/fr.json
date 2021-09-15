@@ -31,8 +31,10 @@
           "t2_unit_of_measurement": "Unit\u00e9 du T\u00e9l\u00e9info 2",
           "c1_device_class": "Type du compteur 1",
           "c1_unit_of_measurement": "Unit\u00e9 du compteur 1",
+          "c1_total_unit_of_measurement": "Unit\u00e9 du compteur 1 pour la valeur total",
           "c2_device_class": "Type du compteur 2",
-          "c2_unit_of_measurement": "Unit\u00e9 du compteur 2"
+          "c2_unit_of_measurement": "Unit\u00e9 du compteur 2",
+          "c2_total_unit_of_measurement": "Unit\u00e9 du compteur 2 pour la valeur total"
         }
       }
     }
