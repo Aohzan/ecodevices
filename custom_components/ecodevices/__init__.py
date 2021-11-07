@@ -23,14 +23,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import (
-    CONFIG,
-    CONTROLLER,
-    COORDINATOR,
-    DOMAIN,
-    PLATFORMS,
-    UNDO_UPDATE_LISTENER,
-)
+from .const import CONTROLLER, COORDINATOR, DOMAIN, PLATFORMS, UNDO_UPDATE_LISTENER
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -44,14 +37,19 @@ async def async_setup(hass: HomeAssistant, config: dict):
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up Eco-Devices from a config entry."""
     config = entry.data
+    options = entry.options
+
+    scan_interval = options.get(CONF_SCAN_INTERVAL, config.get(CONF_SCAN_INTERVAL))
+    username = options.get(CONF_USERNAME, config.get(CONF_USERNAME))
+    password = options.get(CONF_PASSWORD, config.get(CONF_PASSWORD))
 
     session = async_get_clientsession(hass, False)
 
     controller = EcoDevices(
-        config.get(CONF_HOST),
-        config.get(CONF_PORT),
-        config.get(CONF_USERNAME),
-        config.get(CONF_PASSWORD),
+        config[CONF_HOST],
+        config[CONF_PORT],
+        username,
+        password,
         session=session,
     )
 
@@ -68,8 +66,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             raise UpdateFailed("Authentication error on Eco-Devices") from err
         except EcoDevicesCannotConnectError as err:
             raise UpdateFailed(f"Failed to communicating with API: {err}") from err
-
-    scan_interval = config[CONF_SCAN_INTERVAL]
 
     coordinator = DataUpdateCoordinator(
         hass,
@@ -89,7 +85,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data[DOMAIN][entry.entry_id] = {
         CONTROLLER: controller,
         COORDINATOR: coordinator,
-        CONFIG: config,
         UNDO_UPDATE_LISTENER: undo_listener,
     }
 
@@ -99,9 +94,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         identifiers={(DOMAIN, controller.host)},
         manufacturer="GCE",
         model="Eco-Devices",
-        name=controller.host,
+        default_name=f"Eco-Devices {controller.host}",
         sw_version=controller.version,
         connections={(dr.CONNECTION_NETWORK_MAC, controller.mac_address)},
+        configuration_url=f"http://{config[CONF_HOST]}:{config[CONF_PORT]}",
     )
 
     for platform in PLATFORMS:

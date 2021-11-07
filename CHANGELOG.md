@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0
+
+- /!\ Breaking : the total value is now the same that display on Eco-Devices Web UI, and no more multiplied by 1000, watch the unit of measurement which can change (example: Wh => kWh, dm³ => m³)
+- Full configuration since options UI
+- Add device configuration link
+
 ## 2.5.0
 
 - Allow to set a different unit of measurement for counters total sensors (https://github.com/Aohzan/ecodevices/issues/12)
