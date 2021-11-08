@@ -98,7 +98,7 @@ class EcoDevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="params",
-            data_schema=vol.Schema(_get_params(self.base_input, user_input)),
+            data_schema=vol.Schema(_get_params(self.base_input)),
         )
 
     @staticmethod
@@ -222,7 +222,7 @@ async def _test_connection(session, user_input):
     return errors
 
 
-def _get_params(base_input, base_params):
+def _get_params(base_input, base_params = {}):
     params_schema = {}
     if base_input[CONF_T1_ENABLED]:
         params_schema.update(
