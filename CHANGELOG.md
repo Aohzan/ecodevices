@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.2
+
+- Fix empty dict in config flow
+
 ## 3.0.1
 
 - Fix optional keys error in config flow
