@@ -229,7 +229,7 @@ def _get_params(base_input, base_params):
             {
                 vol.Required(
                     CONF_T1_UNIT_OF_MEASUREMENT,
-                    default=base_params[CONF_T1_UNIT_OF_MEASUREMENT],
+                    default=base_params.get(CONF_T1_UNIT_OF_MEASUREMENT),
                 ): str,
             }
         )
@@ -239,7 +239,7 @@ def _get_params(base_input, base_params):
             {
                 vol.Required(
                     CONF_T2_UNIT_OF_MEASUREMENT,
-                    default=base_params[CONF_T2_UNIT_OF_MEASUREMENT],
+                    default=base_params.get(CONF_T2_UNIT_OF_MEASUREMENT),
                 ): str,
             }
         )
@@ -248,15 +248,15 @@ def _get_params(base_input, base_params):
         params_schema.update(
             {
                 vol.Required(
-                    CONF_C1_DEVICE_CLASS, default=base_params[CONF_C1_DEVICE_CLASS]
+                    CONF_C1_DEVICE_CLASS, default=base_params.get(CONF_C1_DEVICE_CLASS)
                 ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
                 vol.Optional(
                     CONF_C1_UNIT_OF_MEASUREMENT,
-                    default=base_params[CONF_C1_UNIT_OF_MEASUREMENT],
+                    default=base_params.get(CONF_C1_UNIT_OF_MEASUREMENT),
                 ): str,
                 vol.Optional(
                     CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
-                    default=base_params[CONF_C1_TOTAL_UNIT_OF_MEASUREMENT],
+                    default=base_params.get(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT),
                 ): str,
             }
         )
@@ -265,15 +265,15 @@ def _get_params(base_input, base_params):
         params_schema.update(
             {
                 vol.Required(
-                    CONF_C2_DEVICE_CLASS, default=base_params[CONF_C2_DEVICE_CLASS]
+                    CONF_C2_DEVICE_CLASS, default=base_params.get(CONF_C2_DEVICE_CLASS)
                 ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
                 vol.Optional(
                     CONF_C2_UNIT_OF_MEASUREMENT,
-                    default=base_params[CONF_C2_UNIT_OF_MEASUREMENT],
+                    default=base_params.get(CONF_C2_UNIT_OF_MEASUREMENT),
                 ): str,
                 vol.Optional(
                     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
-                    default=base_params[CONF_C2_TOTAL_UNIT_OF_MEASUREMENT],
+                    default=base_params.get(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT),
                 ): str,
             }
         )
