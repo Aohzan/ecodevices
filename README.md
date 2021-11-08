@@ -18,3 +18,10 @@ Copy the `custom_components/ecodevices` folder into the config folder.
 ## Configuration
 
 To add ecodevices to your installation, go to Configuration >> Integrations in the UI, click the button with + sign and from the list of integrations select GCE Eco-Devices.
+
+## Example
+
+![[Energy Dashboard]](.readme_content/ecodevices_energy.jpg)
+![[Device page]](.readme_content/ecodevices_entities.jpg)
+![[Options]](.readme_content/ecodevices_options.jpg)
+![[Params]](.readme_content/ecodevices_params.jpg)
