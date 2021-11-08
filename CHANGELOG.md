@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
+- Fix optional keys error in config flow
+
 ## 3.0.0
 
 - /!\ Need Home-Assistant version 202111 at least
