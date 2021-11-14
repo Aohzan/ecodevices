@@ -23,8 +23,8 @@
 
 ## 2.5.0
 
-- Allow to set a different unit of measurement for counters total sensors (https://github.com/Aohzan/ecodevices/issues/12)
-- Don't report 0 for total sensors (https://github.com/Aohzan/ecodevices/issues/13)
+- Allow to set a different unit of measurement for counters total sensors [issue#12](https://github.com/Aohzan/ecodevices/issues/12)
+- Don't report 0 for total sensors [issue#13](https://github.com/Aohzan/ecodevices/issues/13)
 
 ## 2.4.0
 
