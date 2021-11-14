@@ -28,12 +28,10 @@ from .const import (
     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
     CONF_C2_UNIT_OF_MEASUREMENT,
     CONF_T1_ENABLED,
-    CONF_T1_UNIT_OF_MEASUREMENT,
+    CONF_T1_HCHP,
     CONF_T2_ENABLED,
-    CONF_T2_UNIT_OF_MEASUREMENT,
+    CONF_T2_HCHP,
     DEFAULT_SCAN_INTERVAL,
-    DEFAULT_T1_UNIT_OF_MEASUREMENT,
-    DEFAULT_T2_UNIT_OF_MEASUREMENT,
     DOMAIN,
 )
 
@@ -165,13 +163,13 @@ class EcoDevicesOptionsFlowHandler(config_entries.OptionsFlow):
         options = self.config_entry.options
 
         base_params = {
-            CONF_T1_UNIT_OF_MEASUREMENT: options.get(
-                CONF_T1_UNIT_OF_MEASUREMENT,
-                config.get(CONF_T1_UNIT_OF_MEASUREMENT, DEFAULT_T1_UNIT_OF_MEASUREMENT),
+            CONF_T1_HCHP: options.get(
+                CONF_T1_HCHP,
+                config.get(CONF_T1_HCHP, False),
             ),
-            CONF_T2_UNIT_OF_MEASUREMENT: options.get(
-                CONF_T2_UNIT_OF_MEASUREMENT,
-                config.get(CONF_T2_UNIT_OF_MEASUREMENT, DEFAULT_T2_UNIT_OF_MEASUREMENT),
+            CONF_T2_HCHP: options.get(
+                CONF_T2_HCHP,
+                config.get(CONF_T2_HCHP, False),
             ),
             CONF_C1_DEVICE_CLASS: options.get(
                 CONF_C1_DEVICE_CLASS, config.get(CONF_C1_DEVICE_CLASS)
@@ -222,15 +220,15 @@ async def _test_connection(session, user_input):
     return errors
 
 
-def _get_params(base_input, base_params = {}):
+def _get_params(base_input, base_params={}):
     params_schema = {}
     if base_input[CONF_T1_ENABLED]:
         params_schema.update(
             {
                 vol.Required(
-                    CONF_T1_UNIT_OF_MEASUREMENT,
-                    default=base_params.get(CONF_T1_UNIT_OF_MEASUREMENT),
-                ): str,
+                    CONF_T1_HCHP,
+                    default=base_params.get(CONF_T1_HCHP, False),
+                ): bool,
             }
         )
 
@@ -238,9 +236,9 @@ def _get_params(base_input, base_params = {}):
         params_schema.update(
             {
                 vol.Required(
-                    CONF_T2_UNIT_OF_MEASUREMENT,
-                    default=base_params.get(CONF_T2_UNIT_OF_MEASUREMENT),
-                ): str,
+                    CONF_T2_HCHP,
+                    default=base_params.get(CONF_T2_HCHP, False),
+                ): bool,
             }
         )
 

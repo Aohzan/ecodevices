@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+- Add HC/HP maangements for teleinfo inputs
+- Set static units for teleinfo inputs
+- Code improvments
+
 ## 3.0.2
 
 - Fix empty dict in config flow
