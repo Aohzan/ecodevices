@@ -1,5 +1,13 @@
 # Changelog
 
+
+## 4.0.0
+
+- You have to delete the integration before upgrade, and make installation again
+- Handle multiple Eco-Device on the same hostname but different port
+- Change default teleinfo unit from `VA` to `W`
+- Change entity and device unique id
+
 ## 3.1.0
 
 - Add HC/HP maangements for teleinfo inputs

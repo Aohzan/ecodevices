@@ -69,7 +69,9 @@ class EcoDevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 step_id="user", data_schema=BASE_SCHEMA, errors=errors
             )
 
-        entry = await self.async_set_unique_id(f"{DOMAIN}, {user_input.get(CONF_HOST)}")
+        entry = await self.async_set_unique_id(
+            "_".join([DOMAIN, user_input[CONF_HOST], str(user_input[CONF_PORT])])
+        )
 
         if entry:
             self._abort_if_unique_id_configured()
@@ -91,12 +93,13 @@ class EcoDevicesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             user_input.update(self.base_input)
             return self.async_create_entry(
-                title=f"Eco-Devices {user_input.get(CONF_HOST)}", data=user_input
+                title=f"Eco-Devices {user_input[CONF_HOST]}:{user_input[CONF_PORT]}",
+                data=user_input,
             )
 
         return self.async_show_form(
             step_id="params",
-            data_schema=vol.Schema(_get_params(self.base_input)),
+            data_schema=vol.Schema(_get_params(self.base_input, {})),
         )
 
     @staticmethod
@@ -156,7 +159,8 @@ class EcoDevicesOptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             user_input.update(self.base_input)
             return self.async_create_entry(
-                title=f"Eco-Devices {user_input.get(CONF_HOST)}", data=user_input
+                title=f"Eco-Devices {user_input[CONF_HOST]}:{user_input[CONF_PORT]}",
+                data=user_input,
             )
 
         config = self.config_entry.data
@@ -220,7 +224,7 @@ async def _test_connection(session, user_input):
     return errors
 
 
-def _get_params(base_input, base_params={}):
+def _get_params(base_input, base_params):
     params_schema = {}
     if base_input[CONF_T1_ENABLED]:
         params_schema.update(
