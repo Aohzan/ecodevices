@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.1.0
+
+- Add instant entity for counters
 
 ## 4.0.0
 
