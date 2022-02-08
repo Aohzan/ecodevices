@@ -31,12 +31,12 @@ To add ecodevices to your installation, go to Configuration >> Integrations in t
 If you want individual entities for more informations, you can get it from main sensor attributes, for example:
 
 ```yaml
-sensors:
+sensor:
   - platform: template
     sensors:
       intensity_phase_1:
         unique_id: intensity_phase_1
         friendly_name: "Intensité phase 1"
-        unit_of_measurement: "Wh"
+        unit_of_measurement: "A"
         value_template: "{{ state_attr('sensor.compteur_linky', 'intensite_now_ph1') | int }}"
 ```
