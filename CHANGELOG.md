@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.1
+
+- Fix incrementation
+
 ## 4.2.0
 
 - Replace deprecated async_get_registry method
