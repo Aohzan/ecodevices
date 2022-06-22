@@ -194,7 +194,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 input_name="c1",
                 name=DEFAULT_C1_NAME,
                 unit=options.get(
-                    CONF_C1_UNIT_OF_MEASUREMENT, config.get(CONF_C1_UNIT_OF_MEASUREMENT)
+                    CONF_C1_UNIT_OF_MEASUREMENT, config.get(
+                        CONF_C1_UNIT_OF_MEASUREMENT)
                 ),
                 device_class=options.get(
                     CONF_C1_DEVICE_CLASS, config.get(CONF_C1_DEVICE_CLASS)
@@ -210,7 +211,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 input_name="c1_daily",
                 name=DEFAULT_C1_NAME + " Daily",
                 unit=options.get(
-                    CONF_C1_UNIT_OF_MEASUREMENT, config.get(CONF_C1_UNIT_OF_MEASUREMENT)
+                    CONF_C1_UNIT_OF_MEASUREMENT, config.get(
+                        CONF_C1_UNIT_OF_MEASUREMENT)
                 ),
                 device_class=options.get(
                     CONF_C1_DEVICE_CLASS, config.get(CONF_C1_DEVICE_CLASS)
@@ -262,7 +264,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 input_name="c2_daily",
                 name=DEFAULT_C2_NAME + " Daily",
                 unit=options.get(
-                    CONF_C2_UNIT_OF_MEASUREMENT, config.get(CONF_C2_UNIT_OF_MEASUREMENT)
+                    CONF_C2_UNIT_OF_MEASUREMENT, config.get(
+                        CONF_C2_UNIT_OF_MEASUREMENT)
                 ),
                 device_class=options.get(
                     CONF_C2_DEVICE_CLASS, config.get(CONF_C2_DEVICE_CLASS)
@@ -575,9 +578,6 @@ class C2TotalEdDevice(EdDevice):
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
         value = float(self.coordinator.data["count1"])
-        old_state = await self.async_get_last_state()
-        if old_state is not None:
-            self._state = old_state.state
         if value > 0:
             return value / 1000
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")

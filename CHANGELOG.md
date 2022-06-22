@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.2
+
+- Remove wrong old code
+
 ## 4.2.1
 
 - Fix incrementation
