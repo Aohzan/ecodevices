@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.0
+
+- Replace deprecated async_get_registry method
+
 ## 4.1.0
 
 - Add instant entity for counters

@@ -575,6 +575,9 @@ class C2TotalEdDevice(EdDevice):
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
         value = float(self.coordinator.data["count1"])
+        old_state = await self.async_get_last_state()
+            if old_state is not None:
+                self._state = old_state.state
         if value > 0:
             return value / 1000
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
