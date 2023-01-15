@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.3.0
+
+- Add support of teleinfo "jours bleu,blanc,rouge"
+- Fix deprecation types and various improvments
+
 ## 4.2.2
 
 - Remove wrong old code
