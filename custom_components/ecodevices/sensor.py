@@ -401,7 +401,7 @@ class T1TotalEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        if value := float(self.coordinator.data["T1_BASE"]) > 0:
+        if (value := float(self.coordinator.data["T1_BASE"])) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -414,7 +414,7 @@ class T1TotalHchpEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         value_hc = float(self.coordinator.data["T1_HCHC"])
         value_hp = float(self.coordinator.data["T1_HCHP"])
-        if value := value_hc + value_hp > 0:
+        if (value := value_hc + value_hp) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -425,7 +425,7 @@ class T1TotalHcEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        if value := float(self.coordinator.data["T1_HCHC"]) > 0:
+        if (value := float(self.coordinator.data["T1_HCHC"])) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -436,7 +436,7 @@ class T1TotalHpEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        if value := float(self.coordinator.data["T1_HCHP"]) > 0:
+        if (value := float(self.coordinator.data["T1_HCHP"])) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -502,7 +502,7 @@ class T2TotalEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        if value := float(self.coordinator.data["T2_BASE"]) > 0:
+        if (value := float(self.coordinator.data["T2_BASE"])) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -515,7 +515,7 @@ class T2TotalHchpEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         value_hc = float(self.coordinator.data["T2_HCHC"])
         value_hp = float(self.coordinator.data["T2_HCHP"])
-        if value := value_hc + value_hp > 0:
+        if (value := value_hc + value_hp) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -526,7 +526,7 @@ class T2TotalHcEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        if value := float(self.coordinator.data["T2_HCHC"]) > 0:
+        if (value := float(self.coordinator.data["T2_HCHC"])) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -537,7 +537,7 @@ class T2TotalHpEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        if value := float(self.coordinator.data["T2_HCHP"]) > 0:
+        if (value := float(self.coordinator.data["T2_HCHP"])) > 0:
             return value
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -576,8 +576,7 @@ class C1TotalEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        value = float(self.coordinator.data["count0"])
-        if value > 0:
+        if (value := float(self.coordinator.data["count0"])) > 0:
             return value / 1000
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 
@@ -616,8 +615,7 @@ class C2TotalEdDevice(EdDevice):
     @property
     def native_value(self) -> float:
         """Return the total value if it's greater than 0."""
-        value = float(self.coordinator.data["count1"])
-        if value > 0:
+        if (value := float(self.coordinator.data["count1"])) > 0:
             return value / 1000
         raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
 

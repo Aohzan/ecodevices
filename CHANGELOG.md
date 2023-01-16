@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.1
+
+- Fix values assignments
+
 ## 4.3.0
 
 - Add support of teleinfo "jours bleu,blanc,rouge"
