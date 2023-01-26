@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.2
+
+- Fix coordinator data keys
+
 ## 4.3.1
 
 - Fix values assignments

@@ -382,10 +382,10 @@ class T1EdDevice(EdDevice):
                     "T1_BBRHCJW"
                 ),
                 "index_heures_pleines_jour_blanc": self.coordinator.data.get(
-                    "T1_BBRHCJB"
+                    "T1_BBRHPJW"
                 ),
                 "index_heures_creuses_jour_rouge": self.coordinator.data.get(
-                    "T1_BBRHCJB"
+                    "T1_BBRHCJR"
                 ),
                 "index_heures_pleines_jour_rouge": self.coordinator.data.get(
                     "T1_BBRHPJR"
@@ -486,10 +486,10 @@ class T2EdDevice(EdDevice):
                     "T2_BBRHCJB"
                 ),
                 "index_heures_creuses_jour_rouge": self.coordinator.data.get(
-                    "T2_BBRHCJB"
+                    "T2_BBRHPJW"
                 ),
                 "index_heures_pleines_jour_rouge": self.coordinator.data.get(
-                    "T2_BBRHPJR"
+                    "T2_BBRHCJR"
                 ),
                 "etat": self.coordinator.data.get("T2_MOTDETAT"),
             }
