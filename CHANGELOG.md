@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4.0
+
+- Add `type_heures_demain` info on teleinfo inputs
+
 ## 4.3.2
 
 - Fix coordinator data keys

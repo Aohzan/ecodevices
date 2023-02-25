@@ -390,6 +390,7 @@ class T1EdDevice(EdDevice):
                 "index_heures_pleines_jour_rouge": self.coordinator.data.get(
                     "T1_BBRHPJR"
                 ),
+                "type_heures_demain": self.coordinator.data.get("T1_DEMAIN"),
                 "etat": self.coordinator.data.get("T1_MOTDETAT"),
             }
         raise EcoDevicesIncorrectValueError("Data not received.")
@@ -491,6 +492,7 @@ class T2EdDevice(EdDevice):
                 "index_heures_pleines_jour_rouge": self.coordinator.data.get(
                     "T2_BBRHCJR"
                 ),
+                "type_heures_demain": self.coordinator.data.get("T2_DEMAIN"),
                 "etat": self.coordinator.data.get("T2_MOTDETAT"),
             }
         raise EcoDevicesIncorrectValueError("Data not received.")
