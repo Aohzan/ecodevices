@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.5.0
+
+- bump pyecodevices (add debug logging)
+- fix T2 attributes
+- do not raise error when total value not greater than 0, just warning message
+
 ## 4.4.0
 
 - Add `type_heures_demain` info on teleinfo inputs
