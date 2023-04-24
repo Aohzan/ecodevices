@@ -404,7 +404,7 @@ class T1TotalEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T1_BASE"])) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T1 not greater than 0, ignore.")
 
 
 class T1TotalHchpEdDevice(EdDevice):
@@ -417,7 +417,7 @@ class T1TotalHchpEdDevice(EdDevice):
         value_hp = float(self.coordinator.data["T1_HCHP"])
         if (value := value_hc + value_hp) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
 
 
 class T1TotalHcEdDevice(EdDevice):
@@ -428,7 +428,7 @@ class T1TotalHcEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T1_HCHC"])) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T1 not greater than 0, ignore.")
 
 
 class T1TotalHpEdDevice(EdDevice):
@@ -439,7 +439,7 @@ class T1TotalHpEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T1_HCHP"])) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T1 not greater than 0, ignore.")
 
 
 class T2EdDevice(EdDevice):
@@ -484,13 +484,13 @@ class T2EdDevice(EdDevice):
                     "T2_BBRHCJW"
                 ),
                 "index_heures_pleines_jour_blanc": self.coordinator.data.get(
-                    "T2_BBRHCJB"
-                ),
-                "index_heures_creuses_jour_rouge": self.coordinator.data.get(
                     "T2_BBRHPJW"
                 ),
-                "index_heures_pleines_jour_rouge": self.coordinator.data.get(
+                "index_heures_creuses_jour_rouge": self.coordinator.data.get(
                     "T2_BBRHCJR"
+                ),
+                "index_heures_pleines_jour_rouge": self.coordinator.data.get(
+                    "T2_BBRHPJR"
                 ),
                 "type_heures_demain": self.coordinator.data.get("T2_DEMAIN"),
                 "etat": self.coordinator.data.get("T2_MOTDETAT"),
@@ -506,7 +506,7 @@ class T2TotalEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T2_BASE"])) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
 
 
 class T2TotalHchpEdDevice(EdDevice):
@@ -519,7 +519,7 @@ class T2TotalHchpEdDevice(EdDevice):
         value_hp = float(self.coordinator.data["T2_HCHP"])
         if (value := value_hc + value_hp) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
 
 
 class T2TotalHcEdDevice(EdDevice):
@@ -530,7 +530,7 @@ class T2TotalHcEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T2_HCHC"])) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
 
 
 class T2TotalHpEdDevice(EdDevice):
@@ -541,7 +541,7 @@ class T2TotalHpEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T2_HCHP"])) > 0:
             return value
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
 
 
 class C1EdDevice(EdDevice):
@@ -580,7 +580,7 @@ class C1TotalEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["count0"])) > 0:
             return value / 1000
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for C1 not greater than 0, ignore.")
 
 
 class C2EdDevice(EdDevice):
@@ -619,7 +619,7 @@ class C2TotalEdDevice(EdDevice):
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["count1"])) > 0:
             return value / 1000
-        raise EcoDevicesIncorrectValueError("Total value not greater than 0.")
+        _LOGGER.warning("Total value for C2 not greater than 0, ignore.")
 
 
 class EcoDevicesIncorrectValueError(Exception):
