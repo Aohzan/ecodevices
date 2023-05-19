@@ -1,8 +1,11 @@
 # Changelog
 
+## 4.6.0
+
+- bump pyecodevices (force xml encoding)
+
 ## 4.5.0
 
-- bump pyecodevices (add debug logging)
 - fix T2 attributes
 - do not raise error when total value not greater than 0, just warning message
 
