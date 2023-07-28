@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.6.1
+
+- fix DeviceInfo for HA 2023.8 release
+
 ## 4.6.0
 
 - bump pyecodevices (force xml encoding)

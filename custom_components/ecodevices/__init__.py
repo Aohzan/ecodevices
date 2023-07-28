@@ -19,7 +19,6 @@ from homeassistant.const import (
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -88,18 +87,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         COORDINATOR: coordinator,
         UNDO_UPDATE_LISTENER: undo_listener,
     }
-
-    device_registry = dr.async_get(hass)
-    device_registry.async_get_or_create(
-        config_entry_id=entry.entry_id,
-        identifiers={(DOMAIN, controller.mac_address)},
-        manufacturer="GCE",
-        model="Eco-Devices",
-        default_name=f"Eco-Devices {controller.host}:{str(controller.port)}",
-        sw_version=controller.version,
-        connections={(dr.CONNECTION_NETWORK_MAC, controller.mac_address)},
-        configuration_url=f"http://{config[CONF_HOST]}:{config[CONF_PORT]}",
-    )
 
     for platform in PLATFORMS:
         hass.async_create_task(

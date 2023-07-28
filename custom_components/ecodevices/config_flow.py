@@ -1,4 +1,6 @@
 """Config flow to configure the GCE Eco-Devices integration."""
+from typing import Any
+
 from pyecodevices import (
     EcoDevices,
     EcoDevicesCannotConnectError,
@@ -57,9 +59,9 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize class variables."""
-        self.base_input = {}
+        self.base_input: dict[str, Any] = {}
 
     async def async_step_user(self, user_input=None) -> FlowResult:
         """Handle a flow initialized by the user."""
@@ -112,10 +114,10 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
 class EcoDevicesOptionsFlowHandler(OptionsFlow):
     """Handle a EcoDevices options flow."""
 
-    def __init__(self, config_entry):
+    def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize."""
-        self.config_entry = config_entry
-        self.base_input = {}
+        self.config_entry: ConfigEntry = config_entry
+        self.base_input: dict[str, Any] = {}
 
     async def async_step_init(self, user_input) -> FlowResult:
         """Manage the options."""

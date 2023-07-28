@@ -11,6 +11,8 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfEnergy, UnitOfPower
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
+from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
@@ -311,7 +313,7 @@ class EdDevice(CoordinatorEntity, SensorEntity):
         device_class,
         state_class,
         icon,
-    ):
+    ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
         self.controller = controller
@@ -332,10 +334,15 @@ class EdDevice(CoordinatorEntity, SensorEntity):
                 ]
             )
         )
-        self._attr_device_info = {
-            "identifiers": {(DOMAIN, self.controller.mac_address)},
-            "via_device": (DOMAIN, self.controller.mac_address),
-        }
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, controller.mac_address)},
+            manufacturer="GCE Electronics",
+            model="Eco-Devices",
+            name=f"Eco-Devices {controller.host}:{str(controller.port)}",
+            sw_version=controller.version,
+            connections={(CONNECTION_NETWORK_MAC, controller.mac_address)},
+            configuration_url=f"http://{controller.host}:{controller.port}",
+        )
 
         self._state = None
 
@@ -400,46 +407,50 @@ class T1TotalEdDevice(EdDevice):
     """Initialize the T1 Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T1_BASE"])) > 0:
             return value
-        _LOGGER.warning("Total value for T1 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+        return None
 
 
 class T1TotalHchpEdDevice(EdDevice):
     """Initialize the T1 HCHP Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         value_hc = float(self.coordinator.data["T1_HCHC"])
         value_hp = float(self.coordinator.data["T1_HCHP"])
         if (value := value_hc + value_hp) > 0:
             return value
         _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+        return None
 
 
 class T1TotalHcEdDevice(EdDevice):
     """Initialize the T1 HC Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T1_HCHC"])) > 0:
             return value
-        _LOGGER.warning("Total value for T1 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+        return None
 
 
 class T1TotalHpEdDevice(EdDevice):
     """Initialize the T1 HP Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T1_HCHP"])) > 0:
             return value
-        _LOGGER.warning("Total value for T1 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+        return None
 
 
 class T2EdDevice(EdDevice):
@@ -502,46 +513,50 @@ class T2TotalEdDevice(EdDevice):
     """Initialize the T1 Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T2_BASE"])) > 0:
             return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
+        return None
 
 
 class T2TotalHchpEdDevice(EdDevice):
     """Initialize the T2 HCHP Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         value_hc = float(self.coordinator.data["T2_HCHC"])
         value_hp = float(self.coordinator.data["T2_HCHP"])
         if (value := value_hc + value_hp) > 0:
             return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
+        return None
 
 
 class T2TotalHcEdDevice(EdDevice):
     """Initialize the T2 HC Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T2_HCHC"])) > 0:
             return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
+        return None
 
 
 class T2TotalHpEdDevice(EdDevice):
     """Initialize the T2 HP Total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["T2_HCHP"])) > 0:
             return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
+        return None
 
 
 class C1EdDevice(EdDevice):
@@ -576,11 +591,12 @@ class C1TotalEdDevice(EdDevice):
     """Initialize the C1 total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["count0"])) > 0:
             return value / 1000
-        _LOGGER.warning("Total value for C1 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for C1 not greater than 0, ignore")
+        return None
 
 
 class C2EdDevice(EdDevice):
@@ -615,11 +631,12 @@ class C2TotalEdDevice(EdDevice):
     """Initialize the C2 total sensor."""
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data["count1"])) > 0:
             return value / 1000
-        _LOGGER.warning("Total value for C2 not greater than 0, ignore.")
+        _LOGGER.warning("Total value for C2 not greater than 0, ignore")
+        return None
 
 
 class EcoDevicesIncorrectValueError(Exception):
