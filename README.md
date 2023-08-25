@@ -1,5 +1,7 @@
 # Eco-Devices integration for Home Assistant
 
+![GitHub release (with filter)](https://img.shields.io/github/v/release/aohzan/ecodevices) ![GitHub](https://img.shields.io/github/license/aohzan/ecodevices) [![Donate](https://img.shields.io/badge/$-support-ff69b4.svg?style=flat)](https://github.com/sponsors/Aohzan) [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
+
 This a _custom component_ for [Home Assistant](https://www.home-assistant.io/).
 The `ecodevices` integration allows you to get information from [GCE Eco-Devices](http://gce-electronics.com/fr/carte-relais-ethernet-module-rail-din/409-teleinformation-ethernet-ecodevices.html) (/!\ not the RT2).
 
