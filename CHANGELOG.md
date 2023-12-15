@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.7.0
+
+- add some teleinfo attributes: `Avertissement depassement`, `Conso instant general`, `Puissance apparente`
+- code enhancement
+- bump dependencies
+
 ## 4.6.1
 
 - fix DeviceInfo for HA 2023.8 release

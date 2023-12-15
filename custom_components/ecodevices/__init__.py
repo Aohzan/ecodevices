@@ -20,7 +20,6 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import CONTROLLER, COORDINATOR, DOMAIN, PLATFORMS, UNDO_UPDATE_LISTENER
@@ -28,14 +27,9 @@ from .const import CONTROLLER, COORDINATOR, DOMAIN, PLATFORMS, UNDO_UPDATE_LISTE
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Set up the Eco-Devices integration."""
-    hass.data.setdefault(DOMAIN, {})
-    return True
-
-
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Eco-Devices from a config entry."""
+    hass.data.setdefault(DOMAIN, {})
     config = entry.data
     options = entry.options
 

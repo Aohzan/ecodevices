@@ -24,3 +24,39 @@ DEFAULT_T2_NAME = "Teleinfo 2"
 DEFAULT_C1_NAME = "Meter 1"
 DEFAULT_C2_NAME = "Meter 2"
 DEFAULT_SCAN_INTERVAL = 5
+
+TELEINFO_EXTRA_ATTR = {
+    "type_heures": "PTEC",
+    "souscription": "ISOUSC",
+    "intensite_max": "IMAX",
+    "intensite_max_ph1": "IMAX1",
+    "intensite_max_ph2": "IMAX2",
+    "intensite_max_ph3": "IMAX3",
+    "intensite_now": "IINST",
+    "intensite_now_ph1": "IINST1",
+    "intensite_now_ph2": "IINST2",
+    "intensite_now_ph3": "IINST3",
+    "conso_instant_general": "PPAP",
+    "puissance_apparente": "PAPP",
+    "avertissement_depassement": "ADPS",
+    "numero_compteur": "ADCO",
+    "option_tarifaire": "OPTARIF",
+    "index_base": "BASE",
+    "etat": "MOTDETAT",
+    "presence_potentiels": "PPOT",
+    # HCHP
+    "index_heures_creuses": "HCHC",
+    "index_heures_pleines": "HCHP",
+    "index_heures_normales": "EJPHN",
+    "index_heures_pointes": "EJPHPM",
+    "preavis_heures_pointes": "PEJP",
+    "groupe_horaire": "HHPHC",
+    # Tempo
+    "index_heures_creuses_jour_bleu": "BBRHCJB",
+    "index_heures_pleines_jour_bleu": "BBRHPJB",
+    "index_heures_creuses_jour_blanc": "BBRHCJW",
+    "index_heures_pleines_jour_blanc": "BBRHPJW",
+    "index_heures_creuses_jour_rouge": "BBRHCJR",
+    "index_heures_pleines_jour_rouge": "BBRHPJR",
+    "type_heures_demain": "DEMAIN",
+}

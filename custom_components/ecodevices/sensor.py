@@ -11,8 +11,7 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfEnergy, UnitOfPower
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
@@ -37,6 +36,7 @@ from .const import (
     DEFAULT_T1_NAME,
     DEFAULT_T2_NAME,
     DOMAIN,
+    TELEINFO_EXTRA_ATTR,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -64,9 +64,10 @@ async def async_setup_entry(
     if t1_enabled:
         _LOGGER.debug("Add the teleinfo 1 entities")
         entities.append(
-            T1EdDevice(
+            TeleinfoInputEdDevice(
                 controller,
                 coordinator,
+                input_number=1,
                 input_name="t1",
                 name=DEFAULT_T1_NAME,
                 unit=UnitOfPower.WATT,
@@ -77,60 +78,65 @@ async def async_setup_entry(
         )
         if t1_hchp:
             entities.append(
-                T1TotalHchpEdDevice(
+                TeleinfoInputTotalHchpEdDevice(
                     controller,
                     coordinator,
+                    input_number=1,
                     input_name="t1_total",
                     name=DEFAULT_T1_NAME + " Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
             entities.append(
-                T1TotalHcEdDevice(
+                TeleinfoInputTotalHcEdDevice(
                     controller,
                     coordinator,
+                    input_number=1,
                     input_name="t1_total_hc",
                     name=DEFAULT_T1_NAME + " HC Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
             entities.append(
-                T1TotalHpEdDevice(
+                TeleinfoInputTotalHpEdDevice(
                     controller,
                     coordinator,
+                    input_number=1,
                     input_name="t1_total_hp",
                     name=DEFAULT_T1_NAME + " HP Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
         else:
             entities.append(
-                T1TotalEdDevice(
+                TeleinfoInputTotalEdDevice(
                     controller,
                     coordinator,
+                    input_number=1,
                     input_name="t1_total",
                     name=DEFAULT_T1_NAME + " Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
     if t2_enabled:
         _LOGGER.debug("Add the teleinfo 2 entities")
         entities.append(
-            T2EdDevice(
+            TeleinfoInputEdDevice(
                 controller,
                 coordinator,
+                input_number=2,
                 input_name="t2",
                 name=DEFAULT_T2_NAME,
                 unit=UnitOfPower.WATT,
@@ -141,60 +147,65 @@ async def async_setup_entry(
         )
         if t2_hchp:
             entities.append(
-                T2TotalHchpEdDevice(
+                TeleinfoInputTotalHchpEdDevice(
                     controller,
                     coordinator,
+                    input_number=2,
                     input_name="t2_total",
                     name=DEFAULT_T2_NAME + " Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
             entities.append(
-                T2TotalHcEdDevice(
+                TeleinfoInputTotalHcEdDevice(
                     controller,
                     coordinator,
+                    input_number=2,
                     input_name="t2_total_hc",
                     name=DEFAULT_T2_NAME + " HC Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
             entities.append(
-                T2TotalHpEdDevice(
+                TeleinfoInputTotalHpEdDevice(
                     controller,
                     coordinator,
+                    input_number=2,
                     input_name="t2_total_hp",
                     name=DEFAULT_T2_NAME + " HP Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
         else:
             entities.append(
-                T2TotalEdDevice(
+                TeleinfoInputTotalEdDevice(
                     controller,
                     coordinator,
+                    input_number=2,
                     input_name="t2_total",
                     name=DEFAULT_T2_NAME + " Total",
                     unit=UnitOfEnergy.WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                     state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:flash",
+                    icon="mdi:meter-electric",
                 )
             )
     if c1_enabled:
         _LOGGER.debug("Add the meter 1 entities")
         entities.append(
-            C1EdDevice(
+            MeterInputEdDevice(
                 controller,
                 coordinator,
+                input_number=1,
                 input_name="c1",
                 name=DEFAULT_C1_NAME,
                 unit=options.get(
@@ -208,9 +219,10 @@ async def async_setup_entry(
             )
         )
         entities.append(
-            C1DailyEdDevice(
+            MeterInputDailyEdDevice(
                 controller,
                 coordinator,
+                input_number=1,
                 input_name="c1_daily",
                 name=DEFAULT_C1_NAME + " Daily",
                 unit=options.get(
@@ -224,9 +236,10 @@ async def async_setup_entry(
             )
         )
         entities.append(
-            C1TotalEdDevice(
+            MeterInputTotalEdDevice(
                 controller,
                 coordinator,
+                input_number=1,
                 input_name="c1_total",
                 name=DEFAULT_C1_NAME + " Total",
                 unit=options.get(
@@ -246,9 +259,10 @@ async def async_setup_entry(
     if c2_enabled:
         _LOGGER.debug("Add the meter 2 entities")
         entities.append(
-            C2EdDevice(
+            MeterInputEdDevice(
                 controller,
                 coordinator,
+                input_number=2,
                 input_name="c2",
                 name=DEFAULT_C2_NAME,
                 unit=config.get(CONF_C2_UNIT_OF_MEASUREMENT),
@@ -260,9 +274,10 @@ async def async_setup_entry(
             )
         )
         entities.append(
-            C2DailyEdDevice(
+            MeterInputDailyEdDevice(
                 controller,
                 coordinator,
+                input_number=2,
                 input_name="c2_daily",
                 name=DEFAULT_C2_NAME + " Daily",
                 unit=options.get(
@@ -276,9 +291,10 @@ async def async_setup_entry(
             )
         )
         entities.append(
-            C2TotalEdDevice(
+            MeterInputTotalEdDevice(
                 controller,
                 coordinator,
+                input_number=2,
                 input_name="c2_total",
                 name=DEFAULT_C2_NAME + " Total",
                 unit=options.get(
@@ -307,17 +323,19 @@ class EdDevice(CoordinatorEntity, SensorEntity):
         self,
         controller,
         coordinator,
-        input_name,
-        name,
-        unit,
-        device_class,
-        state_class,
-        icon,
+        input_number: int,
+        input_name: str,
+        name: str,
+        unit: str | None,
+        device_class: SensorDeviceClass | None,
+        state_class: SensorStateClass | None,
+        icon: str,
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
         self.controller = controller
         self._input_name = input_name
+        self._input_number = input_number
 
         self._attr_name = name
         self._attr_native_unit_of_measurement = unit
@@ -347,295 +365,126 @@ class EdDevice(CoordinatorEntity, SensorEntity):
         self._state = None
 
 
-class T1EdDevice(EdDevice):
-    """Initialize the T1 sensor."""
+class TeleinfoInputEdDevice(EdDevice):
+    """Initialize the Teleinfo Input sensor."""
 
     @property
     def native_value(self) -> int:
         """Return the state."""
-        return self.coordinator.data["T1_PAPP"]
+        return self.coordinator.data[f"T{self._input_number}_PAPP"]
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any]:
         """Return the state attributes."""
         if self.coordinator.data:
             return {
-                "type_heures": self.coordinator.data.get("T1_PTEC"),
-                "souscription": self.coordinator.data.get("T1_ISOUSC"),
-                "intensite_max": self.coordinator.data.get("T1_IMAX"),
-                "intensite_max_ph1": self.coordinator.data.get("T1_IMAX1"),
-                "intensite_max_ph2": self.coordinator.data.get("T1_IMAX2"),
-                "intensite_max_ph3": self.coordinator.data.get("T1_IMAX3"),
-                "intensite_now": self.coordinator.data.get("T1_IINST"),
-                "intensite_now_ph1": self.coordinator.data.get("T1_IINST1"),
-                "intensite_now_ph2": self.coordinator.data.get("T1_IINST2"),
-                "intensite_now_ph3": self.coordinator.data.get("T1_IINST3"),
-                "numero_compteur": self.coordinator.data.get("T1_ADCO"),
-                "option_tarifaire": self.coordinator.data.get("T1_OPTARIF"),
-                "index_base": self.coordinator.data.get("T1_BASE"),
-                "index_heures_creuses": self.coordinator.data.get("T1_HCHC"),
-                "index_heures_pleines": self.coordinator.data.get("T1_HCHP"),
-                "index_heures_normales": self.coordinator.data.get("T1_EJPHN"),
-                "index_heures_pointes": self.coordinator.data.get("T1_EJPHPM"),
-                "preavis_heures_pointes": self.coordinator.data.get("T1_PEJP"),
-                "groupe_horaire": self.coordinator.data.get("T1_HHPHC"),
-                "index_heures_creuses_jour_bleu": self.coordinator.data.get(
-                    "T1_BBRHCJB"
-                ),
-                "index_heures_pleines_jour_bleu": self.coordinator.data.get(
-                    "T1_BBRHPJB"
-                ),
-                "index_heures_creuses_jour_blanc": self.coordinator.data.get(
-                    "T1_BBRHCJW"
-                ),
-                "index_heures_pleines_jour_blanc": self.coordinator.data.get(
-                    "T1_BBRHPJW"
-                ),
-                "index_heures_creuses_jour_rouge": self.coordinator.data.get(
-                    "T1_BBRHCJR"
-                ),
-                "index_heures_pleines_jour_rouge": self.coordinator.data.get(
-                    "T1_BBRHPJR"
-                ),
-                "type_heures_demain": self.coordinator.data.get("T1_DEMAIN"),
-                "etat": self.coordinator.data.get("T1_MOTDETAT"),
+                k: self.coordinator.data.get(f"T{self._input_number}_{v}")
+                for k, v in TELEINFO_EXTRA_ATTR.items()
             }
         raise EcoDevicesIncorrectValueError("Data not received.")
 
 
-class T1TotalEdDevice(EdDevice):
-    """Initialize the T1 Total sensor."""
+class TeleinfoInputTotalEdDevice(EdDevice):
+    """Initialize the Teleinfo Input Total sensor."""
 
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["T1_BASE"])) > 0:
+        if (value := float(self.coordinator.data[f"T{self._input_number}_BASE"])) > 0:
             return value
         _LOGGER.warning("Total value for T1 not greater than 0, ignore")
         return None
 
 
-class T1TotalHchpEdDevice(EdDevice):
-    """Initialize the T1 HCHP Total sensor."""
+class TeleinfoInputTotalHchpEdDevice(EdDevice):
+    """Initialize the Teleinfo Input HCHP Total sensor."""
 
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        value_hc = float(self.coordinator.data["T1_HCHC"])
-        value_hp = float(self.coordinator.data["T1_HCHP"])
+        value_hc = float(self.coordinator.data[f"T{self._input_number}_HCHC"])
+        value_hp = float(self.coordinator.data[f"T{self._input_number}_HCHP"])
         if (value := value_hc + value_hp) > 0:
             return value
-        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+        _LOGGER.warning(
+            "Total value for Teleinfo Input %s not greater than 0, ignore",
+            self._input_number,
+        )
         return None
 
 
-class T1TotalHcEdDevice(EdDevice):
-    """Initialize the T1 HC Total sensor."""
+class TeleinfoInputTotalHcEdDevice(EdDevice):
+    """Initialize the Teleinfo Input HC Total sensor."""
 
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["T1_HCHC"])) > 0:
+        if (value := float(self.coordinator.data[f"T{self._input_number}_HCHC"])) > 0:
             return value
-        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+        _LOGGER.warning(
+            "Total value for Teleinfo Input %s not greater than 0, ignore",
+            self._input_number,
+        )
         return None
 
 
-class T1TotalHpEdDevice(EdDevice):
-    """Initialize the T1 HP Total sensor."""
+class TeleinfoInputTotalHpEdDevice(EdDevice):
+    """Initialize the Teleinfo Input HP Total sensor."""
 
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["T1_HCHP"])) > 0:
+        if (value := float(self.coordinator.data[f"T{self._input_number}_HCHP"])) > 0:
             return value
-        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+        _LOGGER.warning(
+            "Total value for Teleinfo Input %s not greater than 0, ignore",
+            self._input_number,
+        )
         return None
 
 
-class T2EdDevice(EdDevice):
-    """Initialize the T2 sensor."""
+class MeterInputEdDevice(EdDevice):
+    """Initialize the meter input sensor."""
 
     @property
     def native_value(self) -> int:
         """Return the state."""
-        return self.coordinator.data["T2_PAPP"]
+        return self.coordinator.data[f"meter{self._input_number + 1}"]
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any]:
         """Return the state attributes."""
         if self.coordinator.data:
             return {
-                "type_heures": self.coordinator.data.get("T2_PTEC"),
-                "souscription": self.coordinator.data.get("T2_ISOUSC"),
-                "intensite_max": self.coordinator.data.get("T2_IMAX"),
-                "intensite_max_ph1": self.coordinator.data.get("T2_IMAX1"),
-                "intensite_max_ph2": self.coordinator.data.get("T2_IMAX2"),
-                "intensite_max_ph3": self.coordinator.data.get("T2_IMAX3"),
-                "intensite_now": self.coordinator.data.get("T2_IINST"),
-                "intensite_now_ph1": self.coordinator.data.get("T2_IINST1"),
-                "intensite_now_ph2": self.coordinator.data.get("T2_IINST2"),
-                "intensite_now_ph3": self.coordinator.data.get("T2_IINST3"),
-                "numero_compteur": self.coordinator.data.get("T2_ADCO"),
-                "option_tarifaire": self.coordinator.data.get("T2_OPTARIF"),
-                "index_base": self.coordinator.data.get("T2_BASE"),
-                "index_heures_creuses": self.coordinator.data.get("T2_HCHC"),
-                "index_heures_pleines": self.coordinator.data.get("T2_HCHP"),
-                "index_heures_normales": self.coordinator.data.get("T2_EJPHN"),
-                "index_heures_pointes": self.coordinator.data.get("T2_EJPHPM"),
-                "preavis_heures_pointes": self.coordinator.data.get("T2_PEJP"),
-                "groupe_horaire": self.coordinator.data.get("T2_HHPHC"),
-                "index_heures_creuses_jour_bleu": self.coordinator.data.get(
-                    "T2_BBRHCJB"
-                ),
-                "index_heures_pleines_jour_bleu": self.coordinator.data.get(
-                    "T2_BBRHPJB"
-                ),
-                "index_heures_creuses_jour_blanc": self.coordinator.data.get(
-                    "T2_BBRHCJW"
-                ),
-                "index_heures_pleines_jour_blanc": self.coordinator.data.get(
-                    "T2_BBRHPJW"
-                ),
-                "index_heures_creuses_jour_rouge": self.coordinator.data.get(
-                    "T2_BBRHCJR"
-                ),
-                "index_heures_pleines_jour_rouge": self.coordinator.data.get(
-                    "T2_BBRHPJR"
-                ),
-                "type_heures_demain": self.coordinator.data.get("T2_DEMAIN"),
-                "etat": self.coordinator.data.get("T2_MOTDETAT"),
+                "total": self.coordinator.data[f"count{self._input_number - 1}"],
+                "fuel": self.coordinator.data[f"c{self._input_number - 1}_fuel"],
             }
         raise EcoDevicesIncorrectValueError("Data not received.")
 
 
-class T2TotalEdDevice(EdDevice):
-    """Initialize the T1 Total sensor."""
-
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["T2_BASE"])) > 0:
-            return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
-        return None
-
-
-class T2TotalHchpEdDevice(EdDevice):
-    """Initialize the T2 HCHP Total sensor."""
-
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        value_hc = float(self.coordinator.data["T2_HCHC"])
-        value_hp = float(self.coordinator.data["T2_HCHP"])
-        if (value := value_hc + value_hp) > 0:
-            return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
-        return None
-
-
-class T2TotalHcEdDevice(EdDevice):
-    """Initialize the T2 HC Total sensor."""
-
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["T2_HCHC"])) > 0:
-            return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
-        return None
-
-
-class T2TotalHpEdDevice(EdDevice):
-    """Initialize the T2 HP Total sensor."""
-
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["T2_HCHP"])) > 0:
-            return value
-        _LOGGER.warning("Total value for T2 not greater than 0, ignore")
-        return None
-
-
-class C1EdDevice(EdDevice):
-    """Initialize the C1 sensor."""
+class MeterInputDailyEdDevice(EdDevice):
+    """Initialize the meter input daily sensor."""
 
     @property
     def native_value(self) -> int:
         """Return the state."""
-        return self.coordinator.data["meter2"]
-
-    @property
-    def extra_state_attributes(self) -> Mapping[str, Any]:
-        """Return the state attributes."""
-        if self.coordinator.data:
-            return {
-                "total": self.coordinator.data["count0"],
-                "fuel": self.coordinator.data["c0_fuel"],
-            }
-        raise EcoDevicesIncorrectValueError("Data not received.")
+        return self.coordinator.data[f"c{self._input_number - 1}day"]
 
 
-class C1DailyEdDevice(EdDevice):
-    """Initialize the C1 daily sensor."""
-
-    @property
-    def native_value(self) -> int:
-        """Return the state."""
-        return self.coordinator.data["c0day"]
-
-
-class C1TotalEdDevice(EdDevice):
-    """Initialize the C1 total sensor."""
+class MeterInputTotalEdDevice(EdDevice):
+    """Initialize the meter input total sensor."""
 
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["count0"])) > 0:
+        if (
+            value := float(self.coordinator.data[f"count{self._input_number - 1}"])
+        ) > 0:
             return value / 1000
-        _LOGGER.warning("Total value for C1 not greater than 0, ignore")
-        return None
-
-
-class C2EdDevice(EdDevice):
-    """Initialize the C2 sensor."""
-
-    @property
-    def native_value(self) -> int:
-        """Return the state."""
-        return self.coordinator.data["meter3"]
-
-    @property
-    def extra_state_attributes(self) -> Mapping[str, Any]:
-        """Return the state attributes."""
-        if self.coordinator.data:
-            return {
-                "total": self.coordinator.data["count1"],
-                "fuel": self.coordinator.data["c1_fuel"],
-            }
-        raise EcoDevicesIncorrectValueError("Data not received.")
-
-
-class C2DailyEdDevice(EdDevice):
-    """Initialize the C2 daily sensor."""
-
-    @property
-    def native_value(self) -> int:
-        """Return the state."""
-        return self.coordinator.data["c1day"]
-
-
-class C2TotalEdDevice(EdDevice):
-    """Initialize the C2 total sensor."""
-
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data["count1"])) > 0:
-            return value / 1000
-        _LOGGER.warning("Total value for C2 not greater than 0, ignore")
+        _LOGGER.warning(
+            "Total value for meter input %s not greater than 0, ignore",
+            self._input_number,
+        )
         return None
 
 
