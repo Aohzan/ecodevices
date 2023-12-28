@@ -19,14 +19,16 @@
       "params": {
         "title": "Paramètres des entités",
         "data": {
-          "t1_hchp": "Teleinfo 1 HC/HP activ\u00e9",
-          "t2_hchp": "Teleinfo 2 HC/HP activ\u00e9",
-          "c1_device_class": "Type du compteur 1",
-          "c1_unit_of_measurement": "Unit\u00e9 du compteur 1",
-          "c1_total_unit_of_measurement": "Unit\u00e9 du compteur 1 pour la valeur total",
-          "c2_device_class": "Type du compteur 2",
-          "c2_unit_of_measurement": "Unit\u00e9 du compteur 2",
-          "c2_total_unit_of_measurement": "Unit\u00e9 du compteur 2 pour la valeur total"
+          "t1_hchp": "Teleinfo 1 - HC/HP activ\u00e9",
+          "t2_hchp": "Teleinfo 2 - HC/HP activ\u00e9",
+          "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
+          "c1_device_class": "Compteur 1 - Type",
+          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9",
+          "c1_total_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour la valeur total",
+          "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalière",
+          "c2_device_class": "Compteur 2 - Type",
+          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9",
+          "c2_total_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour la valeur total"
         }
       }
     },
@@ -57,14 +59,16 @@
       "params": {
         "title": "Paramètres des entités",
         "data": {
-          "t1_hchp": "Teleinfo 1 HC/HP activ\u00e9",
-          "t2_hchp": "Teleinfo 2 HC/HP activ\u00e9",
-          "c1_device_class": "Type du compteur 1",
-          "c1_unit_of_measurement": "Unit\u00e9 du compteur 1",
-          "c1_total_unit_of_measurement": "Unit\u00e9 du compteur 1 pour la valeur total",
-          "c2_device_class": "Type du compteur 2",
-          "c2_unit_of_measurement": "Unit\u00e9 du compteur 2",
-          "c2_total_unit_of_measurement": "Unit\u00e9 du compteur 2 pour la valeur total"
+          "t1_hchp": "Teleinfo 1 - HC/HP activ\u00e9",
+          "t2_hchp": "Teleinfo 2 - HC/HP activ\u00e9",
+          "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
+          "c1_device_class": "Compteur 1 - Type",
+          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9",
+          "c1_total_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour la valeur total",
+          "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalière",
+          "c2_device_class": "Compteur 2 - Type",
+          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9",
+          "c2_total_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour la valeur total"
         }
       }
     },

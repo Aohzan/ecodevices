@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 from homeassistant.components.sensor import (
+    DEVICE_CLASS_STATE_CLASSES,
     SensorDeviceClass,
     SensorEntity,
     SensorStateClass,
@@ -18,10 +19,12 @@ from homeassistant.util import slugify
 
 from .const import (
     CONF_C1_DEVICE_CLASS,
+    CONF_C1_DIVIDER_FACTOR,
     CONF_C1_ENABLED,
     CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
     CONF_C1_UNIT_OF_MEASUREMENT,
     CONF_C2_DEVICE_CLASS,
+    CONF_C2_DIVIDER_FACTOR,
     CONF_C2_ENABLED,
     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
     CONF_C2_UNIT_OF_MEASUREMENT,
@@ -200,7 +203,7 @@ async def async_setup_entry(
                 )
             )
     if c1_enabled:
-        _LOGGER.debug("Add the meter 1 entities")
+        _LOGGER.debug("Add the Meter 1 - entities")
         entities.append(
             MeterInputEdDevice(
                 controller,
@@ -214,8 +217,23 @@ async def async_setup_entry(
                 device_class=options.get(
                     CONF_C1_DEVICE_CLASS, config.get(CONF_C1_DEVICE_CLASS)
                 ),
-                state_class=SensorStateClass.MEASUREMENT,
+                state_class=SensorStateClass.MEASUREMENT
+                if (
+                    SensorStateClass.MEASUREMENT
+                    in (
+                        DEVICE_CLASS_STATE_CLASSES.get(
+                            options.get(
+                                CONF_C1_DEVICE_CLASS, config.get(CONF_C1_DEVICE_CLASS)
+                            ),
+                            {},
+                        )
+                    )
+                )
+                else None,
                 icon="mdi:counter",
+                divider_factor=options.get(
+                    CONF_C1_DIVIDER_FACTOR, config.get(CONF_C1_DIVIDER_FACTOR)
+                ),
             )
         )
         entities.append(
@@ -231,8 +249,11 @@ async def async_setup_entry(
                 device_class=options.get(
                     CONF_C1_DEVICE_CLASS, config.get(CONF_C1_DEVICE_CLASS)
                 ),
-                state_class=SensorStateClass.MEASUREMENT,
+                state_class=SensorStateClass.TOTAL,
                 icon="mdi:counter",
+                divider_factor=options.get(
+                    CONF_C1_DIVIDER_FACTOR, config.get(CONF_C1_DIVIDER_FACTOR)
+                ),
             )
         )
         entities.append(
@@ -257,7 +278,7 @@ async def async_setup_entry(
             )
         )
     if c2_enabled:
-        _LOGGER.debug("Add the meter 2 entities")
+        _LOGGER.debug("Add the Meter 2 - entities")
         entities.append(
             MeterInputEdDevice(
                 controller,
@@ -269,8 +290,23 @@ async def async_setup_entry(
                 device_class=options.get(
                     CONF_C2_DEVICE_CLASS, config.get(CONF_C2_DEVICE_CLASS)
                 ),
-                state_class=SensorStateClass.MEASUREMENT,
+                state_class=SensorStateClass.MEASUREMENT
+                if (
+                    SensorStateClass.MEASUREMENT
+                    in (
+                        DEVICE_CLASS_STATE_CLASSES.get(
+                            options.get(
+                                CONF_C2_DEVICE_CLASS, config.get(CONF_C2_DEVICE_CLASS)
+                            ),
+                            {},
+                        )
+                    )
+                )
+                else None,
                 icon="mdi:counter",
+                divider_factor=options.get(
+                    CONF_C2_DIVIDER_FACTOR, config.get(CONF_C2_DIVIDER_FACTOR)
+                ),
             )
         )
         entities.append(
@@ -286,8 +322,11 @@ async def async_setup_entry(
                 device_class=options.get(
                     CONF_C2_DEVICE_CLASS, config.get(CONF_C2_DEVICE_CLASS)
                 ),
-                state_class=SensorStateClass.MEASUREMENT,
+                state_class=SensorStateClass.TOTAL,
                 icon="mdi:counter",
+                divider_factor=options.get(
+                    CONF_C2_DIVIDER_FACTOR, config.get(CONF_C2_DIVIDER_FACTOR)
+                ),
             )
         )
         entities.append(
@@ -330,12 +369,14 @@ class EdDevice(CoordinatorEntity, SensorEntity):
         device_class: SensorDeviceClass | None,
         state_class: SensorStateClass | None,
         icon: str,
+        divider_factor: float | None = None,
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
         self.controller = controller
         self._input_name = input_name
         self._input_number = input_number
+        self._divider_factor = divider_factor
 
         self._attr_name = name
         self._attr_native_unit_of_measurement = unit
@@ -447,9 +488,12 @@ class MeterInputEdDevice(EdDevice):
     """Initialize the meter input sensor."""
 
     @property
-    def native_value(self) -> int:
+    def native_value(self) -> float:
         """Return the state."""
-        return self.coordinator.data[f"meter{self._input_number + 1}"]
+        value = int(self.coordinator.data[f"meter{self._input_number + 1}"])
+        if self._divider_factor:
+            return value / self._divider_factor
+        return value
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any]:
@@ -466,9 +510,12 @@ class MeterInputDailyEdDevice(EdDevice):
     """Initialize the meter input daily sensor."""
 
     @property
-    def native_value(self) -> int:
+    def native_value(self) -> float:
         """Return the state."""
-        return self.coordinator.data[f"c{self._input_number - 1}day"]
+        value = int(self.coordinator.data[f"c{self._input_number - 1}day"])
+        if self._divider_factor:
+            return value / self._divider_factor
+        return value
 
 
 class MeterInputTotalEdDevice(EdDevice):

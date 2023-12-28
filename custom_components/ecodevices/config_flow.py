@@ -23,10 +23,12 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
     CONF_C1_DEVICE_CLASS,
+    CONF_C1_DIVIDER_FACTOR,
     CONF_C1_ENABLED,
     CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
     CONF_C1_UNIT_OF_MEASUREMENT,
     CONF_C2_DEVICE_CLASS,
+    CONF_C2_DIVIDER_FACTOR,
     CONF_C2_ENABLED,
     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
     CONF_C2_UNIT_OF_MEASUREMENT,
@@ -183,6 +185,9 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
             CONF_C1_UNIT_OF_MEASUREMENT: options.get(
                 CONF_C1_UNIT_OF_MEASUREMENT, config.get(CONF_C1_UNIT_OF_MEASUREMENT)
             ),
+            CONF_C1_DIVIDER_FACTOR: options.get(
+                CONF_C1_DIVIDER_FACTOR, config.get(CONF_C1_DIVIDER_FACTOR, 1)
+            ),
             CONF_C1_TOTAL_UNIT_OF_MEASUREMENT: options.get(
                 CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
                 config.get(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT),
@@ -192,6 +197,9 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
             ),
             CONF_C2_UNIT_OF_MEASUREMENT: options.get(
                 CONF_C2_UNIT_OF_MEASUREMENT, config.get(CONF_C2_UNIT_OF_MEASUREMENT)
+            ),
+            CONF_C2_DIVIDER_FACTOR: options.get(
+                CONF_C2_DIVIDER_FACTOR, config.get(CONF_C2_DIVIDER_FACTOR, 1)
             ),
             CONF_C2_TOTAL_UNIT_OF_MEASUREMENT: options.get(
                 CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
@@ -258,6 +266,10 @@ def _get_params(base_input, base_params):
                     CONF_C1_UNIT_OF_MEASUREMENT,
                     default=base_params.get(CONF_C1_UNIT_OF_MEASUREMENT),
                 ): str,
+                vol.Required(
+                    CONF_C1_DIVIDER_FACTOR,
+                    default=base_params.get(CONF_C1_DIVIDER_FACTOR),
+                ): int,
                 vol.Optional(
                     CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
                     default=base_params.get(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT),
@@ -275,6 +287,10 @@ def _get_params(base_input, base_params):
                     CONF_C2_UNIT_OF_MEASUREMENT,
                     default=base_params.get(CONF_C2_UNIT_OF_MEASUREMENT),
                 ): str,
+                vol.Required(
+                    CONF_C2_DIVIDER_FACTOR,
+                    default=base_params.get(CONF_C2_DIVIDER_FACTOR),
+                ): int,
                 vol.Optional(
                     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
                     default=base_params.get(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT),
