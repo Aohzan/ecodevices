@@ -3,6 +3,7 @@
 ## 4.8.0
 
 - Add divider factor for both meters to allow user to choose a compatible unit of measurement (example, m³ for gas instead of dm³ with a divider factor of 1000)
+- Update translation
 
 ## 4.7.0
 
