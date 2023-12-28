@@ -23,11 +23,11 @@
           "t2_hchp": "Teleinfo 2 - HC/HP activ\u00e9",
           "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
           "c1_device_class": "Compteur 1 - Type",
-          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9",
+          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour les valeurs courantes et journalière",
           "c1_total_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour la valeur total",
           "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalière",
           "c2_device_class": "Compteur 2 - Type",
-          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9",
+          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour les valeurs courantes et journalière",
           "c2_total_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour la valeur total"
         }
       }
@@ -63,11 +63,11 @@
           "t2_hchp": "Teleinfo 2 - HC/HP activ\u00e9",
           "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
           "c1_device_class": "Compteur 1 - Type",
-          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9",
+          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour les valeurs courantes et journalière",
           "c1_total_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour la valeur total",
           "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalière",
           "c2_device_class": "Compteur 2 - Type",
-          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9",
+          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour les valeurs courantes et journalière",
           "c2_total_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour la valeur total"
         }
       }
