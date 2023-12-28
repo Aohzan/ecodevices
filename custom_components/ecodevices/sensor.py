@@ -340,7 +340,7 @@ async def async_setup_entry(
                     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
                     config.get(
                         CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
-                        config.get(CONF_C1_UNIT_OF_MEASUREMENT),
+                        config.get(CONF_C2_UNIT_OF_MEASUREMENT),
                     ),
                 ),
                 device_class=options.get(
