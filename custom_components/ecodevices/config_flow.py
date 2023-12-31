@@ -33,9 +33,11 @@ from .const import (
     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
     CONF_C2_UNIT_OF_MEASUREMENT,
     CONF_T1_ENABLED,
-    CONF_T1_HCHP,
+    CONF_T1_TYPE,
     CONF_T2_ENABLED,
-    CONF_T2_HCHP,
+    CONF_T2_TYPE,
+    CONF_TI_TYPE_BASE,
+    CONF_TI_TYPES,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
 )
@@ -59,7 +61,7 @@ BASE_SCHEMA = vol.Schema(
 class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a eco-devices config flow."""
 
-    VERSION = 1
+    VERSION = 2
 
     def __init__(self) -> None:
         """Initialize class variables."""
@@ -171,13 +173,13 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
         options = self.config_entry.options
 
         base_params = {
-            CONF_T1_HCHP: options.get(
-                CONF_T1_HCHP,
-                config.get(CONF_T1_HCHP, False),
+            CONF_T1_TYPE: options.get(
+                CONF_T1_TYPE,
+                config.get(CONF_T1_TYPE, False),
             ),
-            CONF_T2_HCHP: options.get(
-                CONF_T2_HCHP,
-                config.get(CONF_T2_HCHP, False),
+            CONF_T2_TYPE: options.get(
+                CONF_T2_TYPE,
+                config.get(CONF_T2_TYPE, False),
             ),
             CONF_C1_DEVICE_CLASS: options.get(
                 CONF_C1_DEVICE_CLASS, config.get(CONF_C1_DEVICE_CLASS)
@@ -240,9 +242,9 @@ def _get_params(base_input, base_params):
         params_schema.update(
             {
                 vol.Required(
-                    CONF_T1_HCHP,
-                    default=base_params.get(CONF_T1_HCHP, False),
-                ): bool,
+                    CONF_T1_TYPE,
+                    default=base_params.get(CONF_T1_TYPE, CONF_TI_TYPE_BASE),
+                ): vol.All(str, vol.Lower, vol.In(CONF_TI_TYPES)),
             }
         )
 
@@ -250,9 +252,9 @@ def _get_params(base_input, base_params):
         params_schema.update(
             {
                 vol.Required(
-                    CONF_T2_HCHP,
-                    default=base_params.get(CONF_T2_HCHP, False),
-                ): bool,
+                    CONF_T2_TYPE,
+                    default=base_params.get(CONF_T2_TYPE, CONF_TI_TYPE_BASE),
+                ): vol.All(str, vol.Lower, vol.In(CONF_TI_TYPES)),
             }
         )
 

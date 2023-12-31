@@ -29,9 +29,12 @@ from .const import (
     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
     CONF_C2_UNIT_OF_MEASUREMENT,
     CONF_T1_ENABLED,
-    CONF_T1_HCHP,
+    CONF_T1_TYPE,
     CONF_T2_ENABLED,
-    CONF_T2_HCHP,
+    CONF_T2_TYPE,
+    CONF_TI_TYPE_BASE,
+    CONF_TI_TYPE_HCHP,
+    CONF_TI_TYPE_TEMPO,
     CONTROLLER,
     COORDINATOR,
     DEFAULT_C1_NAME,
@@ -40,6 +43,7 @@ from .const import (
     DEFAULT_T2_NAME,
     DOMAIN,
     TELEINFO_EXTRA_ATTR,
+    TELEINFO_TEMPO_ATTR,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -56,9 +60,9 @@ async def async_setup_entry(
     options = entry.options
 
     t1_enabled = options.get(CONF_T1_ENABLED, config.get(CONF_T1_ENABLED))
-    t1_hchp = options.get(CONF_T1_HCHP, config.get(CONF_T1_HCHP))
+    t1_type = options.get(CONF_T1_TYPE, config.get(CONF_T1_TYPE))
     t2_enabled = options.get(CONF_T2_ENABLED, config.get(CONF_T2_ENABLED))
-    t2_hchp = options.get(CONF_T2_HCHP, config.get(CONF_T2_HCHP))
+    t2_type = options.get(CONF_T2_TYPE, config.get(CONF_T2_TYPE))
     c1_enabled = options.get(CONF_C1_ENABLED, config.get(CONF_C1_ENABLED))
     c2_enabled = options.get(CONF_C2_ENABLED, config.get(CONF_C2_ENABLED))
 
@@ -79,7 +83,21 @@ async def async_setup_entry(
                 icon="mdi:flash",
             )
         )
-        if t1_hchp:
+        if t1_type == CONF_TI_TYPE_BASE:
+            entities.append(
+                TeleinfoInputTotalEdDevice(
+                    controller,
+                    coordinator,
+                    input_number=1,
+                    input_name="t1_total",
+                    name=DEFAULT_T1_NAME + " Total",
+                    unit=UnitOfEnergy.WATT_HOUR,
+                    device_class=SensorDeviceClass.ENERGY,
+                    state_class=SensorStateClass.TOTAL_INCREASING,
+                    icon="mdi:meter-electric",
+                )
+            )
+        elif t1_type == CONF_TI_TYPE_HCHP:
             entities.append(
                 TeleinfoInputTotalHchpEdDevice(
                     controller,
@@ -119,9 +137,9 @@ async def async_setup_entry(
                     icon="mdi:meter-electric",
                 )
             )
-        else:
+        elif t1_type == CONF_TI_TYPE_TEMPO:
             entities.append(
-                TeleinfoInputTotalEdDevice(
+                TeleinfoInputTotalTempoEdDevice(
                     controller,
                     coordinator,
                     input_number=1,
@@ -133,6 +151,20 @@ async def async_setup_entry(
                     icon="mdi:meter-electric",
                 )
             )
+            for desc, key in TELEINFO_TEMPO_ATTR.items():
+                entities.append(
+                    TeleinfoInputTempoEdDevice(
+                        controller,
+                        coordinator,
+                        input_number=1,
+                        input_name=f"t1_{key}",
+                        name=DEFAULT_T1_NAME + " " + desc + " Total",
+                        unit=UnitOfEnergy.WATT_HOUR,
+                        device_class=SensorDeviceClass.ENERGY,
+                        state_class=SensorStateClass.TOTAL_INCREASING,
+                        icon="mdi:meter-electric",
+                    )
+                )
     if t2_enabled:
         _LOGGER.debug("Add the teleinfo 2 entities")
         entities.append(
@@ -148,7 +180,21 @@ async def async_setup_entry(
                 icon="mdi:flash",
             )
         )
-        if t2_hchp:
+        if t2_type == CONF_TI_TYPE_BASE:
+            entities.append(
+                TeleinfoInputTotalEdDevice(
+                    controller,
+                    coordinator,
+                    input_number=2,
+                    input_name="t2_total",
+                    name=DEFAULT_T2_NAME + " Total",
+                    unit=UnitOfEnergy.WATT_HOUR,
+                    device_class=SensorDeviceClass.ENERGY,
+                    state_class=SensorStateClass.TOTAL_INCREASING,
+                    icon="mdi:meter-electric",
+                )
+            )
+        elif t2_type == CONF_TI_TYPE_HCHP:
             entities.append(
                 TeleinfoInputTotalHchpEdDevice(
                     controller,
@@ -188,9 +234,9 @@ async def async_setup_entry(
                     icon="mdi:meter-electric",
                 )
             )
-        else:
+        elif t2_type == CONF_TI_TYPE_TEMPO:
             entities.append(
-                TeleinfoInputTotalEdDevice(
+                TeleinfoInputTotalTempoEdDevice(
                     controller,
                     coordinator,
                     input_number=2,
@@ -202,6 +248,20 @@ async def async_setup_entry(
                     icon="mdi:meter-electric",
                 )
             )
+            for desc, key in TELEINFO_TEMPO_ATTR.items():
+                entities.append(
+                    TeleinfoInputTempoEdDevice(
+                        controller,
+                        coordinator,
+                        input_number=2,
+                        input_name=f"t2_{key}",
+                        name=DEFAULT_T2_NAME + " " + desc + " Total",
+                        unit=UnitOfEnergy.WATT_HOUR,
+                        device_class=SensorDeviceClass.ENERGY,
+                        state_class=SensorStateClass.TOTAL_INCREASING,
+                        icon="mdi:meter-electric",
+                    )
+                )
     if c1_enabled:
         _LOGGER.debug("Add the Meter 1 - entities")
         entities.append(
@@ -476,6 +536,39 @@ class TeleinfoInputTotalHpEdDevice(EdDevice):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data[f"T{self._input_number}_HCHP"])) > 0:
+            return value
+        _LOGGER.warning(
+            "Total value for Teleinfo Input %s not greater than 0, ignore",
+            self._input_number,
+        )
+        return None
+
+
+class TeleinfoInputTotalTempoEdDevice(EdDevice):
+    """Initialize the Teleinfo Input Tempo Total sensor."""
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the total value if it's greater than 0."""
+        value = 0.0
+        for key in TELEINFO_TEMPO_ATTR.values():
+            value += float(self.coordinator.data[f"T{self._input_number}_{key}"])
+        if value > 0:
+            return value
+        _LOGGER.warning(
+            "Total value for Teleinfo Input %s not greater than 0, ignore",
+            self._input_number,
+        )
+        return None
+
+
+class TeleinfoInputTempoEdDevice(EdDevice):
+    """Initialize the Teleinfo Input Tempo sensor."""
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the total value if it's greater than 0."""
+        if (value := float(self.coordinator.data[self._input_name.upper()])) > 0:
             return value
         _LOGGER.warning(
             "Total value for Teleinfo Input %s not greater than 0, ignore",

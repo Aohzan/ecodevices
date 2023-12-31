@@ -19,8 +19,8 @@
       "params": {
         "title": "Paramètres des entités",
         "data": {
-          "t1_hchp": "Teleinfo 1 - HC/HP activ\u00e9",
-          "t2_hchp": "Teleinfo 2 - HC/HP activ\u00e9",
+          "t1_type": "Teleinfo 1 - Type de tarifs (Base, HC/HP ou Tempo)",
+          "t2_type": "Teleinfo 2 - Type de tarifs (Base, HC/HP ou Tempo)",
           "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
           "c1_device_class": "Compteur 1 - Type",
           "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour les valeurs courantes et journalière",
@@ -59,8 +59,8 @@
       "params": {
         "title": "Paramètres des entités",
         "data": {
-          "t1_hchp": "Teleinfo 1 - HC/HP activ\u00e9",
-          "t2_hchp": "Teleinfo 2 - HC/HP activ\u00e9",
+          "t1_type": "Teleinfo 1 - Type de tarifs (Base, HC/HP ou Tempo)",
+          "t2_type": "Teleinfo 2 - Type de tarifs (Base, HC/HP ou Tempo)",
           "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
           "c1_device_class": "Compteur 1 - Type",
           "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour les valeurs courantes et journalière",

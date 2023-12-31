@@ -19,8 +19,8 @@
       "params": {
         "title": "Parameters of Eco-Devices entities",
         "data": {
-          "t1_hchp": "Teleinfo 1 - HC/HP enabled",
-          "t2_hchp": "Teleinfo 2 - HC/HP enabled",
+          "t1_type": "Teleinfo 1 - Rate type (Base, HC/HP or Tempo)",
+          "t2_type": "Teleinfo 2 - Rate type (Base, HC/HP or Tempo)",
           "c1_device_class": "Meter 1 - Device Class (sensor)",
           "c1_unit_of_measurement": "Meter 1 - Unit of measurement for current and daily values",
           "c1_total_unit_of_measurement": "Meter 1 - Unit of measurement for total value",
@@ -59,8 +59,8 @@
       "params": {
         "title": "Parameters of Eco-Devices entities",
         "data": {
-          "t1_hchp": "Teleinfo 1 - HC/HP enabled",
-          "t2_hchp": "Teleinfo 2 - HC/HP enabled",
+          "t1_type": "Teleinfo 1 - Rate type (Base, HC/HP or Tempo)",
+          "t2_type": "Teleinfo 2 - Rate type (Base, HC/HP or Tempo)",
           "c1_device_class": "Meter 1 - Device Class (sensor)",
           "c1_unit_of_measurement": "Meter 1 - Unit of measurement for current and daily values",
           "c1_total_unit_of_measurement": "Meter 1 - Unit of measurement for total value",

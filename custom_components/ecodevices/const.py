@@ -7,9 +7,9 @@ PLATFORMS = ["sensor"]
 UNDO_UPDATE_LISTENER = "undo_update_listener"
 
 CONF_T1_ENABLED = "t1_enabled"
-CONF_T1_HCHP = "t1_hchp"
+CONF_T1_TYPE = "t1_type"
 CONF_T2_ENABLED = "t2_enabled"
-CONF_T2_HCHP = "t2_hchp"
+CONF_T2_TYPE = "t2_type"
 CONF_C1_ENABLED = "c1_enabled"
 CONF_C1_UNIT_OF_MEASUREMENT = "c1_unit_of_measurement"
 CONF_C1_DIVIDER_FACTOR = "c1_divider_factor"
@@ -26,6 +26,15 @@ DEFAULT_T2_NAME = "Teleinfo 2"
 DEFAULT_C1_NAME = "Meter 1"
 DEFAULT_C2_NAME = "Meter 2"
 DEFAULT_SCAN_INTERVAL = 5
+
+CONF_TI_TYPE_BASE = "base"
+CONF_TI_TYPE_HCHP = "hchp"
+CONF_TI_TYPE_TEMPO = "tempo"
+CONF_TI_TYPES = [
+    CONF_TI_TYPE_BASE,
+    CONF_TI_TYPE_HCHP,
+    CONF_TI_TYPE_TEMPO,
+]
 
 TELEINFO_EXTRA_ATTR = {
     "type_heures": "PTEC",
@@ -61,4 +70,12 @@ TELEINFO_EXTRA_ATTR = {
     "index_heures_creuses_jour_rouge": "BBRHCJR",
     "index_heures_pleines_jour_rouge": "BBRHPJR",
     "type_heures_demain": "DEMAIN",
+}
+TELEINFO_TEMPO_ATTR = {
+    "Jour Bleu HC": "BBRHCJB",
+    "Jour Bleu HP": "BBRHPJB",
+    "Jour Blanc HC": "BBRHCJW",
+    "Jour Blanc HP": "BBRHPJW",
+    "Jour Rouge HC": "BBRHCJR",
+    "Jour Rouge HP": "BBRHPJR",
 }
