@@ -1,4 +1,5 @@
 """GCE Eco-Devices integration."""
+
 import asyncio
 from datetime import timedelta
 import logging

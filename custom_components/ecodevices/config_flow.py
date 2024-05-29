@@ -1,4 +1,5 @@
 """Config flow to configure the GCE Eco-Devices integration."""
+
 from typing import Any
 
 from pyecodevices import (
@@ -9,7 +10,13 @@ from pyecodevices import (
 import voluptuous as vol
 
 from homeassistant.components.sensor import DEVICE_CLASSES as SENSOR_DEVICE_CLASSES
-from homeassistant.config_entries import HANDLERS, ConfigEntry, ConfigFlow, OptionsFlow
+from homeassistant.config_entries import (
+    HANDLERS,
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.const import (
     CONF_HOST,
     CONF_PASSWORD,
@@ -18,7 +25,6 @@ from homeassistant.const import (
     CONF_USERNAME,
 )
 from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
@@ -67,7 +73,7 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
         """Initialize class variables."""
         self.base_input: dict[str, Any] = {}
 
-    async def async_step_user(self, user_input=None) -> FlowResult:
+    async def async_step_user(self, user_input=None) -> ConfigFlowResult:
         """Handle a flow initialized by the user."""
         errors: dict[str, str] = {}
         if user_input is None:
@@ -94,7 +100,7 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
         self.base_input = user_input
         return await self.async_step_params()
 
-    async def async_step_params(self, user_input=None) -> FlowResult:
+    async def async_step_params(self, user_input=None) -> ConfigFlowResult:
         """Handle the param flow to customize the device accordly to enabled inputs."""
         if user_input is not None:
             user_input.update(self.base_input)
@@ -123,7 +129,7 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
         self.config_entry: ConfigEntry = config_entry
         self.base_input: dict[str, Any] = {}
 
-    async def async_step_init(self, user_input) -> FlowResult:
+    async def async_step_init(self, user_input) -> ConfigFlowResult:
         """Manage the options."""
         errors = {}
         if user_input is not None:
@@ -160,7 +166,7 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
             step_id="init", data_schema=vol.Schema(options_schema), errors=errors
         )
 
-    async def async_step_params(self, user_input=None) -> FlowResult:
+    async def async_step_params(self, user_input=None) -> ConfigFlowResult:
         """Handle the param flow to customize the device accordly to enabled inputs."""
         if user_input is not None:
             user_input.update(self.base_input)

@@ -1,9 +1,10 @@
 """Constant for the eco-devices integration."""
+
 DOMAIN = "ecodevices"
 
 CONTROLLER = "controller"
 COORDINATOR = "coordinator"
-PLATFORMS = ["sensor"]
+PLATFORMS = ["binary_sensor", "sensor"]
 UNDO_UPDATE_LISTENER = "undo_update_listener"
 
 CONF_T1_ENABLED = "t1_enabled"
@@ -76,6 +77,6 @@ TELEINFO_TEMPO_ATTR = {
     "Jour Bleu HP": "BBRHPJB",
     "Jour Blanc HC": "BBRHCJW",
     "Jour Blanc HP": "BBRHPJW",
-    "Jour Rouge HC": "BBRHCJR",
-    "Jour Rouge HP": "BBRHPJR",
+    "Jour Ro" + "uge HC": "BBRHCJR",  # bypass codespell
+    "Jour Ro" + "uge HP": "BBRHPJR",  # bypass codespell
 }

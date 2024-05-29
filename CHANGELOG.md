@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.1.0
+
+- Add binary sensor in Tempo and HCHP modes to know if currently in HC or not
+- Add sensor in Tempo mode to know today and tomorrow colors
+- Teleinfo instant power is now in VA instead of W
+- Remove warning message for HCHP and Tempo total entity when equal to 0
+
 ## 5.0.0
 
 - Add Tempo support
