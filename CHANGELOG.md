@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.0
+
+- Compare total sensors with previous value when possible to avoid wrong values
+
 ## 5.1.0
 
 - Add binary sensor in Tempo and HCHP modes to know if currently in HC or not

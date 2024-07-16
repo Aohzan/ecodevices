@@ -8,8 +8,8 @@ from pyecodevices import EcoDevices
 
 from homeassistant.components.sensor import (
     DEVICE_CLASS_STATE_CLASSES,
+    RestoreSensor,
     SensorDeviceClass,
-    SensorEntity,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -294,7 +294,7 @@ async def async_setup_entry(
         async_add_entities(entities)
 
 
-class EdSensorEntity(CoordinatorEntity, SensorEntity):
+class EdSensorEntity(CoordinatorEntity, RestoreSensor):
     """Representation of a generic Eco-Devices sensor."""
 
     def __init__(
@@ -327,7 +327,16 @@ class EdSensorEntity(CoordinatorEntity, SensorEntity):
         )
         self._attr_device_info = get_device_info(self.controller)
 
-        self._state = None
+        self._last_state: float | None = None
+
+    async def async_added_to_hass(self) -> None:
+        """Restore state on startup."""
+        await super().async_added_to_hass()
+
+        last_state = await self.async_get_last_state()
+
+        if last_state:
+            self._last_state = float(last_state.state)
 
 
 class TeleinfoInputEdDevice(EdSensorEntity):
@@ -356,8 +365,16 @@ class TeleinfoInputTotalEdDevice(EdSensorEntity):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data[f"T{self._input_number}_BASE"])) > 0:
-            return value
-        _LOGGER.warning("Total value for T1 not greater than 0, ignore")
+            if self._last_state is None or value >= self._last_state:
+                self._last_state = value
+                return value
+            _LOGGER.warning(
+                "Value %s for %s not greater or equal to the previous one %s, ignore",
+                value,
+                self.entity_id,
+                self._last_state,
+            )
+        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
 
@@ -370,7 +387,16 @@ class TeleinfoInputTotalHchpEdDevice(EdSensorEntity):
         value_hc = float(self.coordinator.data[f"T{self._input_number}_HCHC"])
         value_hp = float(self.coordinator.data[f"T{self._input_number}_HCHP"])
         if (value := value_hc + value_hp) > 0:
-            return value
+            if self._last_state is None or value >= self._last_state:
+                self._last_state = value
+                return value
+            _LOGGER.warning(
+                "Value %s for %s not greater or equal to the previous one %s, ignore",
+                value,
+                self.entity_id,
+                self._last_state,
+            )
+        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
 
@@ -381,7 +407,16 @@ class TeleinfoInputTotalHcEdDevice(EdSensorEntity):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data[f"T{self._input_number}_HCHC"])) > 0:
-            return value
+            if self._last_state is None or value >= self._last_state:
+                self._last_state = value
+                return value
+            _LOGGER.warning(
+                "Value %s for %s not greater or equal to the previous one %s, ignore",
+                value,
+                self.entity_id,
+                self._last_state,
+            )
+        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
 
@@ -392,7 +427,16 @@ class TeleinfoInputTotalHpEdDevice(EdSensorEntity):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data[f"T{self._input_number}_HCHP"])) > 0:
-            return value
+            if self._last_state is None or value >= self._last_state:
+                self._last_state = value
+                return value
+            _LOGGER.warning(
+                "Value %s for %s not greater or equal to the previous one %s, ignore",
+                value,
+                self.entity_id,
+                self._last_state,
+            )
+        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
 
@@ -406,7 +450,16 @@ class TeleinfoInputTotalTempoEdDevice(EdSensorEntity):
         for key in TELEINFO_TEMPO_ATTR.values():
             value += float(self.coordinator.data[f"T{self._input_number}_{key}"])
         if value > 0:
-            return value
+            if self._last_state is None or value >= self._last_state:
+                self._last_state = value
+                return value
+            _LOGGER.warning(
+                "Value %s for %s not greater or equal to the previous one %s, ignore",
+                value,
+                self.entity_id,
+                self._last_state,
+            )
+        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
 
@@ -415,9 +468,18 @@ class TeleinfoInputTempoEdDevice(EdSensorEntity):
 
     @property
     def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
+        """Return the total value if it's greater than 0 or the previous value."""
         if (value := float(self.coordinator.data[self._input_name.upper()])) > 0:
-            return value
+            if self._last_state is None or value >= self._last_state:
+                self._last_state = value
+                return value
+            _LOGGER.warning(
+                "Value %s for %s not greater or equal to the previous one %s, ignore",
+                value,
+                self.entity_id,
+                self._last_state,
+            )
+        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
 
@@ -500,7 +562,9 @@ class MeterInputTotalEdDevice(EdSensorEntity):
         if (
             value := float(self.coordinator.data[f"count{self._input_number - 1}"])
         ) > 0:
-            return value / 1000
+            if self._last_state is None or value >= self._last_state:
+                self._last_state = value / 1000
+                return value / 1000
         _LOGGER.warning(
             "Total value for meter input %s not greater than 0, ignore",
             self._input_number,
