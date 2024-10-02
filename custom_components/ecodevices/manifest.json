@@ -11,7 +11,7 @@
   "issue_tracker": "https://github.com/Aohzan/ecodevices/issues",
   "requirements": [
     "xmltodict==0.13.0",
-    "pyecodevices==1.6.1"
+    "pyecodevices==1.7.0"
   ],
-  "version": "5.2.0"
+  "version": "5.3.0"
 }

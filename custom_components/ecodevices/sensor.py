@@ -16,6 +16,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfApparentPower, UnitOfEnergy
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
@@ -327,7 +328,7 @@ class EdSensorEntity(CoordinatorEntity, RestoreSensor):
         )
         self._attr_device_info = get_device_info(self.controller)
 
-        self._last_state: float | None = None
+        self._last_state: StateType | None = None
 
     async def async_added_to_hass(self) -> None:
         """Restore state on startup."""
@@ -336,7 +337,7 @@ class EdSensorEntity(CoordinatorEntity, RestoreSensor):
         last_state = await self.async_get_last_state()
 
         if last_state:
-            self._last_state = float(last_state.state)
+            self._last_state = last_state.state
 
 
 class TeleinfoInputEdDevice(EdSensorEntity):
@@ -365,7 +366,7 @@ class TeleinfoInputTotalEdDevice(EdSensorEntity):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data[f"T{self._input_number}_BASE"])) > 0:
-            if self._last_state is None or value >= self._last_state:
+            if self._last_state is None or value >= float(self._last_state):
                 self._last_state = value
                 return value
             _LOGGER.warning(
@@ -387,7 +388,7 @@ class TeleinfoInputTotalHchpEdDevice(EdSensorEntity):
         value_hc = float(self.coordinator.data[f"T{self._input_number}_HCHC"])
         value_hp = float(self.coordinator.data[f"T{self._input_number}_HCHP"])
         if (value := value_hc + value_hp) > 0:
-            if self._last_state is None or value >= self._last_state:
+            if self._last_state is None or value >= float(self._last_state):
                 self._last_state = value
                 return value
             _LOGGER.warning(
@@ -407,7 +408,7 @@ class TeleinfoInputTotalHcEdDevice(EdSensorEntity):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data[f"T{self._input_number}_HCHC"])) > 0:
-            if self._last_state is None or value >= self._last_state:
+            if self._last_state is None or value >= float(self._last_state):
                 self._last_state = value
                 return value
             _LOGGER.warning(
@@ -427,7 +428,7 @@ class TeleinfoInputTotalHpEdDevice(EdSensorEntity):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
         if (value := float(self.coordinator.data[f"T{self._input_number}_HCHP"])) > 0:
-            if self._last_state is None or value >= self._last_state:
+            if self._last_state is None or value >= float(self._last_state):
                 self._last_state = value
                 return value
             _LOGGER.warning(
@@ -450,7 +451,7 @@ class TeleinfoInputTotalTempoEdDevice(EdSensorEntity):
         for key in TELEINFO_TEMPO_ATTR.values():
             value += float(self.coordinator.data[f"T{self._input_number}_{key}"])
         if value > 0:
-            if self._last_state is None or value >= self._last_state:
+            if self._last_state is None or value >= float(self._last_state):
                 self._last_state = value
                 return value
             _LOGGER.warning(
@@ -470,7 +471,7 @@ class TeleinfoInputTempoEdDevice(EdSensorEntity):
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0 or the previous value."""
         if (value := float(self.coordinator.data[self._input_name.upper()])) > 0:
-            if self._last_state is None or value >= self._last_state:
+            if self._last_state is None or value >= float(self._last_state):
                 self._last_state = value
                 return value
             _LOGGER.warning(
@@ -562,7 +563,7 @@ class MeterInputTotalEdDevice(EdSensorEntity):
         if (
             value := float(self.coordinator.data[f"count{self._input_number - 1}"])
         ) > 0:
-            if self._last_state is None or value >= self._last_state:
+            if self._last_state is None or value >= float(self._last_state):
                 self._last_state = value / 1000
                 return value / 1000
         _LOGGER.warning(

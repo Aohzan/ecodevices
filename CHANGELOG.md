@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.3.0
+
+- Fix deprecations
+- Bump pyecodevices
+
 ## 5.2.0
 
 - Compare total sensors with previous value when possible to avoid wrong values
