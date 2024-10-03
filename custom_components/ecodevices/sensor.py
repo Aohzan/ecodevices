@@ -13,7 +13,12 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfApparentPower, UnitOfEnergy
+from homeassistant.const import (
+    STATE_UNAVAILABLE,
+    STATE_UNKNOWN,
+    UnitOfApparentPower,
+    UnitOfEnergy,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
@@ -336,7 +341,10 @@ class EdSensorEntity(CoordinatorEntity, RestoreSensor):
 
         last_state = await self.async_get_last_state()
 
-        if last_state:
+        if last_state is not None and last_state.state not in (
+            STATE_UNKNOWN,
+            STATE_UNAVAILABLE,
+        ):
             self._last_state = last_state.state
 
 
@@ -375,6 +383,7 @@ class TeleinfoInputTotalEdDevice(EdSensorEntity):
                 self.entity_id,
                 self._last_state,
             )
+            return None
         _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
@@ -397,6 +406,7 @@ class TeleinfoInputTotalHchpEdDevice(EdSensorEntity):
                 self.entity_id,
                 self._last_state,
             )
+            return None
         _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
@@ -417,6 +427,7 @@ class TeleinfoInputTotalHcEdDevice(EdSensorEntity):
                 self.entity_id,
                 self._last_state,
             )
+            return None
         _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
@@ -437,6 +448,7 @@ class TeleinfoInputTotalHpEdDevice(EdSensorEntity):
                 self.entity_id,
                 self._last_state,
             )
+            return None
         _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
@@ -460,6 +472,7 @@ class TeleinfoInputTotalTempoEdDevice(EdSensorEntity):
                 self.entity_id,
                 self._last_state,
             )
+            return None
         _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 
@@ -480,6 +493,7 @@ class TeleinfoInputTempoEdDevice(EdSensorEntity):
                 self.entity_id,
                 self._last_state,
             )
+            return None
         _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
         return None
 

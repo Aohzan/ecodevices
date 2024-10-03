@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.3.1
+
+- Fix error when last state was unavailable
+
 ## 5.3.0
 
 - Fix deprecations
