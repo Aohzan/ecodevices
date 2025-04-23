@@ -1,5 +1,11 @@
 # Changelog
 
+## [5.4.0](https://github.com/Aohzan/ecodevices/compare/5.3.1...5.4.0) (2025-04-23)
+
+### Features
+
+* add release ([ee5345c](https://github.com/Aohzan/ecodevices/commit/ee5345c3aa510857331082169ecd66885bd8e338))
+
 ## 5.3.1
 
 - Fix error when last state was unavailable
