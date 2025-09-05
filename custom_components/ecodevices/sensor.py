@@ -94,7 +94,7 @@ async def async_setup_entry(
                     input_name=f"T{ti_input_number}",
                     name=default_name,
                     unit=UnitOfApparentPower.VOLT_AMPERE,
-                    device_class=SensorDeviceClass.POWER,
+                    device_class=SensorDeviceClass.APPARENT_POWER,
                     state_class=SensorStateClass.MEASUREMENT,
                     icon="mdi:flash",
                 )
