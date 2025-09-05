@@ -8,6 +8,18 @@
 
 ### Bug Fixes
 
+* use SensorDeviceClass.APPARENT_POWER for teleinfo instant sensor ([5eede19](https://github.com/Aohzan/ecodevices/commit/5eede1938e38d736262959b995201f74ff19ea70))
+* use SensorDeviceClass.APPARENT_POWER for teleinfo instant sensor ([3306995](https://github.com/Aohzan/ecodevices/commit/330699570992d6982e891d33ab994df55df30ba1))
+* use SensorDeviceClass.APPARENT_POWER for teleinfo instant sensor ([04f638d](https://github.com/Aohzan/ecodevices/commit/04f638df8bc4db8343b7f4ec5269da99ccdebf81))
+
+## [5.4.0](https://github.com/Aohzan/ecodevices/compare/5.3.1...5.4.0) (2025-09-05)
+
+### Features
+
+* add release ([ee5345c](https://github.com/Aohzan/ecodevices/commit/ee5345c3aa510857331082169ecd66885bd8e338))
+
+### Bug Fixes
+
 * use SensorDeviceClass.APPARENT_POWER for teleinfo instant sensor ([3306995](https://github.com/Aohzan/ecodevices/commit/330699570992d6982e891d33ab994df55df30ba1))
 * use SensorDeviceClass.APPARENT_POWER for teleinfo instant sensor ([04f638d](https://github.com/Aohzan/ecodevices/commit/04f638df8bc4db8343b7f4ec5269da99ccdebf81))
 
