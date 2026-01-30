@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.4.1](https://github.com/Aohzan/ecodevices/compare/5.4.0...5.4.1) (2026-01-30)
+
+### Bug Fixes
+
+* new error when opening option configflow ([7a7250d](https://github.com/Aohzan/ecodevices/commit/7a7250d26b7a798121e53eb0c348725321575028))
+* new error when opening option configflow ([2d01e1b](https://github.com/Aohzan/ecodevices/commit/2d01e1b3e4cabbeb19e5b53b4cb30d670560091c))
+
 ## [5.4.0](https://github.com/Aohzan/ecodevices/compare/5.3.1...5.4.0) (2025-09-05)
 
 ### Features
