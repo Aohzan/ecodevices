@@ -118,15 +118,14 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
         """Define the config flow to handle options."""
-        return EcoDevicesOptionsFlowHandler(config_entry)
+        return EcoDevicesOptionsFlowHandler()
 
 
 class EcoDevicesOptionsFlowHandler(OptionsFlow):
     """Handle a EcoDevices options flow."""
 
-    def __init__(self, config_entry: ConfigEntry) -> None:
+    def __init__(self) -> None:
         """Initialize."""
-        self.config_entry: ConfigEntry = config_entry
         self.base_input: dict[str, Any] = {}
 
     async def async_step_init(self, user_input) -> ConfigFlowResult:
