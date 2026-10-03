@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.4.2](https://github.com/Aohzan/ecodevices/compare/5.4.1...5.4.2) (2026-10-03)
+
+### Bug Fixes
+
+* bump xmltodict to 1.0.4 for HA compatibility ([11c94ed](https://github.com/Aohzan/ecodevices/commit/11c94ed2e7c569a8045e7cba445dfa7d6a89245b))
+* use minimum version for xmltodict requirement ([374b774](https://github.com/Aohzan/ecodevices/commit/374b774b42caa11e2e20d11c96c30db4199d43e1))
+
 ## [5.4.1](https://github.com/Aohzan/ecodevices/compare/5.4.0...5.4.1) (2026-01-30)
 
 ### Bug Fixes

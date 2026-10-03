@@ -13,5 +13,5 @@
     "xmltodict>=1.0.4",
     "pyecodevices==1.7.0"
   ],
-  "version": "5.4.1"
+  "version": "5.4.2"
 }
