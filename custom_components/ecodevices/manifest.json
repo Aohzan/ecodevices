@@ -10,7 +10,7 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Aohzan/ecodevices/issues",
   "requirements": [
-    "xmltodict==1.0.4",
+    "xmltodict>=1.0.4",
     "pyecodevices==1.7.0"
   ],
   "version": "5.4.1"
