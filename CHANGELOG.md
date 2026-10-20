@@ -1,5 +1,11 @@
 # Changelog
 
+## [5.5.0](https://github.com/Aohzan/ecodevices/compare/5.4.2...5.5.0) (2026-10-20)
+
+### Features
+
+* add local brand assets ([f211a8b](https://github.com/Aohzan/ecodevices/commit/f211a8b216e1a3bc37446670021b93613d2dfbb7))
+
 ## [5.4.2](https://github.com/Aohzan/ecodevices/compare/5.4.1...5.4.2) (2026-10-03)
 
 ### Bug Fixes
