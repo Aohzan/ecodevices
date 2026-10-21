@@ -152,8 +152,8 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
         c2_enabled = options.get(CONF_C2_ENABLED, config.get(CONF_C2_ENABLED))
 
         options_schema = {
-            vol.Optional(CONF_USERNAME, default=username): str,
-            vol.Optional(CONF_PASSWORD, default=password): str,
+            vol.Optional(CONF_USERNAME, description={"suggested_value": username}): str,
+            vol.Optional(CONF_PASSWORD, description={"suggested_value": password}): str,
             vol.Required(CONF_SCAN_INTERVAL, default=scan_interval): int,
             vol.Required(CONF_T1_ENABLED, default=t1_enabled): bool,
             vol.Required(CONF_T2_ENABLED, default=t2_enabled): bool,
