@@ -821,17 +821,23 @@ name = "ecodevices"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "homeassistant" },
     { name = "pyecodevices" },
     { name = "xmltodict" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "homeassistant" },
+]
+
 [package.metadata]
 requires-dist = [
-    { name = "homeassistant", specifier = ">=2026.10.0" },
     { name = "pyecodevices", specifier = ">=1.7.0" },
     { name = "xmltodict", specifier = ">=1.0.4" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "homeassistant", specifier = ">=2026.10.0" }]
 
 [[package]]
 name = "envs"
