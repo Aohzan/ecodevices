@@ -54,7 +54,12 @@ from .const import (
     DOMAIN,
 )
 
-PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
+USERNAME_SELECTOR = TextSelector(
+    TextSelectorConfig(type=TextSelectorType.TEXT, autocomplete="username")
+)
+PASSWORD_SELECTOR = TextSelector(
+    TextSelectorConfig(type=TextSelectorType.PASSWORD, autocomplete="current-password")
+)
 
 # Optional fields stored as None when left empty in the options flow, so that the
 # cleared value overrides the one from entry.data
@@ -64,7 +69,7 @@ BASE_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): str,
         vol.Required(CONF_PORT, default=80): int,
-        vol.Optional(CONF_USERNAME): str,
+        vol.Optional(CONF_USERNAME): USERNAME_SELECTOR,
         vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
         vol.Required(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
         vol.Required(CONF_T1_ENABLED, default=False): bool,
@@ -165,10 +170,8 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
         c2_enabled = options.get(CONF_C2_ENABLED, config.get(CONF_C2_ENABLED))
 
         options_schema = {
-            vol.Optional(CONF_USERNAME, description=_suggested(username)): str,
-            vol.Optional(
-                CONF_PASSWORD, description=_suggested(password)
-            ): PASSWORD_SELECTOR,
+            vol.Optional(CONF_USERNAME): USERNAME_SELECTOR,
+            vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
             vol.Required(CONF_SCAN_INTERVAL, default=scan_interval): int,
             vol.Required(CONF_T1_ENABLED, default=t1_enabled): bool,
             vol.Required(CONF_T2_ENABLED, default=t2_enabled): bool,
@@ -177,7 +180,12 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
         }
 
         return self.async_show_form(
-            step_id="init", data_schema=vol.Schema(options_schema), errors=errors
+            step_id="init",
+            data_schema=self.add_suggested_values_to_schema(
+                vol.Schema(options_schema),
+                {CONF_USERNAME: username, CONF_PASSWORD: password},
+            ),
+            errors=errors,
         )
 
     async def async_step_params(self, user_input=None) -> ConfigFlowResult:
@@ -236,7 +244,9 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
 
         return self.async_show_form(
             step_id="params",
-            data_schema=vol.Schema(_get_params(self.base_input, base_params)),
+            data_schema=self.add_suggested_values_to_schema(
+                vol.Schema(_get_params(self.base_input, base_params)), base_params
+            ),
         )
 
 
@@ -259,11 +269,6 @@ async def _test_connection(session, user_input):
         errors["base"] = "cannot_connect"
 
     return errors
-
-
-def _suggested(value: Any) -> dict[str, Any]:
-    """Prefill a field without making it a default, so it can be left empty."""
-    return {"suggested_value": value}
 
 
 def _fill_cleared(user_input: dict[str, Any], keys: Iterable[str]) -> None:
@@ -300,22 +305,12 @@ def _get_params(base_input, base_params):
                 vol.Required(
                     CONF_C1_DEVICE_CLASS, default=base_params.get(CONF_C1_DEVICE_CLASS)
                 ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
-                vol.Optional(
-                    CONF_C1_UNIT_OF_MEASUREMENT,
-                    description=_suggested(
-                        base_params.get(CONF_C1_UNIT_OF_MEASUREMENT)
-                    ),
-                ): str,
+                vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): str,
                 vol.Required(
                     CONF_C1_DIVIDER_FACTOR,
                     default=base_params.get(CONF_C1_DIVIDER_FACTOR, 1),
                 ): int,
-                vol.Optional(
-                    CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
-                    description=_suggested(
-                        base_params.get(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT)
-                    ),
-                ): str,
+                vol.Optional(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT): str,
             }
         )
 
@@ -325,22 +320,12 @@ def _get_params(base_input, base_params):
                 vol.Required(
                     CONF_C2_DEVICE_CLASS, default=base_params.get(CONF_C2_DEVICE_CLASS)
                 ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
-                vol.Optional(
-                    CONF_C2_UNIT_OF_MEASUREMENT,
-                    description=_suggested(
-                        base_params.get(CONF_C2_UNIT_OF_MEASUREMENT)
-                    ),
-                ): str,
+                vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): str,
                 vol.Required(
                     CONF_C2_DIVIDER_FACTOR,
                     default=base_params.get(CONF_C2_DIVIDER_FACTOR, 1),
                 ): int,
-                vol.Optional(
-                    CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
-                    description=_suggested(
-                        base_params.get(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT)
-                    ),
-                ): str,
+                vol.Optional(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT): str,
             }
         )
 
