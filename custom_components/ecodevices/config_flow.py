@@ -1,5 +1,6 @@
 """Config flow to configure the GCE Eco-Devices integration."""
 
+from collections.abc import Iterable
 from typing import Any
 
 from pyecodevices import (
@@ -26,6 +27,11 @@ from homeassistant.const import (
 )
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.selector import (
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+)
 
 from .const import (
     CONF_C1_DEVICE_CLASS,
@@ -48,12 +54,18 @@ from .const import (
     DOMAIN,
 )
 
+PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
+
+# Optional fields stored as None when left empty in the options flow, so that the
+# cleared value overrides the one from entry.data
+OPTIONS_CLEARABLE_KEYS = (CONF_USERNAME, CONF_PASSWORD)
+
 BASE_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): str,
         vol.Required(CONF_PORT, default=80): int,
         vol.Optional(CONF_USERNAME): str,
-        vol.Optional(CONF_PASSWORD): str,
+        vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
         vol.Required(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
         vol.Required(CONF_T1_ENABLED, default=False): bool,
         vol.Required(CONF_T2_ENABLED, default=False): bool,
@@ -135,6 +147,7 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
             session = async_get_clientsession(self.hass, False)
             user_input[CONF_HOST] = self.config_entry.data[CONF_HOST]
             user_input[CONF_PORT] = self.config_entry.data[CONF_PORT]
+            _fill_cleared(user_input, OPTIONS_CLEARABLE_KEYS)
             errors = await _test_connection(session, user_input)
             if not errors:
                 self.base_input = user_input
@@ -152,8 +165,10 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
         c2_enabled = options.get(CONF_C2_ENABLED, config.get(CONF_C2_ENABLED))
 
         options_schema = {
-            vol.Optional(CONF_USERNAME, description={"suggested_value": username}): str,
-            vol.Optional(CONF_PASSWORD, description={"suggested_value": password}): str,
+            vol.Optional(CONF_USERNAME, description=_suggested(username)): str,
+            vol.Optional(
+                CONF_PASSWORD, description=_suggested(password)
+            ): PASSWORD_SELECTOR,
             vol.Required(CONF_SCAN_INTERVAL, default=scan_interval): int,
             vol.Required(CONF_T1_ENABLED, default=t1_enabled): bool,
             vol.Required(CONF_T2_ENABLED, default=t2_enabled): bool,
@@ -168,6 +183,11 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
     async def async_step_params(self, user_input=None) -> ConfigFlowResult:
         """Handle the param flow to customize the device accordly to enabled inputs."""
         if user_input is not None:
+            params_schema = _get_params(self.base_input, {})
+            _fill_cleared(
+                user_input,
+                [key.schema for key in params_schema if isinstance(key, vol.Optional)],
+            )
             user_input.update(self.base_input)
             return self.async_create_entry(
                 title=f"Eco-Devices {user_input[CONF_HOST]}:{user_input[CONF_PORT]}",
@@ -241,6 +261,17 @@ async def _test_connection(session, user_input):
     return errors
 
 
+def _suggested(value: Any) -> dict[str, Any]:
+    """Prefill a field without making it a default, so it can be left empty."""
+    return {"suggested_value": value}
+
+
+def _fill_cleared(user_input: dict[str, Any], keys: Iterable[str]) -> None:
+    """Store None for optional fields the frontend omitted because they were empty."""
+    for key in keys:
+        user_input.setdefault(key, None)
+
+
 def _get_params(base_input, base_params):
     params_schema = {}
     if base_input[CONF_T1_ENABLED]:
@@ -271,15 +302,19 @@ def _get_params(base_input, base_params):
                 ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
                 vol.Optional(
                     CONF_C1_UNIT_OF_MEASUREMENT,
-                    default=base_params.get(CONF_C1_UNIT_OF_MEASUREMENT),
+                    description=_suggested(
+                        base_params.get(CONF_C1_UNIT_OF_MEASUREMENT)
+                    ),
                 ): str,
                 vol.Required(
                     CONF_C1_DIVIDER_FACTOR,
-                    default=base_params.get(CONF_C1_DIVIDER_FACTOR),
+                    default=base_params.get(CONF_C1_DIVIDER_FACTOR, 1),
                 ): int,
                 vol.Optional(
                     CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
-                    default=base_params.get(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT),
+                    description=_suggested(
+                        base_params.get(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT)
+                    ),
                 ): str,
             }
         )
@@ -292,15 +327,19 @@ def _get_params(base_input, base_params):
                 ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
                 vol.Optional(
                     CONF_C2_UNIT_OF_MEASUREMENT,
-                    default=base_params.get(CONF_C2_UNIT_OF_MEASUREMENT),
+                    description=_suggested(
+                        base_params.get(CONF_C2_UNIT_OF_MEASUREMENT)
+                    ),
                 ): str,
                 vol.Required(
                     CONF_C2_DIVIDER_FACTOR,
-                    default=base_params.get(CONF_C2_DIVIDER_FACTOR),
+                    default=base_params.get(CONF_C2_DIVIDER_FACTOR, 1),
                 ): int,
                 vol.Optional(
                     CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
-                    default=base_params.get(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT),
+                    description=_suggested(
+                        base_params.get(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT)
+                    ),
                 ): str,
             }
         )
