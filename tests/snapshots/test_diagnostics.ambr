@@ -1,0 +1,53 @@
+# serializer version: 1
+# name: test_diagnostics
+  dict({
+    'data': dict({
+      'T1_ADCO': '**REDACTED**',
+      'T1_BBRHCJB': '1000',
+      'T1_BBRHCJR': '50',
+      'T1_BBRHCJW': '300',
+      'T1_BBRHPJB': '2000',
+      'T1_BBRHPJR': '60',
+      'T1_BBRHPJW': '400',
+      'T1_DEMAIN': 'BLAN',
+      'T1_ISOUSC': '45',
+      'T1_PAPP': '1250',
+      'T1_PTEC': 'HPJB',
+      'T2_ADCO': '**REDACTED**',
+      'T2_BASE': '11000',
+      'T2_HCHC': '5000',
+      'T2_HCHP': '7000',
+      'T2_PAPP': '780',
+      'T2_PTEC': 'HC..',
+      'c0_fuel': '123',
+      'c0day': '250',
+      'config_mac': '**REDACTED**',
+      'count0': '1234567',
+      'meter2': '1520',
+      'version': '3.00.02',
+    }),
+    'device': dict({
+      'version': '3.00.02',
+    }),
+    'entry': dict({
+      'data': dict({
+        'c1_device_class': 'gas',
+        'c1_divider_factor': 100,
+        'c1_enabled': True,
+        'c1_unit_of_measurement': 'm³',
+        'c2_enabled': False,
+        'host': '192.168.1.10',
+        'password': '**REDACTED**',
+        'port': 80,
+        'scan_interval': 5,
+        't1_enabled': True,
+        't1_type': 'tempo',
+        't2_enabled': True,
+        't2_type': 'hchp',
+        'username': '**REDACTED**',
+      }),
+      'options': dict({
+      }),
+    }),
+  })
+# ---

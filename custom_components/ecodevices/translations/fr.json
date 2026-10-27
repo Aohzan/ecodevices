@@ -2,16 +2,16 @@
   "config": {
     "step": {
       "user": {
-        "title": "Configuration initiale de l'Eco-Device",
-        "description": "D\u00e9finissez les param\u00e8tres de connexion ainsi que les entr\u00e9es utilis\u00e9es.",
+        "title": "Configuration initiale de l'Eco-Devices",
+        "description": "Définissez les paramètres de connexion ainsi que les entrées utilisées.",
         "data": {
           "host": "Adresse IP ou DNS",
           "port": "Port",
+          "scan_interval": "Intervalle de mise à jour en secondes",
           "username": "Nom d'utilisateur",
           "password": "Mot de passe",
-          "scan_interval": "Interval de mise à jour en secondes",
-          "t1_enabled": "T\u00e9l\u00e9info 1",
-          "t2_enabled": "T\u00e9l\u00e9info 2",
+          "t1_enabled": "Téléinfo 1",
+          "t2_enabled": "Téléinfo 2",
           "c1_enabled": "Compteur 1",
           "c2_enabled": "Compteur 2"
         }
@@ -19,39 +19,56 @@
       "params": {
         "title": "Paramètres des entités",
         "data": {
-          "t1_type": "Teleinfo 1 - Type de tarifs (Base, HC/HP ou Tempo)",
-          "t2_type": "Teleinfo 2 - Type de tarifs (Base, HC/HP ou Tempo)",
-          "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
+          "t1_type": "Téléinfo 1 - Type de tarifs (Base, HC/HP ou Tempo)",
+          "t2_type": "Téléinfo 2 - Type de tarifs (Base, HC/HP ou Tempo)",
           "c1_device_class": "Compteur 1 - Type",
-          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour les valeurs courantes et journalière",
-          "c1_total_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour la valeur total",
-          "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalière",
+          "c1_unit_of_measurement": "Compteur 1 - Unité pour les valeurs courantes et journalières",
+          "c1_total_unit_of_measurement": "Compteur 1 - Unité pour la valeur totale",
+          "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalières",
           "c2_device_class": "Compteur 2 - Type",
-          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour les valeurs courantes et journalière",
-          "c2_total_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour la valeur total"
+          "c2_unit_of_measurement": "Compteur 2 - Unité pour les valeurs courantes et journalières",
+          "c2_total_unit_of_measurement": "Compteur 2 - Unité pour la valeur totale",
+          "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalières"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Authentification de l'Eco-Devices",
+        "description": "L'Eco-Devices a refusé les identifiants. Saisissez les nouveaux, ou laissez-les vides si l'authentification est désactivée.",
+        "data": {
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe"
+        }
+      },
+      "reconfigure": {
+        "title": "Adresse de l'Eco-Devices",
+        "description": "Modifiez l'adresse de l'Eco-Devices.",
+        "data": {
+          "host": "Adresse IP ou DNS",
+          "port": "Port"
         }
       }
     },
-    "abort": {
-      "already_configured": "D\u00e9j\u00e0 configur\u00e9"
-    },
     "error": {
-      "cannot_connect": "Probl\u00e8me de connexion",
-      "invalid_auth": "Probl\u00e8me d'authentification",
+      "cannot_connect": "Problème de connexion",
+      "invalid_auth": "Problème d'authentification",
       "unknown": "Erreur non reconnue"
+    },
+    "abort": {
+      "already_configured": "Déjà configuré",
+      "wrong_device": "L'Eco-Devices à cette adresse n'est pas celui de cette entrée"
     }
   },
   "options": {
     "step": {
       "init": {
         "title": "Options Eco-Devices",
-        "description": "Mise à jour des param\u00e8tres de connexion ainsi que les entr\u00e9es utilis\u00e9es.",
+        "description": "Mise à jour des paramètres de connexion ainsi que des entrées utilisées.",
         "data": {
           "username": "Nom d'utilisateur",
           "password": "Mot de passe",
-          "scan_interval": "Interval de mise à jour en secondes",
-          "t1_enabled": "T\u00e9l\u00e9info 1",
-          "t2_enabled": "T\u00e9l\u00e9info 2",
+          "scan_interval": "Intervalle de mise à jour en secondes",
+          "t1_enabled": "Téléinfo 1",
+          "t2_enabled": "Téléinfo 2",
           "c1_enabled": "Compteur 1",
           "c2_enabled": "Compteur 2"
         }
@@ -59,26 +76,85 @@
       "params": {
         "title": "Paramètres des entités",
         "data": {
-          "t1_type": "Teleinfo 1 - Type de tarifs (Base, HC/HP ou Tempo)",
-          "t2_type": "Teleinfo 2 - Type de tarifs (Base, HC/HP ou Tempo)",
-          "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalière",
+          "t1_type": "Téléinfo 1 - Type de tarifs (Base, HC/HP ou Tempo)",
+          "t2_type": "Téléinfo 2 - Type de tarifs (Base, HC/HP ou Tempo)",
           "c1_device_class": "Compteur 1 - Type",
-          "c1_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour les valeurs courantes et journalière",
-          "c1_total_unit_of_measurement": "Compteur 1 - Unit\u00e9 pour la valeur total",
-          "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalière",
+          "c1_unit_of_measurement": "Compteur 1 - Unité pour les valeurs courantes et journalières",
+          "c1_total_unit_of_measurement": "Compteur 1 - Unité pour la valeur totale",
+          "c1_divider_factor": "Compteur 1 - Facteur de division pour les valeurs courantes et journalières",
           "c2_device_class": "Compteur 2 - Type",
-          "c2_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour les valeurs courantes et journalière",
-          "c2_total_unit_of_measurement": "Compteur 2 - Unit\u00e9 pour la valeur total"
+          "c2_unit_of_measurement": "Compteur 2 - Unité pour les valeurs courantes et journalières",
+          "c2_total_unit_of_measurement": "Compteur 2 - Unité pour la valeur totale",
+          "c2_divider_factor": "Compteur 2 - Facteur de division pour les valeurs courantes et journalières"
         }
       }
     },
-    "abort": {
-      "already_configured": "D\u00e9j\u00e0 configur\u00e9"
-    },
     "error": {
-      "cannot_connect": "Probl\u00e8me de connexion",
-      "invalid_auth": "Probl\u00e8me d'authentification",
+      "cannot_connect": "Problème de connexion",
+      "invalid_auth": "Problème d'authentification",
       "unknown": "Erreur non reconnue"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "off_peak": {
+        "name": "Téléinfo {input} heures creuses"
+      }
+    },
+    "sensor": {
+      "teleinfo": {
+        "name": "Téléinfo {input}"
+      },
+      "teleinfo_total": {
+        "name": "Téléinfo {input} total"
+      },
+      "teleinfo_total_hc": {
+        "name": "Téléinfo {input} total HC"
+      },
+      "teleinfo_total_hp": {
+        "name": "Téléinfo {input} total HP"
+      },
+      "tempo_blue_hc_total": {
+        "name": "Téléinfo {input} total jour bleu HC"
+      },
+      "tempo_blue_hp_total": {
+        "name": "Téléinfo {input} total jour bleu HP"
+      },
+      "tempo_white_hc_total": {
+        "name": "Téléinfo {input} total jour blanc HC"
+      },
+      "tempo_white_hp_total": {
+        "name": "Téléinfo {input} total jour blanc HP"
+      },
+      "tempo_red_hc_total": {
+        "name": "Téléinfo {input} total jour rouge HC"
+      },
+      "tempo_red_hp_total": {
+        "name": "Téléinfo {input} total jour rouge HP"
+      },
+      "tempo_color": {
+        "name": "Téléinfo {input} couleur Tempo"
+      },
+      "tempo_color_tomorrow": {
+        "name": "Téléinfo {input} couleur Tempo demain"
+      },
+      "meter": {
+        "name": "Compteur {input}"
+      },
+      "meter_daily": {
+        "name": "Compteur {input} journalier"
+      },
+      "meter_total": {
+        "name": "Compteur {input} total"
+      }
+    }
+  },
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Erreur de communication avec l'Eco-Devices : {error}"
+    },
+    "invalid_auth": {
+      "message": "L'Eco-Devices a refusé les identifiants"
     }
   }
 }

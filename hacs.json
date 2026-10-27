@@ -1,5 +1,6 @@
 {
   "name": "GCE Eco-Devices",
   "country": "FR",
+  "homeassistant": "2026.10.0",
   "render_readme": true
 }

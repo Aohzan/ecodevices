@@ -1,84 +1,160 @@
 {
-    "config": {
-        "abort": {
-            "already_configured": "Device is already configured"
-        },
-        "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
-        },
-        "step": {
-            "params": {
-                "data": {
-                    "c1_device_class": "Meter 1 - Device Class (sensor)",
-                    "c1_divider_factor": "Meter 1 - Divider factor for the value of current and daily sensors",
-                    "c1_total_unit_of_measurement": "Meter 1 - Unit of measurement for total value",
-                    "c1_unit_of_measurement": "Meter 1 - Unit of measurement for current and daily values",
-                    "c2_device_class": "Meter 2 - Device Class (sensor)",
-                    "c2_divider_factor": "Meter 2 - Divider factor for the value of current and daily sensors",
-                    "c2_total_unit_of_measurement": "Meter 2 - Unit of measurement for total value",
-                    "c2_unit_of_measurement": "Meter 2 - Unit of measurement for current and daily values",
-                    "t1_type": "Teleinfo 1 - Rate type (Base, HC/HP or Tempo)",
-                    "t2_type": "Teleinfo 2 - Rate type (Base, HC/HP or Tempo)"
-                },
-                "title": "Parameters of Eco-Devices entities"
-            },
-            "user": {
-                "data": {
-                    "c1_enabled": "Meter 1",
-                    "c2_enabled": "Meter 2",
-                    "host": "Host",
-                    "password": "Password",
-                    "port": "Port",
-                    "scan_interval": "Seconds between updates",
-                    "t1_enabled": "Teleinfo 1",
-                    "t2_enabled": "Teleinfo 2",
-                    "username": "Username"
-                },
-                "description": "Set connexion settings and select which input you use.",
-                "title": "Initial Eco-Devices configuration"
-            }
+  "config": {
+    "step": {
+      "user": {
+        "title": "Initial Eco-Devices configuration",
+        "description": "Set connexion settings and select which input you use.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "scan_interval": "Seconds between updates",
+          "username": "Username",
+          "password": "Password",
+          "t1_enabled": "Teleinfo 1",
+          "t2_enabled": "Teleinfo 2",
+          "c1_enabled": "Meter 1",
+          "c2_enabled": "Meter 2"
         }
+      },
+      "params": {
+        "title": "Parameters of Eco-Devices entities",
+        "data": {
+          "t1_type": "Teleinfo 1 - Rate type (Base, HC/HP or Tempo)",
+          "t2_type": "Teleinfo 2 - Rate type (Base, HC/HP or Tempo)",
+          "c1_device_class": "Meter 1 - Device Class (sensor)",
+          "c1_unit_of_measurement": "Meter 1 - Unit of measurement for current and daily values",
+          "c1_total_unit_of_measurement": "Meter 1 - Unit of measurement for total value",
+          "c1_divider_factor": "Meter 1 - Divider factor for the value of current and daily sensors",
+          "c2_device_class": "Meter 2 - Device Class (sensor)",
+          "c2_unit_of_measurement": "Meter 2 - Unit of measurement for current and daily values",
+          "c2_total_unit_of_measurement": "Meter 2 - Unit of measurement for total value",
+          "c2_divider_factor": "Meter 2 - Divider factor for the value of current and daily sensors"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Eco-Devices authentication",
+        "description": "The Eco-Devices rejected the credentials. Enter the new ones, or leave them empty if the authentication is disabled.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "reconfigure": {
+        "title": "Eco-Devices address",
+        "description": "Update the address of the Eco-Devices.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      }
     },
-    "options": {
-        "abort": {
-            "already_configured": "Device is already configured"
-        },
-        "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
-        },
-        "step": {
-            "init": {
-                "data": {
-                    "c1_enabled": "Meter 1",
-                    "c2_enabled": "Meter 2",
-                    "password": "Password",
-                    "scan_interval": "Seconds between updates",
-                    "t1_enabled": "Teleinfo 1",
-                    "t2_enabled": "Teleinfo 2",
-                    "username": "Username"
-                },
-                "description": "Update connexion settings and select which input you use.",
-                "title": "Eco-Devices options"
-            },
-            "params": {
-                "data": {
-                    "c1_device_class": "Meter 1 - Device Class (sensor)",
-                    "c1_divider_factor": "Meter 1 - Divider factor for the value of current and daily sensors",
-                    "c1_total_unit_of_measurement": "Meter 1 - Unit of measurement for total value",
-                    "c1_unit_of_measurement": "Meter 1 - Unit of measurement for current and daily values",
-                    "c2_device_class": "Meter 2 - Device Class (sensor)",
-                    "c2_divider_factor": "Meter 2 - Divider factor for the value of current and daily sensors",
-                    "c2_total_unit_of_measurement": "Meter 2 - Unit of measurement for total value",
-                    "c2_unit_of_measurement": "Meter 2 - Unit of measurement for current and daily values",
-                    "t1_type": "Teleinfo 1 - Rate type (Base, HC/HP or Tempo)",
-                    "t2_type": "Teleinfo 2 - Rate type (Base, HC/HP or Tempo)"
-                },
-                "title": "Parameters of Eco-Devices entities"
-            }
-        }
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Device is already configured",
+      "wrong_device": "The Eco-Devices at this address isn't the one of this entry"
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Eco-Devices options",
+        "description": "Update connexion settings and select which input you use.",
+        "data": {
+          "username": "Username",
+          "password": "Password",
+          "scan_interval": "Seconds between updates",
+          "t1_enabled": "Teleinfo 1",
+          "t2_enabled": "Teleinfo 2",
+          "c1_enabled": "Meter 1",
+          "c2_enabled": "Meter 2"
+        }
+      },
+      "params": {
+        "title": "Parameters of Eco-Devices entities",
+        "data": {
+          "t1_type": "Teleinfo 1 - Rate type (Base, HC/HP or Tempo)",
+          "t2_type": "Teleinfo 2 - Rate type (Base, HC/HP or Tempo)",
+          "c1_device_class": "Meter 1 - Device Class (sensor)",
+          "c1_unit_of_measurement": "Meter 1 - Unit of measurement for current and daily values",
+          "c1_total_unit_of_measurement": "Meter 1 - Unit of measurement for total value",
+          "c1_divider_factor": "Meter 1 - Divider factor for the value of current and daily sensors",
+          "c2_device_class": "Meter 2 - Device Class (sensor)",
+          "c2_unit_of_measurement": "Meter 2 - Unit of measurement for current and daily values",
+          "c2_total_unit_of_measurement": "Meter 2 - Unit of measurement for total value",
+          "c2_divider_factor": "Meter 2 - Divider factor for the value of current and daily sensors"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "off_peak": {
+        "name": "Teleinfo {input} off-peak hours"
+      }
+    },
+    "sensor": {
+      "teleinfo": {
+        "name": "Teleinfo {input}"
+      },
+      "teleinfo_total": {
+        "name": "Teleinfo {input} total"
+      },
+      "teleinfo_total_hc": {
+        "name": "Teleinfo {input} HC total"
+      },
+      "teleinfo_total_hp": {
+        "name": "Teleinfo {input} HP total"
+      },
+      "tempo_blue_hc_total": {
+        "name": "Teleinfo {input} blue day HC total"
+      },
+      "tempo_blue_hp_total": {
+        "name": "Teleinfo {input} blue day HP total"
+      },
+      "tempo_white_hc_total": {
+        "name": "Teleinfo {input} white day HC total"
+      },
+      "tempo_white_hp_total": {
+        "name": "Teleinfo {input} white day HP total"
+      },
+      "tempo_red_hc_total": {
+        "name": "Teleinfo {input} red day HC total"
+      },
+      "tempo_red_hp_total": {
+        "name": "Teleinfo {input} red day HP total"
+      },
+      "tempo_color": {
+        "name": "Teleinfo {input} Tempo color"
+      },
+      "tempo_color_tomorrow": {
+        "name": "Teleinfo {input} Tempo color tomorrow"
+      },
+      "meter": {
+        "name": "Meter {input}"
+      },
+      "meter_daily": {
+        "name": "Meter {input} daily"
+      },
+      "meter_total": {
+        "name": "Meter {input} total"
+      }
+    }
+  },
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Error while communicating with the Eco-Devices: {error}"
+    },
+    "invalid_auth": {
+      "message": "The Eco-Devices rejected the credentials"
+    }
+  }
 }

@@ -1,0 +1,56 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "off_peak": {
+        "default": "mdi:cash-clock"
+      }
+    },
+    "sensor": {
+      "teleinfo": {
+        "default": "mdi:flash"
+      },
+      "teleinfo_total": {
+        "default": "mdi:meter-electric"
+      },
+      "teleinfo_total_hc": {
+        "default": "mdi:meter-electric"
+      },
+      "teleinfo_total_hp": {
+        "default": "mdi:meter-electric"
+      },
+      "tempo_blue_hc_total": {
+        "default": "mdi:meter-electric"
+      },
+      "tempo_blue_hp_total": {
+        "default": "mdi:meter-electric"
+      },
+      "tempo_white_hc_total": {
+        "default": "mdi:meter-electric"
+      },
+      "tempo_white_hp_total": {
+        "default": "mdi:meter-electric"
+      },
+      "tempo_red_hc_total": {
+        "default": "mdi:meter-electric"
+      },
+      "tempo_red_hp_total": {
+        "default": "mdi:meter-electric"
+      },
+      "tempo_color": {
+        "default": "mdi:palette"
+      },
+      "tempo_color_tomorrow": {
+        "default": "mdi:palette"
+      },
+      "meter": {
+        "default": "mdi:counter"
+      },
+      "meter_daily": {
+        "default": "mdi:counter"
+      },
+      "meter_total": {
+        "default": "mdi:counter"
+      }
+    }
+  }
+}
