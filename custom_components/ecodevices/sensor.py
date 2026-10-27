@@ -1,6 +1,7 @@
 """Support for the GCE Eco-Devices."""
 
 from collections.abc import Mapping
+from dataclasses import dataclass
 import logging
 from typing import Any
 
@@ -8,17 +9,12 @@ from homeassistant.components.sensor import (
     DEVICE_CLASS_STATE_CLASSES,
     RestoreSensor,
     SensorDeviceClass,
+    SensorExtraStoredData,
     SensorStateClass,
 )
-from homeassistant.const import (
-    STATE_UNAVAILABLE,
-    STATE_UNKNOWN,
-    UnitOfApparentPower,
-    UnitOfEnergy,
-)
-from homeassistant.core import HomeAssistant
+from homeassistant.const import UnitOfApparentPower, UnitOfEnergy
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
-from homeassistant.helpers.typing import StateType
 
 from .const import (
     CONF_C1_DEVICE_CLASS,
@@ -47,6 +43,10 @@ from .entity import EcoDevicesEntity
 _LOGGER = logging.getLogger(__name__)
 
 PARALLEL_UPDATES = 0
+
+# Consecutive updates with a total lower than the last accepted one, after
+# which the lower total is accepted as a reset of the index
+TOTAL_RESET_CONFIRMATIONS = 3
 
 
 async def async_setup_entry(
@@ -264,36 +264,106 @@ class EdSensorEntity(EcoDevicesEntity, RestoreSensor):
         self._attr_device_class = device_class
         self._attr_state_class = state_class
 
-        self._last_state: StateType | None = None
+
+@dataclass
+class EdTotalExtraStoredData(SensorExtraStoredData):
+    """Stored data of a total sensor, with the last accepted total."""
+
+    last_total: float | None = None
+
+    def as_dict(self) -> dict[str, Any]:
+        """Return a dict representation of the stored data."""
+        return super().as_dict() | {"last_total": self.last_total}
+
+
+def _to_float(value: Any) -> float | None:
+    """Return the value as a float, or None if it isn't a number."""
+    try:
+        return float(value)
+    except TypeError, ValueError:
+        return None
+
+
+class EdTotalSensorEntity(EdSensorEntity):
+    """Representation of an Eco-Devices total, which only increases.
+
+    A total lower than the last accepted one is ignored as a glitch of the
+    Eco-Devices, unless it's confirmed on consecutive updates (index reset,
+    meter change). A total equal to 0 is always ignored.
+    """
+
+    _last_total: float | None = None
+    _lower_count = 0
 
     async def async_added_to_hass(self) -> None:
-        """Restore the last value on startup, to ignore decreasing totals."""
+        """Restore the last accepted total, to keep ignoring the lower ones."""
         await super().async_added_to_hass()
 
-        if (
-            last_sensor_data := await self.async_get_last_sensor_data()
-        ) is not None and last_sensor_data.native_value is not None:
-            self._last_state = last_sensor_data.native_value
-        elif (last_state := await self.async_get_last_state()) is not None and (
-            last_state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE)
-        ):
-            self._last_state = last_state.state
+        candidates: list[Any] = []
+        if (extra_data := await self.async_get_last_extra_data()) is not None:
+            # last_total is missing in the data stored by the older versions
+            restored = extra_data.as_dict()
+            candidates.extend(
+                (restored.get("last_total"), restored.get("native_value"))
+            )
+        if (last_state := await self.async_get_last_state()) is not None:
+            candidates.append(last_state.state)
+        self._last_total = next(
+            (total for total in map(_to_float, candidates) if total is not None), None
+        )
+        self._update_total()
 
-    def _increasing_total(self, value: float) -> float | None:
-        """Return the total if it's greater than 0 and not lower than the last one."""
+    @property
+    def extra_restore_state_data(self) -> EdTotalExtraStoredData:
+        """Return the data to restore, with the last accepted total."""
+        return EdTotalExtraStoredData(
+            self.native_value, self.native_unit_of_measurement, self._last_total
+        )
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Check the new total, a failed update keeps the previous data."""
+        if self.coordinator.last_update_success:
+            self._update_total()
+        super()._handle_coordinator_update()
+
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices."""
+        raise NotImplementedError
+
+    def _update_total(self) -> None:
+        """Set the state to the total read, if it's accepted."""
+        self._attr_native_value = self._accept_total(self._read_total())
+
+    def _accept_total(self, value: float) -> float | None:
+        """Return the total if it's accepted, otherwise None."""
         if value <= 0:
             _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
             return None
-        if self._last_state is None or value >= float(self._last_state):
-            self._last_state = value
-            return value
-        _LOGGER.warning(
-            "Value %s for %s not greater or equal to the previous one %s, ignore",
-            value,
-            self.entity_id,
-            self._last_state,
-        )
-        return None
+        if self._last_total is not None and value < self._last_total:
+            self._lower_count += 1
+            if self._lower_count < TOTAL_RESET_CONFIRMATIONS:
+                if self._lower_count == 1:
+                    _LOGGER.warning(
+                        "Value %s for %s lower than the previous one %s, ignored "
+                        "until it's confirmed on %s updates",
+                        value,
+                        self.entity_id,
+                        self._last_total,
+                        TOTAL_RESET_CONFIRMATIONS,
+                    )
+                return None
+            _LOGGER.info(
+                "Value %s for %s lower than the previous one %s on %s updates, "
+                "accepted as a reset of the index",
+                value,
+                self.entity_id,
+                self._last_total,
+                TOTAL_RESET_CONFIRMATIONS,
+            )
+        self._lower_count = 0
+        self._last_total = value
+        return value
 
 
 class TeleinfoInputEdDevice(EdSensorEntity):
@@ -315,73 +385,57 @@ class TeleinfoInputEdDevice(EdSensorEntity):
         }
 
 
-class TeleinfoInputTotalEdDevice(EdSensorEntity):
+class TeleinfoInputTotalEdDevice(EdTotalSensorEntity):
     """Initialize the Teleinfo Input Total sensor."""
 
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        return self._increasing_total(
-            float(self.coordinator.data[f"T{self._input_number}_BASE"])
-        )
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices."""
+        return float(self.coordinator.data[f"T{self._input_number}_BASE"])
 
 
-class TeleinfoInputTotalHchpEdDevice(EdSensorEntity):
+class TeleinfoInputTotalHchpEdDevice(EdTotalSensorEntity):
     """Initialize the Teleinfo Input HCHP Total sensor."""
 
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices."""
         value_hc = float(self.coordinator.data[f"T{self._input_number}_HCHC"])
         value_hp = float(self.coordinator.data[f"T{self._input_number}_HCHP"])
-        return self._increasing_total(value_hc + value_hp)
+        return value_hc + value_hp
 
 
-class TeleinfoInputTotalHcEdDevice(EdSensorEntity):
+class TeleinfoInputTotalHcEdDevice(EdTotalSensorEntity):
     """Initialize the Teleinfo Input HC Total sensor."""
 
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        return self._increasing_total(
-            float(self.coordinator.data[f"T{self._input_number}_HCHC"])
-        )
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices."""
+        return float(self.coordinator.data[f"T{self._input_number}_HCHC"])
 
 
-class TeleinfoInputTotalHpEdDevice(EdSensorEntity):
+class TeleinfoInputTotalHpEdDevice(EdTotalSensorEntity):
     """Initialize the Teleinfo Input HP Total sensor."""
 
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        return self._increasing_total(
-            float(self.coordinator.data[f"T{self._input_number}_HCHP"])
-        )
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices."""
+        return float(self.coordinator.data[f"T{self._input_number}_HCHP"])
 
 
-class TeleinfoInputTotalTempoEdDevice(EdSensorEntity):
+class TeleinfoInputTotalTempoEdDevice(EdTotalSensorEntity):
     """Initialize the Teleinfo Input Tempo Total sensor."""
 
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        return self._increasing_total(
-            sum(
-                float(self.coordinator.data[f"T{self._input_number}_{key}"])
-                for key in TELEINFO_TEMPO_INDEXES
-            )
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices."""
+        return sum(
+            float(self.coordinator.data[f"T{self._input_number}_{key}"])
+            for key in TELEINFO_TEMPO_INDEXES
         )
 
 
-class TeleinfoInputTempoEdDevice(EdSensorEntity):
+class TeleinfoInputTempoEdDevice(EdTotalSensorEntity):
     """Initialize the Teleinfo Input Tempo sensor."""
 
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        return self._increasing_total(
-            float(self.coordinator.data[self._input_name.upper()])
-        )
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices."""
+        return float(self.coordinator.data[self._input_name.upper()])
 
 
 class TeleinfoInputColor(EdSensorEntity):
@@ -454,13 +508,10 @@ class MeterInputDailyEdDevice(EdSensorEntity):
         return value
 
 
-class MeterInputTotalEdDevice(EdSensorEntity):
+class MeterInputTotalEdDevice(EdTotalSensorEntity):
     """Initialize the meter input total sensor."""
 
-    @property
-    def native_value(self) -> float | None:
-        """Return the total value in thousands, if it's greater than 0."""
-        # The restored value is in thousands too
-        return self._increasing_total(
-            float(self.coordinator.data[f"count{self._input_number - 1}"]) / 1000
-        )
+    def _read_total(self) -> float:
+        """Return the total read from the Eco-Devices, in thousands."""
+        # The restored total is in thousands too
+        return float(self.coordinator.data[f"count{self._input_number - 1}"]) / 1000
