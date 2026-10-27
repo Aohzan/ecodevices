@@ -16,7 +16,7 @@ from homeassistant.const import (
     UnitOfApparentPower,
     UnitOfEnergy,
 )
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
@@ -278,11 +278,6 @@ class EdSensorEntity(EcoDevicesEntity, RestoreSensor):
             last_state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE)
         ):
             self._last_state = last_state.state
-
-    @callback
-    def async_entity_id_changed(self, old_entity_id: str) -> None:
-        """Keep the entity on an entity ID change, the restored value is kept."""
-        super().async_entity_id_changed(old_entity_id)
 
     def _increasing_total(self, value: float) -> float | None:
         """Return the total if it's greater than 0 and not lower than the last one."""
