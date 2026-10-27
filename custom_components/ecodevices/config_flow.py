@@ -356,8 +356,8 @@ async def _test_connection(
     controller = EcoDevices(
         user_input[CONF_HOST],
         user_input[CONF_PORT],
-        user_input.get(CONF_USERNAME),
-        user_input.get(CONF_PASSWORD),
+        user_input.get(CONF_USERNAME),  # ty: ignore[invalid-argument-type] pyecodevices annotates it str, None means no authentication
+        user_input.get(CONF_PASSWORD),  # ty: ignore[invalid-argument-type] pyecodevices annotates it str, None means no authentication
         session=async_get_clientsession(hass, verify_ssl=False),
     )
 
