@@ -10,6 +10,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    # pyecodevices 1.7.0 imports it without declaring it, until pyecodevices 1.7.1
+    "async-timeout>=4.0.3",
     "homeassistant>=2026.10.0",
     "prek>=0.5.7",
     "pytest-homeassistant-custom-component>=0.13.375",
@@ -27,7 +29,8 @@ select = [
     "A", "ASYNC", "B", "C4", "D", "E", "F", "G", "I", "LOG", "PIE", "PT",
     "PTH", "RET", "RUF", "SIM", "TRY", "UP", "W",
 ]
-ignore = ["D202", "D203", "D213", "E501", "TRY003"]
+# RUF012: Home Assistant entities declare their _attr_ defaults as class attributes
+ignore = ["D202", "D203", "D213", "E501", "RUF012", "TRY003"]
 
 [tool.ruff.lint.isort]
 force-sort-within-sections = true
@@ -38,6 +41,7 @@ combine-as-imports = true
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
+pythonpath = ["."]
 
 [tool.coverage.run]
 source = ["custom_components"]

@@ -28,13 +28,16 @@ def flatten(data: dict, prefix: str = "") -> set[str]:
 
 
 def main() -> None:
+    """Run the script."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
         "--fix", action="store_true", help="copy strings.json to translations/en.json"
     )
     args = parser.parse_args()
 
-    (component,) = (path.parent for path in ROOT.glob("custom_components/*/manifest.json"))
+    (component,) = (
+        path.parent for path in ROOT.glob("custom_components/*/manifest.json")
+    )
     strings_path = component / "strings.json"
     english_path = component / "translations" / "en.json"
     strings = json.loads(strings_path.read_text(encoding="utf-8"))

@@ -1,0 +1,1162 @@
+# serializer version: 1
+# name: test_entities[binary_sensor][binary_sensor.eco_devices_192_168_1_10_80_teleinfo_1_off_peak_hours-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.eco_devices_192_168_1_10_80_teleinfo_1_off_peak_hours',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 off-peak hours',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 off-peak hours',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'off_peak',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_binary_sensor_1_ptec',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[binary_sensor][binary_sensor.eco_devices_192_168_1_10_80_teleinfo_1_off_peak_hours-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 off-peak hours',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.eco_devices_192_168_1_10_80_teleinfo_1_off_peak_hours',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_entities[binary_sensor][binary_sensor.eco_devices_192_168_1_10_80_teleinfo_2_off_peak_hours-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.eco_devices_192_168_1_10_80_teleinfo_2_off_peak_hours',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 2 off-peak hours',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Teleinfo 2 off-peak hours',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'off_peak',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_binary_sensor_2_ptec',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[binary_sensor][binary_sensor.eco_devices_192_168_1_10_80_teleinfo_2_off_peak_hours-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 2 off-peak hours',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.eco_devices_192_168_1_10_80_teleinfo_2_off_peak_hours',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_meter_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_meter_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Meter 1',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 2,
+      }),
+    }),
+    'original_device_class': 'gas',
+    'original_icon': None,
+    'original_name': 'Meter 1',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'meter',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_c1',
+    'unit_of_measurement': 'm³',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_meter_1-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'gas',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Meter 1',
+      'fuel': '123',
+      'total': '1234567',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'm³',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_meter_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '15.2',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_meter_1_daily-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_meter_1_daily',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Meter 1 daily',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 2,
+      }),
+    }),
+    'original_device_class': 'gas',
+    'original_icon': None,
+    'original_name': 'Meter 1 daily',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'meter_daily',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_c1_daily',
+    'unit_of_measurement': 'm³',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_meter_1_daily-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'gas',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Meter 1 daily',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'm³',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_meter_1_daily',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '2.5',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_meter_1_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_meter_1_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Meter 1 total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 2,
+      }),
+    }),
+    'original_device_class': 'gas',
+    'original_icon': None,
+    'original_name': 'Meter 1 total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'meter_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_c1_total',
+    'unit_of_measurement': 'm³',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_meter_1_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'gas',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Meter 1 total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'm³',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_meter_1_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1234.567',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.APPARENT_POWER: 'apparent_power'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'teleinfo',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1',
+    'unit_of_measurement': <UnitOfApparentPower.VOLT_AMPERE: 'VA'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'avertissement_depassement': None,
+      'conso_instant_general': None,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'apparent_power',
+      'etat': None,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1',
+      'groupe_horaire': None,
+      'index_base': None,
+      'index_heures_creuses': None,
+      'index_heures_creuses_jour_blanc': '300',
+      'index_heures_creuses_jour_bleu': '1000',
+      'index_heures_creuses_jour_rouge': '50',
+      'index_heures_normales': None,
+      'index_heures_pleines': None,
+      'index_heures_pleines_jour_blanc': '400',
+      'index_heures_pleines_jour_bleu': '2000',
+      'index_heures_pleines_jour_rouge': '60',
+      'index_heures_pointes': None,
+      'intensite_max': None,
+      'intensite_max_ph1': None,
+      'intensite_max_ph2': None,
+      'intensite_max_ph3': None,
+      'intensite_now': None,
+      'intensite_now_ph1': None,
+      'intensite_now_ph2': None,
+      'intensite_now_ph3': None,
+      'numero_compteur': '021728123456',
+      'option_tarifaire': None,
+      'preavis_heures_pointes': None,
+      'presence_potentiels': None,
+      'puissance_apparente': '1250',
+      'souscription': '45',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'type_heures': 'HPJB',
+      'type_heures_demain': 'BLANC',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfApparentPower.VOLT_AMPERE: 'VA'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1250',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hc_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hc_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 blue day HC total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 blue day HC total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_blue_hc_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_bbrhcjb',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hc_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 blue day HC total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hc_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1000.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hp_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hp_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 blue day HP total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 blue day HP total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_blue_hp_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_bbrhpjb',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hp_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 blue day HP total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_blue_day_hp_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '2000.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hc_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hc_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 red day HC total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 red day HC total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_red_hc_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_bbrhcjr',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hc_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 red day HC total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hc_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '50.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hp_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hp_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 red day HP total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 red day HP total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_red_hp_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_bbrhpjr',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hp_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 red day HP total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_red_day_hp_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '60.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        '🔵',
+        '⚪',
+        '🔴',
+        '❓',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 Tempo color',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 Tempo color',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_color',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_ptec',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 Tempo color',
+      'name': 'Bleu',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        '🔵',
+        '⚪',
+        '🔴',
+        '❓',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '🔵',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color_tomorrow-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        '🔵',
+        '⚪',
+        '🔴',
+        '❓',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color_tomorrow',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 Tempo color tomorrow',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 Tempo color tomorrow',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_color_tomorrow',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_demain',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color_tomorrow-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 Tempo color tomorrow',
+      'name': 'inconnu',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        '🔵',
+        '⚪',
+        '🔴',
+        '❓',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color_tomorrow',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '❓',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'teleinfo_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_total',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '3810.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hc_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hc_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 white day HC total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 white day HC total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_white_hc_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_bbrhcjw',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hc_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 white day HC total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hc_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '300.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hp_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hp_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 1 white day HP total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 1 white day HP total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tempo_white_hp_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t1_bbrhpjw',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hp_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 white day HP total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_1_white_day_hp_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '400.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 2',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.APPARENT_POWER: 'apparent_power'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 2',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'teleinfo',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t2',
+    'unit_of_measurement': <UnitOfApparentPower.VOLT_AMPERE: 'VA'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'avertissement_depassement': None,
+      'conso_instant_general': None,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'apparent_power',
+      'etat': None,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 2',
+      'groupe_horaire': None,
+      'index_base': '11000',
+      'index_heures_creuses': '5000',
+      'index_heures_creuses_jour_blanc': None,
+      'index_heures_creuses_jour_bleu': None,
+      'index_heures_creuses_jour_rouge': None,
+      'index_heures_normales': None,
+      'index_heures_pleines': '7000',
+      'index_heures_pleines_jour_blanc': None,
+      'index_heures_pleines_jour_bleu': None,
+      'index_heures_pleines_jour_rouge': None,
+      'index_heures_pointes': None,
+      'intensite_max': None,
+      'intensite_max_ph1': None,
+      'intensite_max_ph2': None,
+      'intensite_max_ph3': None,
+      'intensite_now': None,
+      'intensite_now_ph1': None,
+      'intensite_now_ph2': None,
+      'intensite_now_ph3': None,
+      'numero_compteur': '021728654321',
+      'option_tarifaire': None,
+      'preavis_heures_pointes': None,
+      'presence_potentiels': None,
+      'puissance_apparente': '780',
+      'souscription': None,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'type_heures': 'HC..',
+      'type_heures_demain': None,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfApparentPower.VOLT_AMPERE: 'VA'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '780',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2_hc_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2_hc_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 2 HC total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 2 HC total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'teleinfo_total_hc',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t2_total_hc',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2_hc_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 2 HC total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2_hc_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '5000.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2_hp_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2_hp_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 2 HP total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 2 HP total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'teleinfo_total_hp',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t2_total_hp',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2_hp_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 2 HP total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2_hp_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '7000.0',
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2_total-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2_total',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Teleinfo 2 total',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.ENERGY: 'energy'>,
+    'original_icon': None,
+    'original_name': 'Teleinfo 2 total',
+    'platform': 'ecodevices',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'teleinfo_total',
+    'unique_id': 'ecodevices_00_04_a3_00_00_01_sensor_t2_total',
+    'unit_of_measurement': <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+  })
+# ---
+# name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_2_total-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 2 total',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.WATT_HOUR: 'Wh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.eco_devices_192_168_1_10_80_teleinfo_2_total',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '12000.0',
+  })
+# ---
