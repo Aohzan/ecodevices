@@ -3,7 +3,7 @@
 from collections.abc import Mapping
 from dataclasses import dataclass
 import logging
-from typing import Any
+from typing import Any, TypedDict
 
 from homeassistant.components.sensor import (
     DEVICE_CLASS_STATE_CLASSES,
@@ -58,6 +58,14 @@ TEMPO_COLORS = {
 TEMPO_TOMORROW_CODES = {"BLEU": "JB", "BLAN": "JW", "ROUG": "JR"}
 
 
+class _SensorTypeKwargs(TypedDict):
+    """Unit and classes of a sensor, as keyword arguments of its constructor."""
+
+    unit: str
+    device_class: SensorDeviceClass
+    state_class: SensorStateClass
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: EcoDevicesConfigEntry,
@@ -77,7 +85,7 @@ async def async_setup_entry(
             continue
         _LOGGER.debug("Add the teleinfo %s sensor entities", ti_input_number)
         ti_type = config.get(type_key)
-        energy = {
+        energy: _SensorTypeKwargs = {
             "unit": UnitOfEnergy.WATT_HOUR,
             "device_class": SensorDeviceClass.ENERGY,
             "state_class": SensorStateClass.TOTAL_INCREASING,
