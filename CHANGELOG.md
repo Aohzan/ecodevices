@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.5.1](https://github.com/Aohzan/ecodevices/compare/5.5.0...5.5.1) (2026-10-27)
+
+### Bug Fixes
+
+* **config_flow:** allow clearing optional fields and default divider factor ([eca0efc](https://github.com/Aohzan/ecodevices/commit/eca0efcbfa1d9bb2bb55250795ebbad1fff9b3a5))
+* **options:** allow empty username/password in options flow ([7dd2a28](https://github.com/Aohzan/ecodevices/commit/7dd2a2817fa978248d326ba03c4aa85d1f80bbd9))
+
 ## [5.5.0](https://github.com/Aohzan/ecodevices/compare/5.4.2...5.5.0) (2026-10-20)
 
 ### Features
