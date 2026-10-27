@@ -288,3 +288,43 @@ async def test_meter_total_unit(
         hass.states.get(METER_TOTAL).attributes[ATTR_UNIT_OF_MEASUREMENT]
         == expected_unit
     )
+
+
+async def test_unique_ids(
+    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    mock_config_entry: MockConfigEntry,
+    mock_ecodevices: MagicMock,
+) -> None:
+    """Test the unique IDs are the ones of the previous versions."""
+    await _setup(hass, mock_config_entry)
+
+    assert sorted(
+        entity.unique_id
+        for entity in er.async_entries_for_config_entry(
+            entity_registry, mock_config_entry.entry_id
+        )
+    ) == sorted(
+        f"ecodevices_00_04_a3_00_00_01_{suffix}"
+        for suffix in (
+            "binary_sensor_1_ptec",
+            "binary_sensor_2_ptec",
+            "sensor_t1",
+            "sensor_t1_total",
+            "sensor_t1_bbrhcjb",
+            "sensor_t1_bbrhpjb",
+            "sensor_t1_bbrhcjw",
+            "sensor_t1_bbrhpjw",
+            "sensor_t1_bbrhcjr",
+            "sensor_t1_bbrhpjr",
+            "sensor_t1_ptec",
+            "sensor_t1_demain",
+            "sensor_t2",
+            "sensor_t2_total",
+            "sensor_t2_total_hc",
+            "sensor_t2_total_hp",
+            "sensor_c1",
+            "sensor_c1_daily",
+            "sensor_c1_total",
+        )
+    )
