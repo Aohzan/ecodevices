@@ -15,8 +15,17 @@ from pytest_homeassistant_custom_component.common import (
 )
 from syrupy.assertion import SnapshotAssertion
 
-from custom_components.ecodevices.const import CONF_T2_TYPE
-from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN, Platform
+from custom_components.ecodevices.const import (
+    CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
+    CONF_T2_TYPE,
+    DOMAIN,
+)
+from homeassistant.const import (
+    ATTR_UNIT_OF_MEASUREMENT,
+    STATE_UNAVAILABLE,
+    STATE_UNKNOWN,
+    Platform,
+)
 from homeassistant.core import HomeAssistant, State
 from homeassistant.helpers import entity_registry as er
 
@@ -49,7 +58,7 @@ async def test_off_peak_binary_sensor_per_input(
 ) -> None:
     """Test an input with the base rate has no off-peak binary sensor."""
     entry = MockConfigEntry(
-        domain="ecodevices",
+        domain=DOMAIN,
         data=ENTRY_DATA | {CONF_T2_TYPE: "base"},
         version=2,
     )
@@ -244,3 +253,28 @@ async def test_tempo_colors(
             "sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color_tomorrow"
         ).state
     ) == tomorrow_color
+
+
+@pytest.mark.parametrize(
+    ("total_unit", "expected_unit"),
+    [(None, "m³"), ("L", "L")],
+)
+async def test_meter_total_unit(
+    hass: HomeAssistant,
+    mock_ecodevices: MagicMock,
+    total_unit: str | None,
+    expected_unit: str,
+) -> None:
+    """Test the total of a meter has the unit of the meter when it's cleared."""
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data=ENTRY_DATA,
+        options={CONF_C1_TOTAL_UNIT_OF_MEASUREMENT: total_unit},
+        version=2,
+    )
+    await _setup(hass, entry)
+
+    assert (
+        hass.states.get(METER_TOTAL).attributes[ATTR_UNIT_OF_MEASUREMENT]
+        == expected_unit
+    )

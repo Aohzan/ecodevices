@@ -236,7 +236,8 @@ async def async_setup_entry(
                 input_number=ci_input_number,
                 input_name=f"c{ci_input_number}_total",
                 translation_key="meter_total",
-                unit=config.get(total_unit_key, unit),
+                # A cleared unit is stored as None
+                unit=config.get(total_unit_key) or unit,
                 device_class=device_class,
                 state_class=SensorStateClass.TOTAL_INCREASING,
             )
