@@ -1,11 +1,10 @@
 """Constant for the eco-devices integration."""
 
+from homeassistant.const import Platform
+
 DOMAIN = "ecodevices"
 
-CONTROLLER = "controller"
-COORDINATOR = "coordinator"
-PLATFORMS = ["binary_sensor", "sensor"]
-UNDO_UPDATE_LISTENER = "undo_update_listener"
+PLATFORMS = [Platform.BINARY_SENSOR, Platform.SENSOR]
 
 CONF_T1_ENABLED = "t1_enabled"
 CONF_T1_TYPE = "t1_type"
@@ -22,10 +21,6 @@ CONF_C2_DIVIDER_FACTOR = "c2_divider_factor"
 CONF_C2_TOTAL_UNIT_OF_MEASUREMENT = "c2_total_unit_of_measurement"
 CONF_C2_DEVICE_CLASS = "c2_device_class"
 
-DEFAULT_T1_NAME = "Teleinfo 1"
-DEFAULT_T2_NAME = "Teleinfo 2"
-DEFAULT_C1_NAME = "Meter 1"
-DEFAULT_C2_NAME = "Meter 2"
 DEFAULT_SCAN_INTERVAL = 5
 
 CONF_TI_TYPE_BASE = "base"
@@ -72,11 +67,12 @@ TELEINFO_EXTRA_ATTR = {
     "index_heures_pleines_jour_rouge": "BBRHPJR",
     "type_heures_demain": "DEMAIN",
 }
-TELEINFO_TEMPO_ATTR = {
-    "Jour Bleu HC": "BBRHCJB",
-    "Jour Bleu HP": "BBRHPJB",
-    "Jour Blanc HC": "BBRHCJW",
-    "Jour Blanc HP": "BBRHPJW",
-    "Jour Ro" + "uge HC": "BBRHCJR",  # bypass codespell
-    "Jour Ro" + "uge HP": "BBRHPJR",  # bypass codespell
+# Teleinfo key of each Tempo index and the translation key of its sensor
+TELEINFO_TEMPO_INDEXES = {
+    "BBRHCJB": "tempo_blue_hc_total",
+    "BBRHPJB": "tempo_blue_hp_total",
+    "BBRHCJW": "tempo_white_hc_total",
+    "BBRHPJW": "tempo_white_hp_total",
+    "BBRHCJR": "tempo_red_hc_total",
+    "BBRHPJR": "tempo_red_hp_total",
 }

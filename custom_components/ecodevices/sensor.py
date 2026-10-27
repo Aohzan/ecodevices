@@ -4,29 +4,21 @@ from collections.abc import Mapping
 import logging
 from typing import Any
 
-from pyecodevices import EcoDevices
-
 from homeassistant.components.sensor import (
     DEVICE_CLASS_STATE_CLASSES,
     RestoreSensor,
     SensorDeviceClass,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
     UnitOfApparentPower,
     UnitOfEnergy,
 )
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import StateType
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
-from homeassistant.util import slugify
 
 from .const import (
     CONF_C1_DEVICE_CLASS,
@@ -46,306 +38,267 @@ from .const import (
     CONF_TI_TYPE_BASE,
     CONF_TI_TYPE_HCHP,
     CONF_TI_TYPE_TEMPO,
-    CONTROLLER,
-    COORDINATOR,
-    DEFAULT_C1_NAME,
-    DEFAULT_C2_NAME,
-    DEFAULT_T1_NAME,
-    DEFAULT_T2_NAME,
-    DOMAIN,
     TELEINFO_EXTRA_ATTR,
-    TELEINFO_TEMPO_ATTR,
+    TELEINFO_TEMPO_INDEXES,
 )
-from .entity import get_device_info
+from .coordinator import EcoDevicesConfigEntry, EcoDevicesCoordinator, get_entry_config
+from .entity import EcoDevicesEntity
 
 _LOGGER = logging.getLogger(__name__)
 
+PARALLEL_UPDATES = 0
+
 
 async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant,
+    entry: EcoDevicesConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up the GCE Eco-Devices platform."""
-    data = hass.data[DOMAIN][entry.entry_id]
-    controller = data[CONTROLLER]
-    coordinator = data[COORDINATOR]
-    config = entry.data
-    options = entry.options
-
-    t1_enabled = options.get(CONF_T1_ENABLED, config.get(CONF_T1_ENABLED))
-    t1_type = options.get(CONF_T1_TYPE, config.get(CONF_T1_TYPE))
-    t2_enabled = options.get(CONF_T2_ENABLED, config.get(CONF_T2_ENABLED))
-    t2_type = options.get(CONF_T2_TYPE, config.get(CONF_T2_TYPE))
-    c1_enabled = options.get(CONF_C1_ENABLED, config.get(CONF_C1_ENABLED))
-    c2_enabled = options.get(CONF_C2_ENABLED, config.get(CONF_C2_ENABLED))
+    coordinator = entry.runtime_data
+    config = get_entry_config(entry)
 
     entities: list[EdSensorEntity] = []
 
-    for ti_input_number in (1, 2):
-        if t1_enabled and ti_input_number == 1 or t2_enabled and ti_input_number == 2:
-            _LOGGER.debug("Add the teleinfo %s sensor entities", ti_input_number)
-            default_name = DEFAULT_T1_NAME if ti_input_number == 1 else DEFAULT_T2_NAME
-            ti_type = t1_type if ti_input_number == 1 else t2_type
+    for ti_input_number, enabled_key, type_key in (
+        (1, CONF_T1_ENABLED, CONF_T1_TYPE),
+        (2, CONF_T2_ENABLED, CONF_T2_TYPE),
+    ):
+        if not config.get(enabled_key):
+            continue
+        _LOGGER.debug("Add the teleinfo %s sensor entities", ti_input_number)
+        ti_type = config.get(type_key)
+        energy = {
+            "unit": UnitOfEnergy.WATT_HOUR,
+            "device_class": SensorDeviceClass.ENERGY,
+            "state_class": SensorStateClass.TOTAL_INCREASING,
+        }
 
+        entities.append(
+            TeleinfoInputEdDevice(
+                coordinator,
+                input_number=ti_input_number,
+                input_name=f"T{ti_input_number}",
+                translation_key="teleinfo",
+                unit=UnitOfApparentPower.VOLT_AMPERE,
+                device_class=SensorDeviceClass.APPARENT_POWER,
+                state_class=SensorStateClass.MEASUREMENT,
+            )
+        )
+        if ti_type == CONF_TI_TYPE_BASE:
             entities.append(
-                TeleinfoInputEdDevice(
-                    controller,
+                TeleinfoInputTotalEdDevice(
                     coordinator,
                     input_number=ti_input_number,
-                    input_name=f"T{ti_input_number}",
-                    name=default_name,
-                    unit=UnitOfApparentPower.VOLT_AMPERE,
-                    device_class=SensorDeviceClass.APPARENT_POWER,
-                    state_class=SensorStateClass.MEASUREMENT,
-                    icon="mdi:flash",
+                    input_name=f"T{ti_input_number}_total",
+                    translation_key="teleinfo_total",
+                    **energy,
                 )
             )
-            if ti_type == CONF_TI_TYPE_BASE:
-                entities.append(
-                    TeleinfoInputTotalEdDevice(
-                        controller,
-                        coordinator,
-                        input_number=ti_input_number,
-                        input_name=f"T{ti_input_number}_total",
-                        name=default_name + " Total",
-                        unit=UnitOfEnergy.WATT_HOUR,
-                        device_class=SensorDeviceClass.ENERGY,
-                        state_class=SensorStateClass.TOTAL_INCREASING,
-                        icon="mdi:meter-electric",
-                    )
-                )
-            elif ti_type == CONF_TI_TYPE_HCHP:
-                entities.append(
-                    TeleinfoInputTotalHchpEdDevice(
-                        controller,
-                        coordinator,
-                        input_number=ti_input_number,
-                        input_name=f"T{ti_input_number}_total",
-                        name=default_name + " Total",
-                        unit=UnitOfEnergy.WATT_HOUR,
-                        device_class=SensorDeviceClass.ENERGY,
-                        state_class=SensorStateClass.TOTAL_INCREASING,
-                        icon="mdi:meter-electric",
-                    )
-                )
-                entities.append(
-                    TeleinfoInputTotalHcEdDevice(
-                        controller,
-                        coordinator,
-                        input_number=ti_input_number,
-                        input_name=f"T{ti_input_number}_total_hc",
-                        name=default_name + " HC Total",
-                        unit=UnitOfEnergy.WATT_HOUR,
-                        device_class=SensorDeviceClass.ENERGY,
-                        state_class=SensorStateClass.TOTAL_INCREASING,
-                        icon="mdi:meter-electric",
-                    )
-                )
-                entities.append(
-                    TeleinfoInputTotalHpEdDevice(
-                        controller,
-                        coordinator,
-                        input_number=ti_input_number,
-                        input_name=f"T{ti_input_number}_total_hp",
-                        name=default_name + " HP Total",
-                        unit=UnitOfEnergy.WATT_HOUR,
-                        device_class=SensorDeviceClass.ENERGY,
-                        state_class=SensorStateClass.TOTAL_INCREASING,
-                        icon="mdi:meter-electric",
-                    )
-                )
-            elif ti_type == CONF_TI_TYPE_TEMPO:
-                entities.append(
-                    TeleinfoInputTotalTempoEdDevice(
-                        controller,
-                        coordinator,
-                        input_number=ti_input_number,
-                        input_name=f"T{ti_input_number}_total",
-                        name=default_name + " Total",
-                        unit=UnitOfEnergy.WATT_HOUR,
-                        device_class=SensorDeviceClass.ENERGY,
-                        state_class=SensorStateClass.TOTAL_INCREASING,
-                        icon="mdi:meter-electric",
-                    )
-                )
-                for desc, key in TELEINFO_TEMPO_ATTR.items():
-                    entities.append(
-                        TeleinfoInputTempoEdDevice(
-                            controller,
-                            coordinator,
-                            input_number=ti_input_number,
-                            input_name=f"T{ti_input_number}_{key}",
-                            name=default_name + " " + desc + " Total",
-                            unit=UnitOfEnergy.WATT_HOUR,
-                            device_class=SensorDeviceClass.ENERGY,
-                            state_class=SensorStateClass.TOTAL_INCREASING,
-                            icon="mdi:meter-electric",
-                        )
-                    )
-                entities.append(
-                    TeleinfoInputColor(
-                        controller,
-                        coordinator,
-                        input_number=ti_input_number,
-                        input_name=f"T{ti_input_number}_PTEC",
-                        name=default_name + " Tempo Couleur",
-                        icon="mdi:palette",
-                        device_class=SensorDeviceClass.ENUM,
-                    )
-                )
-                entities.append(
-                    TeleinfoInputColor(
-                        controller,
-                        coordinator,
-                        input_number=ti_input_number,
-                        input_name=f"T{ti_input_number}_DEMAIN",
-                        name=default_name + " Tempo Couleur Demain",
-                        icon="mdi:palette",
-                        device_class=SensorDeviceClass.ENUM,
-                    )
-                )
-    for ci_input_number in (1, 2):
-        if c1_enabled and ci_input_number == 1 or c2_enabled and ci_input_number == 2:
-            _LOGGER.debug("Add the meter %s sensor entities", ci_input_number)
-            default_name = DEFAULT_C1_NAME if ci_input_number == 1 else DEFAULT_C2_NAME
-            ci_unit = (
-                CONF_C1_UNIT_OF_MEASUREMENT
-                if ci_input_number == 1
-                else CONF_C2_UNIT_OF_MEASUREMENT
-            )
-            ci_total_unit = (
-                CONF_C1_TOTAL_UNIT_OF_MEASUREMENT
-                if ci_input_number == 1
-                else CONF_C2_TOTAL_UNIT_OF_MEASUREMENT
-            )
-            ci_device_class = (
-                CONF_C1_DEVICE_CLASS if ci_input_number == 1 else CONF_C2_DEVICE_CLASS
-            )
-            ci_divider_factor = (
-                CONF_C1_DIVIDER_FACTOR
-                if ci_input_number == 1
-                else CONF_C2_DIVIDER_FACTOR
-            )
-
+        elif ti_type == CONF_TI_TYPE_HCHP:
             entities.append(
-                MeterInputEdDevice(
-                    controller,
+                TeleinfoInputTotalHchpEdDevice(
                     coordinator,
-                    input_number=ci_input_number,
-                    input_name=f"c{ci_input_number}",
-                    name=default_name,
-                    unit=options.get(ci_unit, config.get(ci_unit)),
-                    device_class=options.get(
-                        ci_device_class, config.get(ci_device_class)
-                    ),
-                    state_class=SensorStateClass.MEASUREMENT
-                    if (
-                        SensorStateClass.MEASUREMENT
-                        in (
-                            DEVICE_CLASS_STATE_CLASSES.get(
-                                options.get(
-                                    ci_device_class, config.get(ci_device_class)
-                                ),
-                                {},
-                            )
-                        )
-                    )
-                    else None,
-                    icon="mdi:counter",
-                    divider_factor=options.get(
-                        ci_divider_factor, config.get(ci_divider_factor)
-                    ),
+                    input_number=ti_input_number,
+                    input_name=f"T{ti_input_number}_total",
+                    translation_key="teleinfo_total",
+                    **energy,
                 )
             )
             entities.append(
-                MeterInputDailyEdDevice(
-                    controller,
+                TeleinfoInputTotalHcEdDevice(
                     coordinator,
-                    input_number=ci_input_number,
-                    input_name=f"c{ci_input_number}_daily",
-                    name=default_name + " Daily",
-                    unit=options.get(ci_unit, config.get(ci_unit)),
-                    device_class=options.get(
-                        ci_device_class, config.get(ci_device_class)
-                    ),
-                    state_class=SensorStateClass.TOTAL,
-                    icon="mdi:counter",
-                    divider_factor=options.get(
-                        ci_divider_factor, config.get(ci_divider_factor)
-                    ),
+                    input_number=ti_input_number,
+                    input_name=f"T{ti_input_number}_total_hc",
+                    translation_key="teleinfo_total_hc",
+                    **energy,
                 )
             )
             entities.append(
-                MeterInputTotalEdDevice(
-                    controller,
+                TeleinfoInputTotalHpEdDevice(
                     coordinator,
-                    input_number=ci_input_number,
-                    input_name=f"c{ci_input_number}_total",
-                    name=default_name + " Total",
-                    unit=options.get(
-                        ci_total_unit,
-                        config.get(
-                            ci_total_unit,
-                            config.get(ci_unit),
-                        ),
-                    ),
-                    device_class=options.get(
-                        ci_device_class, config.get(ci_device_class)
-                    ),
-                    state_class=SensorStateClass.TOTAL_INCREASING,
-                    icon="mdi:counter",
+                    input_number=ti_input_number,
+                    input_name=f"T{ti_input_number}_total_hp",
+                    translation_key="teleinfo_total_hp",
+                    **energy,
+                )
+            )
+        elif ti_type == CONF_TI_TYPE_TEMPO:
+            entities.append(
+                TeleinfoInputTotalTempoEdDevice(
+                    coordinator,
+                    input_number=ti_input_number,
+                    input_name=f"T{ti_input_number}_total",
+                    translation_key="teleinfo_total",
+                    **energy,
+                )
+            )
+            entities.extend(
+                TeleinfoInputTempoEdDevice(
+                    coordinator,
+                    input_number=ti_input_number,
+                    input_name=f"T{ti_input_number}_{key}",
+                    translation_key=translation_key,
+                    **energy,
+                )
+                for key, translation_key in TELEINFO_TEMPO_INDEXES.items()
+            )
+            entities.append(
+                TeleinfoInputColor(
+                    coordinator,
+                    input_number=ti_input_number,
+                    input_name=f"T{ti_input_number}_PTEC",
+                    translation_key="tempo_color",
+                    device_class=SensorDeviceClass.ENUM,
+                )
+            )
+            entities.append(
+                TeleinfoInputColor(
+                    coordinator,
+                    input_number=ti_input_number,
+                    input_name=f"T{ti_input_number}_DEMAIN",
+                    translation_key="tempo_color_tomorrow",
+                    device_class=SensorDeviceClass.ENUM,
                 )
             )
 
-    if entities:
-        async_add_entities(entities)
+    for (
+        ci_input_number,
+        enabled_key,
+        unit_key,
+        total_unit_key,
+        class_key,
+        factor_key,
+    ) in (
+        (
+            1,
+            CONF_C1_ENABLED,
+            CONF_C1_UNIT_OF_MEASUREMENT,
+            CONF_C1_TOTAL_UNIT_OF_MEASUREMENT,
+            CONF_C1_DEVICE_CLASS,
+            CONF_C1_DIVIDER_FACTOR,
+        ),
+        (
+            2,
+            CONF_C2_ENABLED,
+            CONF_C2_UNIT_OF_MEASUREMENT,
+            CONF_C2_TOTAL_UNIT_OF_MEASUREMENT,
+            CONF_C2_DEVICE_CLASS,
+            CONF_C2_DIVIDER_FACTOR,
+        ),
+    ):
+        if not config.get(enabled_key):
+            continue
+        _LOGGER.debug("Add the meter %s sensor entities", ci_input_number)
+        unit = config.get(unit_key)
+        device_class = config.get(class_key)
+        divider_factor = config.get(factor_key)
+
+        entities.append(
+            MeterInputEdDevice(
+                coordinator,
+                input_number=ci_input_number,
+                input_name=f"c{ci_input_number}",
+                translation_key="meter",
+                unit=unit,
+                device_class=device_class,
+                state_class=SensorStateClass.MEASUREMENT
+                if SensorStateClass.MEASUREMENT
+                in DEVICE_CLASS_STATE_CLASSES.get(device_class, {})
+                else None,
+                divider_factor=divider_factor,
+            )
+        )
+        entities.append(
+            MeterInputDailyEdDevice(
+                coordinator,
+                input_number=ci_input_number,
+                input_name=f"c{ci_input_number}_daily",
+                translation_key="meter_daily",
+                unit=unit,
+                device_class=device_class,
+                state_class=SensorStateClass.TOTAL,
+                divider_factor=divider_factor,
+            )
+        )
+        entities.append(
+            MeterInputTotalEdDevice(
+                coordinator,
+                input_number=ci_input_number,
+                input_name=f"c{ci_input_number}_total",
+                translation_key="meter_total",
+                unit=config.get(total_unit_key, unit),
+                device_class=device_class,
+                state_class=SensorStateClass.TOTAL_INCREASING,
+            )
+        )
+
+    async_add_entities(entities)
 
 
-class EdSensorEntity(CoordinatorEntity, RestoreSensor):
+class EdSensorEntity(EcoDevicesEntity, RestoreSensor):
     """Representation of a generic Eco-Devices sensor."""
 
     def __init__(
         self,
-        controller: EcoDevices,
-        coordinator: DataUpdateCoordinator,
+        coordinator: EcoDevicesCoordinator,
         input_number: int,
         input_name: str,
-        name: str,
+        translation_key: str,
         unit: str | None = None,
         device_class: SensorDeviceClass | None = None,
         state_class: SensorStateClass | None = None,
-        icon: str | None = None,
         divider_factor: float | None = None,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator)
-        self.controller = controller
+        super().__init__(
+            coordinator,
+            unique_id_suffix=f"sensor_{input_name}",
+            translation_key=translation_key,
+            input_number=input_number,
+        )
         self._input_name = input_name
-        self._input_number = input_number
         self._divider_factor = divider_factor
 
-        self._attr_name = name
         self._attr_native_unit_of_measurement = unit
         self._attr_device_class = device_class
         self._attr_state_class = state_class
-        self._attr_icon = icon
-        self._attr_unique_id = slugify(
-            f"{DOMAIN}_{self.controller.mac_address}_sensor_{self._input_name}"
-        )
-        self._attr_device_info = get_device_info(self.controller)
 
         self._last_state: StateType | None = None
 
     async def async_added_to_hass(self) -> None:
-        """Restore state on startup."""
+        """Restore the last value on startup, to ignore decreasing totals."""
         await super().async_added_to_hass()
 
-        last_state = await self.async_get_last_state()
-
-        if last_state is not None and last_state.state not in (
-            STATE_UNKNOWN,
-            STATE_UNAVAILABLE,
+        if (
+            last_sensor_data := await self.async_get_last_sensor_data()
+        ) is not None and last_sensor_data.native_value is not None:
+            self._last_state = last_sensor_data.native_value
+        elif (last_state := await self.async_get_last_state()) is not None and (
+            last_state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE)
         ):
             self._last_state = last_state.state
+
+    @callback
+    def async_entity_id_changed(self, old_entity_id: str) -> None:
+        """Keep the entity on an entity ID change, the restored value is kept."""
+        super().async_entity_id_changed(old_entity_id)
+
+    def _increasing_total(self, value: float) -> float | None:
+        """Return the total if it's greater than 0 and not lower than the last one."""
+        if value <= 0:
+            _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
+            return None
+        if self._last_state is None or value >= float(self._last_state):
+            self._last_state = value
+            return value
+        _LOGGER.warning(
+            "Value %s for %s not greater or equal to the previous one %s, ignore",
+            value,
+            self.entity_id,
+            self._last_state,
+        )
+        return None
 
 
 class TeleinfoInputEdDevice(EdSensorEntity):
@@ -357,14 +310,14 @@ class TeleinfoInputEdDevice(EdSensorEntity):
         return self.coordinator.data[f"T{self._input_number}_PAPP"]
 
     @property
-    def extra_state_attributes(self) -> Mapping[str, Any]:
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return the state attributes."""
-        if self.coordinator.data:
-            return {
-                k: self.coordinator.data.get(f"T{self._input_number}_{v}")
-                for k, v in TELEINFO_EXTRA_ATTR.items()
-            }
-        raise EcoDevicesIncorrectValueError("Data not received.")
+        if not self.coordinator.data:
+            return None
+        return {
+            k: self.coordinator.data.get(f"T{self._input_number}_{v}")
+            for k, v in TELEINFO_EXTRA_ATTR.items()
+        }
 
 
 class TeleinfoInputTotalEdDevice(EdSensorEntity):
@@ -373,19 +326,9 @@ class TeleinfoInputTotalEdDevice(EdSensorEntity):
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data[f"T{self._input_number}_BASE"])) > 0:
-            if self._last_state is None or value >= float(self._last_state):
-                self._last_state = value
-                return value
-            _LOGGER.warning(
-                "Value %s for %s not greater or equal to the previous one %s, ignore",
-                value,
-                self.entity_id,
-                self._last_state,
-            )
-            return None
-        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
-        return None
+        return self._increasing_total(
+            float(self.coordinator.data[f"T{self._input_number}_BASE"])
+        )
 
 
 class TeleinfoInputTotalHchpEdDevice(EdSensorEntity):
@@ -396,19 +339,7 @@ class TeleinfoInputTotalHchpEdDevice(EdSensorEntity):
         """Return the total value if it's greater than 0."""
         value_hc = float(self.coordinator.data[f"T{self._input_number}_HCHC"])
         value_hp = float(self.coordinator.data[f"T{self._input_number}_HCHP"])
-        if (value := value_hc + value_hp) > 0:
-            if self._last_state is None or value >= float(self._last_state):
-                self._last_state = value
-                return value
-            _LOGGER.warning(
-                "Value %s for %s not greater or equal to the previous one %s, ignore",
-                value,
-                self.entity_id,
-                self._last_state,
-            )
-            return None
-        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
-        return None
+        return self._increasing_total(value_hc + value_hp)
 
 
 class TeleinfoInputTotalHcEdDevice(EdSensorEntity):
@@ -417,19 +348,9 @@ class TeleinfoInputTotalHcEdDevice(EdSensorEntity):
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data[f"T{self._input_number}_HCHC"])) > 0:
-            if self._last_state is None or value >= float(self._last_state):
-                self._last_state = value
-                return value
-            _LOGGER.warning(
-                "Value %s for %s not greater or equal to the previous one %s, ignore",
-                value,
-                self.entity_id,
-                self._last_state,
-            )
-            return None
-        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
-        return None
+        return self._increasing_total(
+            float(self.coordinator.data[f"T{self._input_number}_HCHC"])
+        )
 
 
 class TeleinfoInputTotalHpEdDevice(EdSensorEntity):
@@ -438,19 +359,9 @@ class TeleinfoInputTotalHpEdDevice(EdSensorEntity):
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        if (value := float(self.coordinator.data[f"T{self._input_number}_HCHP"])) > 0:
-            if self._last_state is None or value >= float(self._last_state):
-                self._last_state = value
-                return value
-            _LOGGER.warning(
-                "Value %s for %s not greater or equal to the previous one %s, ignore",
-                value,
-                self.entity_id,
-                self._last_state,
-            )
-            return None
-        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
-        return None
+        return self._increasing_total(
+            float(self.coordinator.data[f"T{self._input_number}_HCHP"])
+        )
 
 
 class TeleinfoInputTotalTempoEdDevice(EdSensorEntity):
@@ -459,22 +370,12 @@ class TeleinfoInputTotalTempoEdDevice(EdSensorEntity):
     @property
     def native_value(self) -> float | None:
         """Return the total value if it's greater than 0."""
-        value = 0.0
-        for key in TELEINFO_TEMPO_ATTR.values():
-            value += float(self.coordinator.data[f"T{self._input_number}_{key}"])
-        if value > 0:
-            if self._last_state is None or value >= float(self._last_state):
-                self._last_state = value
-                return value
-            _LOGGER.warning(
-                "Value %s for %s not greater or equal to the previous one %s, ignore",
-                value,
-                self.entity_id,
-                self._last_state,
+        return self._increasing_total(
+            sum(
+                float(self.coordinator.data[f"T{self._input_number}_{key}"])
+                for key in TELEINFO_TEMPO_INDEXES
             )
-            return None
-        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
-        return None
+        )
 
 
 class TeleinfoInputTempoEdDevice(EdSensorEntity):
@@ -482,20 +383,10 @@ class TeleinfoInputTempoEdDevice(EdSensorEntity):
 
     @property
     def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0 or the previous value."""
-        if (value := float(self.coordinator.data[self._input_name.upper()])) > 0:
-            if self._last_state is None or value >= float(self._last_state):
-                self._last_state = value
-                return value
-            _LOGGER.warning(
-                "Value %s for %s not greater or equal to the previous one %s, ignore",
-                value,
-                self.entity_id,
-                self._last_state,
-            )
-            return None
-        _LOGGER.debug("Value for %s equal to 0, ignore", self.entity_id)
-        return None
+        """Return the total value if it's greater than 0."""
+        return self._increasing_total(
+            float(self.coordinator.data[self._input_name.upper()])
+        )
 
 
 class TeleinfoInputColor(EdSensorEntity):
@@ -546,14 +437,14 @@ class MeterInputEdDevice(EdSensorEntity):
         return value
 
     @property
-    def extra_state_attributes(self) -> Mapping[str, Any]:
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return the state attributes."""
-        if self.coordinator.data:
-            return {
-                "total": self.coordinator.data[f"count{self._input_number - 1}"],
-                "fuel": self.coordinator.data[f"c{self._input_number - 1}_fuel"],
-            }
-        raise EcoDevicesIncorrectValueError("Data not received.")
+        if not self.coordinator.data:
+            return None
+        return {
+            "total": self.coordinator.data[f"count{self._input_number - 1}"],
+            "fuel": self.coordinator.data[f"c{self._input_number - 1}_fuel"],
+        }
 
 
 class MeterInputDailyEdDevice(EdSensorEntity):
@@ -573,19 +464,8 @@ class MeterInputTotalEdDevice(EdSensorEntity):
 
     @property
     def native_value(self) -> float | None:
-        """Return the total value if it's greater than 0."""
-        if (
-            value := float(self.coordinator.data[f"count{self._input_number - 1}"])
-        ) > 0:
-            if self._last_state is None or value >= float(self._last_state):
-                self._last_state = value / 1000
-                return value / 1000
-        _LOGGER.warning(
-            "Total value for meter input %s not greater than 0, ignore",
-            self._input_number,
+        """Return the total value in thousands, if it's greater than 0."""
+        # The restored value is in thousands too
+        return self._increasing_total(
+            float(self.coordinator.data[f"count{self._input_number - 1}"]) / 1000
         )
-        return None
-
-
-class EcoDevicesIncorrectValueError(Exception):
-    """Exception to indicate that the Eco-Device return an incorrect value."""

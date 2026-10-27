@@ -1,6 +1,7 @@
 """Config flow to configure the GCE Eco-Devices integration."""
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
+import logging
 from typing import Any
 
 from pyecodevices import (
@@ -10,13 +11,11 @@ from pyecodevices import (
 )
 import voluptuous as vol
 
-from homeassistant.components.sensor import DEVICE_CLASSES as SENSOR_DEVICE_CLASSES
 from homeassistant.config_entries import (
-    HANDLERS,
-    ConfigEntry,
+    SOURCE_REAUTH,
     ConfigFlow,
     ConfigFlowResult,
-    OptionsFlow,
+    OptionsFlowWithReload,
 )
 from homeassistant.const import (
     CONF_HOST,
@@ -24,10 +23,13 @@ from homeassistant.const import (
     CONF_PORT,
     CONF_SCAN_INTERVAL,
     CONF_USERNAME,
+    Platform,
 )
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
+    DeviceClassSelector,
+    DeviceClassSelectorConfig,
     TextSelector,
     TextSelectorConfig,
     TextSelectorType,
@@ -53,6 +55,9 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
 )
+from .coordinator import EcoDevicesConfigEntry, get_entry_config
+
+_LOGGER = logging.getLogger(__name__)
 
 USERNAME_SELECTOR = TextSelector(
     TextSelectorConfig(type=TextSelectorType.TEXT, autocomplete="username")
@@ -60,10 +65,12 @@ USERNAME_SELECTOR = TextSelector(
 PASSWORD_SELECTOR = TextSelector(
     TextSelectorConfig(type=TextSelectorType.PASSWORD, autocomplete="current-password")
 )
-
-# Optional fields stored as None when left empty in the options flow, so that the
-# cleared value overrides the one from entry.data
-OPTIONS_CLEARABLE_KEYS = (CONF_USERNAME, CONF_PASSWORD)
+DEVICE_CLASS_SELECTOR = DeviceClassSelector(
+    DeviceClassSelectorConfig(domain=Platform.SENSOR)
+)
+# Optional fields stored as None when left empty, so that the cleared value
+# overrides the one from entry.data
+CREDENTIALS_KEYS = (CONF_USERNAME, CONF_PASSWORD)
 
 BASE_SCHEMA = vol.Schema(
     {
@@ -80,7 +87,25 @@ BASE_SCHEMA = vol.Schema(
 )
 
 
-@HANDLERS.register(DOMAIN)
+CREDENTIALS_SCHEMA = vol.Schema(
+    {
+        vol.Optional(CONF_USERNAME): USERNAME_SELECTOR,
+        vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
+    }
+)
+RECONFIGURE_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_HOST): str,
+        vol.Required(CONF_PORT): int,
+    }
+)
+
+
+def _unique_id(host: str, port: int) -> str:
+    """Return the unique ID of the config entry of an Eco-Devices."""
+    return "_".join([DOMAIN, host, str(port)])
+
+
 class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a eco-devices config flow."""
 
@@ -98,16 +123,12 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
                 step_id="user", data_schema=BASE_SCHEMA, errors=errors
             )
 
-        entry = await self.async_set_unique_id(
-            "_".join([DOMAIN, user_input[CONF_HOST], str(user_input[CONF_PORT])])
+        await self.async_set_unique_id(
+            _unique_id(user_input[CONF_HOST], user_input[CONF_PORT])
         )
+        self._abort_if_unique_id_configured()
 
-        if entry:
-            self._abort_if_unique_id_configured()
-
-        session = async_get_clientsession(self.hass, False)
-
-        errors = await _test_connection(session, user_input)
+        errors = await _test_connection(self.hass, user_input)
 
         if errors:
             return self.async_show_form(
@@ -131,29 +152,94 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(_get_params(self.base_input, {})),
         )
 
+    async def async_step_reauth(
+        self, entry_data: Mapping[str, Any]
+    ) -> ConfigFlowResult:
+        """Handle a rejected authentication."""
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Ask for new credentials."""
+        return await self._async_step_update_entry(
+            "reauth_confirm", CREDENTIALS_SCHEMA, user_input
+        )
+
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Change the address of the Eco-Devices."""
+        return await self._async_step_update_entry(
+            "reconfigure", RECONFIGURE_SCHEMA, user_input
+        )
+
+    async def _async_step_update_entry(
+        self, step_id: str, schema: vol.Schema, user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        """Update the connection settings of the entry after testing them."""
+        if self.source == SOURCE_REAUTH:
+            entry = self._get_reauth_entry()
+        else:
+            entry = self._get_reconfigure_entry()
+        config = get_entry_config(entry)
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            _fill_cleared(user_input, (key.schema for key in schema.schema))
+            new_config = config | user_input
+            unique_id = _unique_id(new_config[CONF_HOST], new_config[CONF_PORT])
+            if unique_id != entry.unique_id:
+                await self.async_set_unique_id(unique_id)
+                self._abort_if_unique_id_configured()
+            errors = await _test_connection(self.hass, new_config)
+            if not errors:
+                # Credentials changed here move from the options to the data
+                return self.async_update_reload_and_abort(
+                    entry,
+                    unique_id=unique_id,
+                    data_updates=user_input,
+                    options={
+                        key: value
+                        for key, value in entry.options.items()
+                        if key not in user_input
+                    },
+                )
+
+        return self.async_show_form(
+            step_id=step_id,
+            data_schema=self.add_suggested_values_to_schema(
+                schema, user_input or config
+            ),
+            errors=errors,
+        )
+
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
+    def async_get_options_flow(
+        config_entry: EcoDevicesConfigEntry,
+    ) -> EcoDevicesOptionsFlowHandler:
         """Define the config flow to handle options."""
         return EcoDevicesOptionsFlowHandler()
 
 
-class EcoDevicesOptionsFlowHandler(OptionsFlow):
+class EcoDevicesOptionsFlowHandler(OptionsFlowWithReload):
     """Handle a EcoDevices options flow."""
 
     def __init__(self) -> None:
         """Initialize."""
         self.base_input: dict[str, Any] = {}
 
-    async def async_step_init(self, user_input) -> ConfigFlowResult:
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
         """Manage the options."""
         errors = {}
         if user_input is not None:
-            session = async_get_clientsession(self.hass, False)
             user_input[CONF_HOST] = self.config_entry.data[CONF_HOST]
             user_input[CONF_PORT] = self.config_entry.data[CONF_PORT]
-            _fill_cleared(user_input, OPTIONS_CLEARABLE_KEYS)
-            errors = await _test_connection(session, user_input)
+            _fill_cleared(user_input, CREDENTIALS_KEYS)
+            errors = await _test_connection(self.hass, user_input)
             if not errors:
                 self.base_input = user_input
                 return await self.async_step_params()
@@ -197,10 +283,7 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
                 [key.schema for key in params_schema if isinstance(key, vol.Optional)],
             )
             user_input.update(self.base_input)
-            return self.async_create_entry(
-                title=f"Eco-Devices {user_input[CONF_HOST]}:{user_input[CONF_PORT]}",
-                data=user_input,
-            )
+            return self.async_create_entry(data=user_input)
 
         config = self.config_entry.data
         options = self.config_entry.options
@@ -250,25 +333,28 @@ class EcoDevicesOptionsFlowHandler(OptionsFlow):
         )
 
 
-async def _test_connection(session, user_input):
-    errors = {}
-
+async def _test_connection(
+    hass: HomeAssistant, user_input: Mapping[str, Any]
+) -> dict[str, str]:
+    """Connect to the Eco-Devices, returning the errors of the form."""
     controller = EcoDevices(
         user_input[CONF_HOST],
         user_input[CONF_PORT],
         user_input.get(CONF_USERNAME),
         user_input.get(CONF_PASSWORD),
-        session=session,
+        session=async_get_clientsession(hass, verify_ssl=False),
     )
 
     try:
         await controller.get_info()
     except EcoDevicesInvalidAuthError:
-        errors["base"] = "invalid_auth"
+        return {"base": "invalid_auth"}
     except EcoDevicesCannotConnectError:
-        errors["base"] = "cannot_connect"
-
-    return errors
+        return {"base": "cannot_connect"}
+    except Exception:
+        _LOGGER.exception("Unexpected error while connecting to the Eco-Devices")
+        return {"base": "unknown"}
+    return {}
 
 
 def _fill_cleared(user_input: dict[str, Any], keys: Iterable[str]) -> None:
@@ -304,7 +390,7 @@ def _get_params(base_input, base_params):
             {
                 vol.Required(
                     CONF_C1_DEVICE_CLASS, default=base_params.get(CONF_C1_DEVICE_CLASS)
-                ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
+                ): DEVICE_CLASS_SELECTOR,
                 vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): str,
                 vol.Required(
                     CONF_C1_DIVIDER_FACTOR,
@@ -319,7 +405,7 @@ def _get_params(base_input, base_params):
             {
                 vol.Required(
                     CONF_C2_DEVICE_CLASS, default=base_params.get(CONF_C2_DEVICE_CLASS)
-                ): vol.All(str, vol.Lower, vol.In(SENSOR_DEVICE_CLASSES)),
+                ): DEVICE_CLASS_SELECTOR,
                 vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): str,
                 vol.Required(
                     CONF_C2_DIVIDER_FACTOR,
