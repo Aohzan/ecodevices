@@ -350,7 +350,7 @@
       'souscription': '45',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'type_heures': 'HPJB',
-      'type_heures_demain': 'BLANC',
+      'type_heures_demain': 'BLAN',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfApparentPower.VOLT_AMPERE: 'VA'>,
     }),
     'context': <ANY>,
@@ -707,7 +707,7 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Eco-Devices 192.168.1.10:80 Teleinfo 1 Tempo color tomorrow',
-      'name': 'inconnu',
+      'name': 'Blanc',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         '🔵',
         '⚪',
@@ -720,7 +720,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '❓',
+    'state': '⚪',
   })
 # ---
 # name: test_entities[sensor][sensor.eco_devices_192_168_1_10_80_teleinfo_1_total-entry]

@@ -19,7 +19,7 @@ async def test_diagnostics(
     mock_config_entry: MockConfigEntry,
     mock_ecodevices: MagicMock,
 ) -> None:
-    """Test the diagnostics redact the credentials and meter numbers."""
+    """Test the diagnostics redact the credentials, MAC and meter numbers."""
     mock_config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(mock_config_entry.entry_id)
     await hass.async_block_till_done()

@@ -61,7 +61,7 @@ DEVICE_DATA: dict[str, Any] = {
     "c0day": "250",
     "T1_PAPP": "1250",
     "T1_PTEC": "HPJB",
-    "T1_DEMAIN": "BLANC",
+    "T1_DEMAIN": "BLAN",
     "T1_ADCO": "021728123456",
     "T1_ISOUSC": "45",
     "T1_BBRHCJB": "1000",

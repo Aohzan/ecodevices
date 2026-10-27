@@ -26,6 +26,7 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
     DeviceClassSelector,
@@ -118,6 +119,11 @@ def _unique_id(host: str, port: int) -> str:
     return "_".join([DOMAIN, host, str(port)])
 
 
+def _default_title(host: str, port: int) -> str:
+    """Return the default title of the config entry of an Eco-Devices."""
+    return f"Eco-Devices {host}:{port}"
+
+
 class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a eco-devices config flow."""
 
@@ -140,7 +146,7 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
         )
         self._abort_if_unique_id_configured()
 
-        errors = await _test_connection(self.hass, user_input)
+        errors, _ = await _test_connection(self.hass, user_input)
 
         if errors:
             return self.async_show_form(
@@ -155,7 +161,7 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             user_input.update(self.base_input)
             return self.async_create_entry(
-                title=f"Eco-Devices {user_input[CONF_HOST]}:{user_input[CONF_PORT]}",
+                title=_default_title(user_input[CONF_HOST], user_input[CONF_PORT]),
                 data=user_input,
             )
 
@@ -204,11 +210,17 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
             if unique_id != entry.unique_id:
                 await self.async_set_unique_id(unique_id)
                 self._abort_if_unique_id_configured()
-            errors = await _test_connection(self.hass, new_config)
+            errors, mac_address = await _test_connection(self.hass, new_config)
             if not errors:
+                if not _is_same_device(self.hass, entry, mac_address):
+                    return self.async_abort(reason="wrong_device")
+                title = entry.title
+                if title == _default_title(config[CONF_HOST], config[CONF_PORT]):
+                    title = _default_title(new_config[CONF_HOST], new_config[CONF_PORT])
                 # Credentials changed here move from the options to the data
                 return self.async_update_reload_and_abort(
                     entry,
+                    title=title,
                     unique_id=unique_id,
                     data_updates=user_input,
                     options={
@@ -251,7 +263,7 @@ class EcoDevicesOptionsFlowHandler(OptionsFlowWithReload):
             user_input[CONF_HOST] = self.config_entry.data[CONF_HOST]
             user_input[CONF_PORT] = self.config_entry.data[CONF_PORT]
             _fill_cleared(user_input, CREDENTIALS_KEYS)
-            errors = await _test_connection(self.hass, user_input)
+            errors, _ = await _test_connection(self.hass, user_input)
             if not errors:
                 self.base_input = user_input
                 return await self.async_step_params()
@@ -347,8 +359,8 @@ class EcoDevicesOptionsFlowHandler(OptionsFlowWithReload):
 
 async def _test_connection(
     hass: HomeAssistant, user_input: Mapping[str, Any]
-) -> dict[str, str]:
-    """Connect to the Eco-Devices, returning the errors of the form."""
+) -> tuple[dict[str, str], str | None]:
+    """Connect to the Eco-Devices, returning the errors of the form and its MAC."""
     controller = EcoDevices(
         user_input[CONF_HOST],
         user_input[CONF_PORT],
@@ -360,13 +372,32 @@ async def _test_connection(
     try:
         await controller.get_info()
     except EcoDevicesInvalidAuthError:
-        return {"base": "invalid_auth"}
+        return {"base": "invalid_auth"}, None
     except EcoDevicesCannotConnectError:
-        return {"base": "cannot_connect"}
+        return {"base": "cannot_connect"}, None
     except Exception:
         _LOGGER.exception("Unexpected error while connecting to the Eco-Devices")
-        return {"base": "unknown"}
-    return {}
+        return {"base": "unknown"}, None
+    return {}, controller.mac_address
+
+
+def _is_same_device(
+    hass: HomeAssistant, entry: EcoDevicesConfigEntry, mac_address: str | None
+) -> bool:
+    """Return False if the MAC address isn't the one of the device of the entry.
+
+    The unique ID of the entry is based on the address, so the MAC address is
+    compared with the identifier of the device, known once the entry was set up.
+    """
+    known_macs = {
+        dr.format_mac(identifier)
+        for device in dr.async_entries_for_config_entry(
+            dr.async_get(hass), entry.entry_id
+        )
+        for domain, identifier in device.identifiers
+        if domain == DOMAIN
+    }
+    return not known_macs or not mac_address or dr.format_mac(mac_address) in known_macs
 
 
 def _fill_cleared(user_input: dict[str, Any], keys: Iterable[str]) -> None:
