@@ -323,6 +323,11 @@ class EdTotalSensorEntity(EdSensorEntity):
         )
         self._update_total()
 
+    @callback
+    def async_entity_id_changed(self, old_entity_id: str) -> None:
+        """Keep the entity on an entity ID change, the last total is kept."""
+        super().async_entity_id_changed(old_entity_id)
+
     @property
     def extra_restore_state_data(self) -> EdTotalExtraStoredData:
         """Return the data to restore, with the last accepted total."""
