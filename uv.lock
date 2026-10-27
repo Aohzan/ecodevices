@@ -960,7 +960,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pyecodevices", specifier = ">=1.7.1" },
+    { name = "pyecodevices", specifier = ">=1.7.2" },
     { name = "xmltodict", specifier = ">=1.0.4" },
 ]
 
@@ -2187,15 +2187,15 @@ wheels = [
 
 [[package]]
 name = "pyecodevices"
-version = "1.7.1"
+version = "1.7.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
     { name = "xmltodict" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/66/57/e6e903c1b6ad9562396943c485af892f8699bd48600f8ca5dc443df203b5/pyecodevices-1.7.1.tar.gz", hash = "sha256:cacff47f6d92549eaa320ebc2830b3b6d72770764e8b100bc9d6d1ebb0876d18", size = 4410, upload-time = "2026-10-27T17:01:20.164Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6e/3d/140aa1d3727dd4009a8710b6e5c64db94ad222dc0bdd1120501a012609d9/pyecodevices-1.7.2.tar.gz", hash = "sha256:bc5745b245248bdcfa39e33905f7711a0a1489fa354ce93cd2286019424b1a97", size = 4393, upload-time = "2026-10-27T20:39:11.829Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/db/59f29362c2e2911955496fa56dfcda5cb238c648680bd87fd0160cfd7006/pyecodevices-1.7.1-py3-none-any.whl", hash = "sha256:0a89c78cf15afa39c8304eea0ece18f99aa188f84a1fce1e629ab58a813a53c2", size = 4477, upload-time = "2026-10-27T17:01:18.837Z" },
+    { url = "https://files.pythonhosted.org/packages/76/dc/dfc4bab231348afade7755ebb29fc533eb9de837e335c36b3f0f0713b617/pyecodevices-1.7.2-py3-none-any.whl", hash = "sha256:a046d4f181892ecbcb0d422f19d2c3d0c7ee17cc6b5372781313b64e8f6b7ab4", size = 4481, upload-time = "2026-10-27T20:39:10.683Z" },
 ]
 
 [[package]]
