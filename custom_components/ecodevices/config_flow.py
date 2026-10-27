@@ -33,6 +33,8 @@ from homeassistant.helpers.selector import (
     TextSelector,
     TextSelectorConfig,
     TextSelectorType,
+    UnitOfMeasurementSelector,
+    UnitOfMeasurementSelectorConfig,
 )
 
 from .const import (
@@ -71,6 +73,16 @@ DEVICE_CLASS_SELECTOR = DeviceClassSelector(
 # Optional fields stored as None when left empty, so that the cleared value
 # overrides the one from entry.data
 CREDENTIALS_KEYS = (CONF_USERNAME, CONF_PASSWORD)
+
+
+def _unit_selector(device_class_key: str) -> UnitOfMeasurementSelector:
+    """Return a unit selector filtered by the device class of the meter."""
+    return UnitOfMeasurementSelector(
+        UnitOfMeasurementSelectorConfig(
+            context={"filter_device_class": device_class_key}
+        )
+    )
+
 
 BASE_SCHEMA = vol.Schema(
     {
@@ -391,12 +403,16 @@ def _get_params(base_input, base_params):
                 vol.Required(
                     CONF_C1_DEVICE_CLASS, default=base_params.get(CONF_C1_DEVICE_CLASS)
                 ): DEVICE_CLASS_SELECTOR,
-                vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): str,
+                vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): _unit_selector(
+                    CONF_C1_DEVICE_CLASS
+                ),
                 vol.Required(
                     CONF_C1_DIVIDER_FACTOR,
                     default=base_params.get(CONF_C1_DIVIDER_FACTOR, 1),
                 ): int,
-                vol.Optional(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT): str,
+                vol.Optional(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT): _unit_selector(
+                    CONF_C1_DEVICE_CLASS
+                ),
             }
         )
 
@@ -406,12 +422,16 @@ def _get_params(base_input, base_params):
                 vol.Required(
                     CONF_C2_DEVICE_CLASS, default=base_params.get(CONF_C2_DEVICE_CLASS)
                 ): DEVICE_CLASS_SELECTOR,
-                vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): str,
+                vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): _unit_selector(
+                    CONF_C2_DEVICE_CLASS
+                ),
                 vol.Required(
                     CONF_C2_DIVIDER_FACTOR,
                     default=base_params.get(CONF_C2_DIVIDER_FACTOR, 1),
                 ): int,
-                vol.Optional(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT): str,
+                vol.Optional(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT): _unit_selector(
+                    CONF_C2_DEVICE_CLASS
+                ),
             }
         )
 
