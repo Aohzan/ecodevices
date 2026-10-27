@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.6.0](https://github.com/Aohzan/ecodevices/compare/5.5.1...5.6.0) (2026-10-27)
+
+### Features
+
+* modernize the integration for Home Assistant 2026.10 ([ee5e6dd](https://github.com/Aohzan/ecodevices/commit/ee5e6dd1c586effd434ccf0ff735f74babbaff27))
+
+### Bug Fixes
+
+* accept a lower total once it's confirmed on 3 updates ([9501be3](https://github.com/Aohzan/ecodevices/commit/9501be31810cf031a1504f361ffddadbd1a6a151))
+* **deps:** bump pyecodevices to 1.7.1 ([2c5c810](https://github.com/Aohzan/ecodevices/commit/2c5c810037861708433a534315eac0a1b550e932))
+* **deps:** bump pyecodevices to 1.7.2 ([04d528a](https://github.com/Aohzan/ecodevices/commit/04d528a479913c0d32246e7929f163cea8dd8408))
+* read the Tempo color of tomorrow from the values of DEMAIN ([5e500b3](https://github.com/Aohzan/ecodevices/commit/5e500b36c108c5c300628b440c0cd7fc7e663664))
+* redact the MAC address in the diagnostics ([d835036](https://github.com/Aohzan/ecodevices/commit/d83503626d8b3625ffa1f05059e2e2f85c0e6c74))
+* refuse to reconfigure the entry with another Eco-Devices ([1814b45](https://github.com/Aohzan/ecodevices/commit/1814b456e9d4e1dc7fe5ed372b4de5657f3d26c0))
+* remove the off-peak binary sensor of an input with the base rate ([8fa4cfb](https://github.com/Aohzan/ecodevices/commit/8fa4cfba6aa7e4c5855131bebb7de3425c359603))
+* use the unit of the meter when the unit of its total is cleared ([213b797](https://github.com/Aohzan/ecodevices/commit/213b797e2113ed68f360fcfbf11a0981542ec658))
+
 ## [5.5.1](https://github.com/Aohzan/ecodevices/compare/5.5.0...5.5.1) (2026-10-27)
 
 ### Bug Fixes
