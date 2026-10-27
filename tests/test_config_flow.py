@@ -208,6 +208,53 @@ async def test_reconfigure_flow(
     assert mock_config_entry.data[CONF_HOST] == "192.168.1.20"
     assert mock_config_entry.data[CONF_PORT] == 8080
     assert mock_config_entry.unique_id == f"{DOMAIN}_192.168.1.20_8080"
+    # The default title follows the address
+    assert mock_config_entry.title == "Eco-Devices 192.168.1.20:8080"
+
+
+async def test_reconfigure_flow_same_device(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_ecodevices: MagicMock,
+) -> None:
+    """Test the set up Eco-Devices can be reconfigured, keeping a custom title."""
+    mock_config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(mock_config_entry, title="Garage")
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    result = await mock_config_entry.start_reconfigure_flow(hass)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_HOST: "192.168.1.20", CONF_PORT: 80}
+    )
+    await hass.async_block_till_done()
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reconfigure_successful"
+    assert mock_config_entry.data[CONF_HOST] == "192.168.1.20"
+    assert mock_config_entry.title == "Garage"
+
+
+async def test_reconfigure_flow_wrong_device(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_ecodevices: MagicMock,
+) -> None:
+    """Test the address of another Eco-Devices is refused."""
+    mock_config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    result = await mock_config_entry.start_reconfigure_flow(hass)
+    mock_ecodevices.mac_address = "00:04:A3:00:00:02"
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_HOST: "192.168.1.20", CONF_PORT: 80}
+    )
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "wrong_device"
+    assert mock_config_entry.data[CONF_HOST] == HOST
+    assert mock_config_entry.unique_id == f"{DOMAIN}_{HOST}_{PORT}"
 
 
 async def test_reconfigure_flow_already_configured(

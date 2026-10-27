@@ -54,7 +54,8 @@
       "unknown": "Erreur non reconnue"
     },
     "abort": {
-      "already_configured": "Déjà configuré"
+      "already_configured": "Déjà configuré",
+      "wrong_device": "L'Eco-Devices à cette adresse n'est pas celui de cette entrée"
     }
   },
   "options": {

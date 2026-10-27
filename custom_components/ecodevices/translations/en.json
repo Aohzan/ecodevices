@@ -54,7 +54,8 @@
       "unknown": "Unexpected error"
     },
     "abort": {
-      "already_configured": "Device is already configured"
+      "already_configured": "Device is already configured",
+      "wrong_device": "The Eco-Devices at this address isn't the one of this entry"
     }
   },
   "options": {
