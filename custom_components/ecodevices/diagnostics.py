@@ -11,6 +11,8 @@ from .coordinator import EcoDevicesConfigEntry
 TO_REDACT = {
     CONF_PASSWORD,
     CONF_USERNAME,
+    # MAC address of the Eco-Devices
+    "config_mac",
     # Meter serial numbers
     "T1_ADCO",
     "T2_ADCO",

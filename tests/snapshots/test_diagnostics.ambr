@@ -21,7 +21,7 @@
       'T2_PTEC': 'HC..',
       'c0_fuel': '123',
       'c0day': '250',
-      'config_mac': '00:04:A3:00:00:01',
+      'config_mac': '**REDACTED**',
       'count0': '1234567',
       'meter2': '1520',
       'version': '3.00.02',
