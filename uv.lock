@@ -307,15 +307,6 @@ wheels = [
 ]
 
 [[package]]
-name = "async-timeout"
-version = "5.0.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a5/ae/136395dfbfe00dfc94da3f3e136d0b13f394cba8f4841120e34226265780/async_timeout-5.0.1.tar.gz", hash = "sha256:d9321a7a3d5a6a5e187e824d2fa0793ce379a202935782d555d6e9d2735677d3", size = 9274, upload-time = "2024-11-06T16:41:39.6Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/fe/ba/e2081de779ca30d473f21f5b30e0e737c438205440784c7dfc81efc2b029/async_timeout-5.0.1-py3-none-any.whl", hash = "sha256:39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c", size = 6233, upload-time = "2024-11-06T16:41:37.9Z" },
-]
-
-[[package]]
 name = "atomicwrites-homeassistant"
 version = "1.4.1"
 source = { registry = "https://pypi.org/simple" }
@@ -960,7 +951,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "async-timeout" },
     { name = "homeassistant" },
     { name = "prek" },
     { name = "pytest-homeassistant-custom-component" },
@@ -969,13 +959,12 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pyecodevices", specifier = ">=1.7.0" },
+    { name = "pyecodevices", specifier = ">=1.7.1" },
     { name = "xmltodict", specifier = ">=1.0.4" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "async-timeout", specifier = ">=4.0.3" },
     { name = "homeassistant", specifier = ">=2026.10.0" },
     { name = "prek", specifier = ">=0.5.7" },
     { name = "pytest-homeassistant-custom-component", specifier = ">=0.13.375" },
@@ -2196,11 +2185,15 @@ wheels = [
 
 [[package]]
 name = "pyecodevices"
-version = "1.7.0"
+version = "1.7.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c3/01/c2656b389f7e6c1ee3f5d7c0c93a76e0890fd166b7b3d919d7189bd30aa6/pyecodevices-1.7.0.tar.gz", hash = "sha256:d2507b4d25b7849badf65774a9014fa34a022dc629d2d6cf3dbd215695847b5a", size = 4038, upload-time = "2024-10-02T17:38:50.26Z" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "xmltodict" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/66/57/e6e903c1b6ad9562396943c485af892f8699bd48600f8ca5dc443df203b5/pyecodevices-1.7.1.tar.gz", hash = "sha256:cacff47f6d92549eaa320ebc2830b3b6d72770764e8b100bc9d6d1ebb0876d18", size = 4410, upload-time = "2026-10-27T17:01:20.164Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/af/cb/e5ba700cbca580696e64debeb1fd99e257ac6e10b5e44f198c19292fee26/pyecodevices-1.7.0-py3-none-any.whl", hash = "sha256:224bdc4ae4a79d823e47a589f967ddbe93f08dfbfbc5f5c030cad529cc8818c3", size = 4414, upload-time = "2024-10-02T17:38:49.36Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/db/59f29362c2e2911955496fa56dfcda5cb238c648680bd87fd0160cfd7006/pyecodevices-1.7.1-py3-none-any.whl", hash = "sha256:0a89c78cf15afa39c8304eea0ece18f99aa188f84a1fce1e629ab58a813a53c2", size = 4477, upload-time = "2026-10-27T17:01:18.837Z" },
 ]
 
 [[package]]

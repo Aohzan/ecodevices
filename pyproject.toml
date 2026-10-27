@@ -4,14 +4,12 @@ version = "0.1.0"
 description = "GCE Eco-Devices integration for Home Assistant"
 requires-python = ">=3.14.2"
 dependencies = [
-    "pyecodevices>=1.7.0",
+    "pyecodevices>=1.7.1",
     "xmltodict>=1.0.4",
 ]
 
 [dependency-groups]
 dev = [
-    # pyecodevices 1.7.0 imports it without declaring it, until pyecodevices 1.7.1
-    "async-timeout>=4.0.3",
     "homeassistant>=2026.10.0",
     "prek>=0.5.7",
     "pytest-homeassistant-custom-component>=0.13.375",
