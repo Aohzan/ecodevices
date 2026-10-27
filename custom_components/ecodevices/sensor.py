@@ -48,6 +48,15 @@ PARALLEL_UPDATES = 0
 # which the lower total is accepted as a reset of the index
 TOTAL_RESET_CONFIRMATIONS = 3
 
+# Symbol and name of the Tempo colors, by suffix of the current period
+TEMPO_COLORS = {
+    "JB": ("🔵", "Bleu"),
+    "JW": ("⚪", "Blanc"),
+    "JR": ("🔴", "Ro" + "uge"),  # bypass codespell
+}
+# Tempo color of tomorrow, by value of DEMAIN
+TEMPO_TOMORROW_CODES = {"BLEU": "JB", "BLAN": "JW", "ROUG": "JR"}
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -448,30 +457,23 @@ class TeleinfoInputColor(EdSensorEntity):
         "❓",
     ]
 
+    def _color(self) -> tuple[str, str]:
+        """Return the symbol and the name of the color."""
+        value = (self.coordinator.data.get(self._input_name) or "").strip()
+        # The color of tomorrow is BLEU, BLAN, ROUG or ----, the current one
+        # is the suffix of the period (HPJB...)
+        code = TEMPO_TOMORROW_CODES.get(value[:4], value[-2:])
+        return TEMPO_COLORS.get(code, ("❓", "inconnu"))
+
     @property
-    def native_value(self) -> str | None:
+    def native_value(self) -> str:
         """Return the state."""
-        if type_heure := self.coordinator.data.get(self._input_name):
-            if type_heure.endswith("JB"):
-                return "🔵"
-            if type_heure.endswith("JW"):
-                return "⚪"
-            if type_heure.endswith("JR"):
-                return "🔴"
-        return "❓"
+        return self._color()[0]
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any]:
         """Return the state attributes."""
-        color_name = "inconnu"
-        if type_heure := self.coordinator.data.get(self._input_name):
-            if type_heure.endswith("JB"):
-                color_name = "Bleu"
-            if type_heure.endswith("JW"):
-                color_name = "Blanc"
-            if type_heure.endswith("JR"):
-                color_name = "Ro" + "uge"  # bypass codespell
-        return {"name": color_name}
+        return {"name": self._color()[1]}
 
 
 class MeterInputEdDevice(EdSensorEntity):

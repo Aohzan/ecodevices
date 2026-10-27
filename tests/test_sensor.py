@@ -206,3 +206,41 @@ async def test_restart_after_ignored_total(
 
     assert await _poll(hass, freezer, mock_ecodevices, "1000") == STATE_UNKNOWN
     assert await _poll(hass, freezer, mock_ecodevices, "1000") == "1.0"
+
+
+@pytest.mark.parametrize(
+    ("ptec", "demain", "color", "tomorrow_color"),
+    [
+        ("HPJB", "BLEU", "🔵", "🔵"),
+        ("HCJW", "BLAN", "⚪", "⚪"),
+        ("HPJR", "ROUG", "🔴", "🔴"),
+        ("HCJB", "----", "🔵", "❓"),
+        (None, None, "❓", "❓"),
+    ],
+)
+async def test_tempo_colors(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_ecodevices: MagicMock,
+    ptec: str | None,
+    demain: str | None,
+    color: str,
+    tomorrow_color: str,
+) -> None:
+    """Test the Tempo colors of today and tomorrow."""
+    mock_ecodevices.global_get.return_value = DEVICE_DATA | {
+        "T1_PTEC": ptec,
+        "T1_DEMAIN": demain,
+    }
+    await _setup(hass, mock_config_entry)
+
+    assert (
+        hass.states.get(
+            "sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color"
+        ).state
+    ) == color
+    assert (
+        hass.states.get(
+            "sensor.eco_devices_192_168_1_10_80_teleinfo_1_tempo_color_tomorrow"
+        ).state
+    ) == tomorrow_color
