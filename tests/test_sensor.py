@@ -56,13 +56,23 @@ async def test_off_peak_binary_sensor_per_input(
     entity_registry: er.EntityRegistry,
     mock_ecodevices: MagicMock,
 ) -> None:
-    """Test an input with the base rate has no off-peak binary sensor."""
+    """Test an input with the base rate has no off-peak binary sensor.
+
+    The older versions created it when the other input had off-peak hours.
+    """
     entry = MockConfigEntry(
         domain=DOMAIN,
         data=ENTRY_DATA | {CONF_T2_TYPE: "base"},
         version=2,
     )
     entry.add_to_hass(hass)
+    entity_registry.async_get_or_create(
+        Platform.BINARY_SENSOR,
+        DOMAIN,
+        "ecodevices_00_04_a3_00_00_01_binary_sensor_2_ptec",
+        config_entry=entry,
+        suggested_object_id="eco_devices_192_168_1_10_80_teleinfo_2_heures_creuses",
+    )
     await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
 

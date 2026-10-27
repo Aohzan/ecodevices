@@ -8,6 +8,11 @@ from .const import DOMAIN
 from .coordinator import EcoDevicesCoordinator
 
 
+def entity_unique_id(mac_address: str, suffix: str) -> str:
+    """Return the unique ID of an entity of the Eco-Devices."""
+    return slugify(f"{DOMAIN}_{mac_address}_{suffix}")
+
+
 class EcoDevicesEntity(CoordinatorEntity[EcoDevicesCoordinator]):
     """Base entity of an Eco-Devices input."""
 
@@ -24,8 +29,8 @@ class EcoDevicesEntity(CoordinatorEntity[EcoDevicesCoordinator]):
         super().__init__(coordinator)
         controller = coordinator.controller
         self._input_number = input_number
-        self._attr_unique_id = slugify(
-            f"{DOMAIN}_{controller.mac_address}_{unique_id_suffix}"
+        self._attr_unique_id = entity_unique_id(
+            controller.mac_address, unique_id_suffix
         )
         self._attr_translation_key = translation_key
         self._attr_translation_placeholders = {"input": str(input_number)}
