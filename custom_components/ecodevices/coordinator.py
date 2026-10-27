@@ -54,8 +54,8 @@ class EcoDevicesCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self.controller = EcoDevices(
             config[CONF_HOST],
             config[CONF_PORT],
-            config.get(CONF_USERNAME),
-            config.get(CONF_PASSWORD),
+            config.get(CONF_USERNAME),  # ty: ignore[invalid-argument-type] pyecodevices annotates it str, None means no authentication
+            config.get(CONF_PASSWORD),  # ty: ignore[invalid-argument-type] pyecodevices annotates it str, None means no authentication
             session=async_get_clientsession(hass, verify_ssl=False),
         )
 

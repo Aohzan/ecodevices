@@ -4,12 +4,12 @@ from collections.abc import Iterable, Mapping
 import logging
 from typing import Any
 
+import probatio
 from pyecodevices import (
     EcoDevices,
     EcoDevicesCannotConnectError,
     EcoDevicesInvalidAuthError,
 )
-import voluptuous as vol
 
 from homeassistant.config_entries import (
     SOURCE_REAUTH,
@@ -85,31 +85,31 @@ def _unit_selector(device_class_key: str) -> UnitOfMeasurementSelector:
     )
 
 
-BASE_SCHEMA = vol.Schema(
+BASE_SCHEMA = probatio.Schema(
     {
-        vol.Required(CONF_HOST): str,
-        vol.Required(CONF_PORT, default=80): int,
-        vol.Optional(CONF_USERNAME): USERNAME_SELECTOR,
-        vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
-        vol.Required(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
-        vol.Required(CONF_T1_ENABLED, default=False): bool,
-        vol.Required(CONF_T2_ENABLED, default=False): bool,
-        vol.Required(CONF_C1_ENABLED, default=False): bool,
-        vol.Required(CONF_C2_ENABLED, default=False): bool,
+        probatio.Required(CONF_HOST): str,
+        probatio.Required(CONF_PORT, default=80): int,
+        probatio.Optional(CONF_USERNAME): USERNAME_SELECTOR,
+        probatio.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
+        probatio.Required(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
+        probatio.Required(CONF_T1_ENABLED, default=False): bool,
+        probatio.Required(CONF_T2_ENABLED, default=False): bool,
+        probatio.Required(CONF_C1_ENABLED, default=False): bool,
+        probatio.Required(CONF_C2_ENABLED, default=False): bool,
     }
 )
 
 
-CREDENTIALS_SCHEMA = vol.Schema(
+CREDENTIALS_SCHEMA = probatio.Schema(
     {
-        vol.Optional(CONF_USERNAME): USERNAME_SELECTOR,
-        vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
+        probatio.Optional(CONF_USERNAME): USERNAME_SELECTOR,
+        probatio.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
     }
 )
-RECONFIGURE_SCHEMA = vol.Schema(
+RECONFIGURE_SCHEMA = probatio.Schema(
     {
-        vol.Required(CONF_HOST): str,
-        vol.Required(CONF_PORT): int,
+        probatio.Required(CONF_HOST): str,
+        probatio.Required(CONF_PORT): int,
     }
 )
 
@@ -167,7 +167,7 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="params",
-            data_schema=vol.Schema(_get_params(self.base_input, {})),
+            data_schema=probatio.Schema(_get_params(self.base_input, {})),
         )
 
     async def async_step_reauth(
@@ -193,7 +193,7 @@ class EcoDevicesConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
     async def _async_step_update_entry(
-        self, step_id: str, schema: vol.Schema, user_input: dict[str, Any] | None
+        self, step_id: str, schema: probatio.Schema, user_input: dict[str, Any] | None
     ) -> ConfigFlowResult:
         """Update the connection settings of the entry after testing them."""
         if self.source == SOURCE_REAUTH:
@@ -280,19 +280,19 @@ class EcoDevicesOptionsFlowHandler(OptionsFlowWithReload):
         c2_enabled = options.get(CONF_C2_ENABLED, config.get(CONF_C2_ENABLED))
 
         options_schema = {
-            vol.Optional(CONF_USERNAME): USERNAME_SELECTOR,
-            vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
-            vol.Required(CONF_SCAN_INTERVAL, default=scan_interval): int,
-            vol.Required(CONF_T1_ENABLED, default=t1_enabled): bool,
-            vol.Required(CONF_T2_ENABLED, default=t2_enabled): bool,
-            vol.Required(CONF_C1_ENABLED, default=c1_enabled): bool,
-            vol.Required(CONF_C2_ENABLED, default=c2_enabled): bool,
+            probatio.Optional(CONF_USERNAME): USERNAME_SELECTOR,
+            probatio.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
+            probatio.Required(CONF_SCAN_INTERVAL, default=scan_interval): int,
+            probatio.Required(CONF_T1_ENABLED, default=t1_enabled): bool,
+            probatio.Required(CONF_T2_ENABLED, default=t2_enabled): bool,
+            probatio.Required(CONF_C1_ENABLED, default=c1_enabled): bool,
+            probatio.Required(CONF_C2_ENABLED, default=c2_enabled): bool,
         }
 
         return self.async_show_form(
             step_id="init",
             data_schema=self.add_suggested_values_to_schema(
-                vol.Schema(options_schema),
+                probatio.Schema(options_schema),
                 {CONF_USERNAME: username, CONF_PASSWORD: password},
             ),
             errors=errors,
@@ -304,7 +304,11 @@ class EcoDevicesOptionsFlowHandler(OptionsFlowWithReload):
             params_schema = _get_params(self.base_input, {})
             _fill_cleared(
                 user_input,
-                [key.schema for key in params_schema if isinstance(key, vol.Optional)],
+                [
+                    key.schema
+                    for key in params_schema
+                    if isinstance(key, probatio.Optional)
+                ],
             )
             user_input.update(self.base_input)
             return self.async_create_entry(data=user_input)
@@ -352,7 +356,7 @@ class EcoDevicesOptionsFlowHandler(OptionsFlowWithReload):
         return self.async_show_form(
             step_id="params",
             data_schema=self.add_suggested_values_to_schema(
-                vol.Schema(_get_params(self.base_input, base_params)), base_params
+                probatio.Schema(_get_params(self.base_input, base_params)), base_params
             ),
         )
 
@@ -364,8 +368,8 @@ async def _test_connection(
     controller = EcoDevices(
         user_input[CONF_HOST],
         user_input[CONF_PORT],
-        user_input.get(CONF_USERNAME),
-        user_input.get(CONF_PASSWORD),
+        user_input.get(CONF_USERNAME),  # ty: ignore[invalid-argument-type] pyecodevices annotates it str, None means no authentication
+        user_input.get(CONF_PASSWORD),  # ty: ignore[invalid-argument-type] pyecodevices annotates it str, None means no authentication
         session=async_get_clientsession(hass, verify_ssl=False),
     )
 
@@ -411,37 +415,37 @@ def _get_params(base_input, base_params):
     if base_input[CONF_T1_ENABLED]:
         params_schema.update(
             {
-                vol.Required(
+                probatio.Required(
                     CONF_T1_TYPE,
                     default=base_params.get(CONF_T1_TYPE, CONF_TI_TYPE_BASE),
-                ): vol.All(str, vol.Lower, vol.In(CONF_TI_TYPES)),
+                ): probatio.All(str, probatio.Lower, probatio.In(CONF_TI_TYPES)),
             }
         )
 
     if base_input[CONF_T2_ENABLED]:
         params_schema.update(
             {
-                vol.Required(
+                probatio.Required(
                     CONF_T2_TYPE,
                     default=base_params.get(CONF_T2_TYPE, CONF_TI_TYPE_BASE),
-                ): vol.All(str, vol.Lower, vol.In(CONF_TI_TYPES)),
+                ): probatio.All(str, probatio.Lower, probatio.In(CONF_TI_TYPES)),
             }
         )
 
     if base_input[CONF_C1_ENABLED]:
         params_schema.update(
             {
-                vol.Required(
+                probatio.Required(
                     CONF_C1_DEVICE_CLASS, default=base_params.get(CONF_C1_DEVICE_CLASS)
                 ): DEVICE_CLASS_SELECTOR,
-                vol.Optional(CONF_C1_UNIT_OF_MEASUREMENT): _unit_selector(
+                probatio.Optional(CONF_C1_UNIT_OF_MEASUREMENT): _unit_selector(
                     CONF_C1_DEVICE_CLASS
                 ),
-                vol.Required(
+                probatio.Required(
                     CONF_C1_DIVIDER_FACTOR,
                     default=base_params.get(CONF_C1_DIVIDER_FACTOR, 1),
                 ): int,
-                vol.Optional(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT): _unit_selector(
+                probatio.Optional(CONF_C1_TOTAL_UNIT_OF_MEASUREMENT): _unit_selector(
                     CONF_C1_DEVICE_CLASS
                 ),
             }
@@ -450,17 +454,17 @@ def _get_params(base_input, base_params):
     if base_input[CONF_C2_ENABLED]:
         params_schema.update(
             {
-                vol.Required(
+                probatio.Required(
                     CONF_C2_DEVICE_CLASS, default=base_params.get(CONF_C2_DEVICE_CLASS)
                 ): DEVICE_CLASS_SELECTOR,
-                vol.Optional(CONF_C2_UNIT_OF_MEASUREMENT): _unit_selector(
+                probatio.Optional(CONF_C2_UNIT_OF_MEASUREMENT): _unit_selector(
                     CONF_C2_DEVICE_CLASS
                 ),
-                vol.Required(
+                probatio.Required(
                     CONF_C2_DIVIDER_FACTOR,
                     default=base_params.get(CONF_C2_DIVIDER_FACTOR, 1),
                 ): int,
-                vol.Optional(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT): _unit_selector(
+                probatio.Optional(CONF_C2_TOTAL_UNIT_OF_MEASUREMENT): _unit_selector(
                     CONF_C2_DEVICE_CLASS
                 ),
             }
