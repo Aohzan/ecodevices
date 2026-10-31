@@ -1,6 +1,9 @@
 {
   "domain": "ecodevices",
   "name": "GCE Eco-Devices",
+  "categories": [
+    "energy.meters_monitoring"
+  ],
   "codeowners": [
     "@Aohzan"
   ],
