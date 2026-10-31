@@ -31,6 +31,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
     DeviceClassSelector,
     DeviceClassSelectorConfig,
+    Selector,
     TextSelector,
     TextSelectorConfig,
     TextSelectorType,
@@ -76,7 +77,9 @@ DEVICE_CLASS_SELECTOR = DeviceClassSelector(
 CREDENTIALS_KEYS = (CONF_USERNAME, CONF_PASSWORD)
 
 
-def _unit_selector(device_class_key: str) -> UnitOfMeasurementSelector:
+def _unit_selector(
+    device_class_key: str,
+) -> Selector[UnitOfMeasurementSelectorConfig]:
     """Return a unit selector filtered by the device class of the meter."""
     return UnitOfMeasurementSelector(
         UnitOfMeasurementSelectorConfig(
