@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.7.0](https://github.com/Aohzan/ecodevices/compare/5.6.0...5.7.0) (2026-11-07)
+
+### Features
+
+* handle the entity ID change of the total sensors ([13ae22e](https://github.com/Aohzan/ecodevices/commit/13ae22e6c18dbc71f1783a3248d1a550708a254d))
+* require Home Assistant 2026.11 ([6c0c81a](https://github.com/Aohzan/ecodevices/commit/6c0c81ad438a758e93bf04106ef1f7c1f5adc92a))
+
 ## [5.6.0](https://github.com/Aohzan/ecodevices/compare/5.5.1...5.6.0) (2026-10-27)
 
 ### Features
