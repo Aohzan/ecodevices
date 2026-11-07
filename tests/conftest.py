@@ -6,9 +6,7 @@ from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
-from syrupy.assertion import SnapshotAssertion
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.ecodevices.const import (
     CONF_C1_DEVICE_CLASS,
@@ -77,17 +75,6 @@ DEVICE_DATA: dict[str, Any] = {
     "T2_HCHC": "5000",
     "T2_HCHP": "7000",
 }
-
-
-@pytest.fixture
-def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
-    """Return the snapshot assertion with the Home Assistant serializer."""
-    return snapshot.use_extension(HomeAssistantSnapshotExtension)
-
-
-@pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
-    """Enable the custom integrations in every test."""
 
 
 @pytest.fixture
