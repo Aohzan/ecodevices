@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 from pyecodevices import EcoDevicesCannotConnectError, EcoDevicesInvalidAuthError
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.ecodevices.const import (
     CONF_C1_DEVICE_CLASS,
